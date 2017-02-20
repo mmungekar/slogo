@@ -25,6 +25,11 @@ public class Controller
 		
 		view.setEnterListener((String string) -> model.execute(stringInterpreter.interpret(string)));
 		
+		initAnimation();
+	}
+
+	private void initAnimation()
+	{
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
 				e -> step());
 		Timeline animation = new Timeline();

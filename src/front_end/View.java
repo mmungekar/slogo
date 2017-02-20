@@ -7,11 +7,11 @@ import javafx.stage.Stage;
 public class View
 {
 	private Terminal terminal;
-	private Canvas canvass;
+	private Canvas canvas;
 	
 	public View (Stage s)
 	{
-		canvass = new Canvas(s);
+		canvas = new Canvas(s);
 		terminal = new Terminal();
 		
 	}

@@ -1,13 +1,22 @@
 package back_end;
 
-public class Model {
+import commands.Command;
 
-	public Object getChanges() {
+public class Model
+{
+	public Model()
+	{
+		
+	}
+	
+	public Object getChanges()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void execute(Object interpret) {
+	public void execute(Command command)
+	{
 		// TODO Auto-generated method stub
 		
 	}
