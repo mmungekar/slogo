@@ -1,6 +1,5 @@
 package main;
 
-import front_end.Animation;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -17,8 +16,8 @@ public class Main extends Application
 	@Override
 	public void start(Stage primaryStage) 
 	{
-		Animation animation = new Animation();
-		animation.start(primaryStage);
+		Controller runtime = new Controller();
+		runtime.start(primaryStage);
 	}
 
 }
