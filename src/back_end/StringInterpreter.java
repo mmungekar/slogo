@@ -1,7 +1,12 @@
 package back_end;
 
-public class StringInterpreter {
-
+public class StringInterpreter
+{
+	public StringInterpreter()
+	{
+		
+	}
+	
 	public Object interpret(String commandString)
 	{
 		

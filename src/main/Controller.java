@@ -23,7 +23,7 @@ public class Controller
 		model = new Model();
 		stringInterpreter = new StringInterpreter();
 		
-		view.setEnterListener((String string) -> handleEnter(string));
+		view.setEnterListener((String string) -> model.execute(stringInterpreter.interpret(string)));
 		
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
 				e -> step());
@@ -36,9 +36,5 @@ public class Controller
 	private void step()
 	{
 		view.update(model.getChanges());
-	}
-	private void handleEnter(String commandString)
-	{
-		 model.execute(stringInterpreter.interpret(commandString));
 	}
 }

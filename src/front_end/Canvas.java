@@ -2,9 +2,9 @@ package front_end;
 
 import javafx.stage.Stage;
 
-public class Canvass
+public class Canvas
 {
-	public Canvass(Stage s)
+	public Canvas(Stage s)
 	{
 		s.show();
 	}
