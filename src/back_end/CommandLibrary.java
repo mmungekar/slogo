@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import commands.Command;
-import commands.MovementCommand;
+import commands.ForwardCommand;
 
 public class CommandLibrary
 {
@@ -54,7 +54,7 @@ public class CommandLibrary
 
 	private Command createCommand(String commandName)
 	{
-		if ("Forward Backward Left Right".contains(commandName)) return new MovementCommand();
+		if ("Forward Backward Left Right".contains(commandName)) return new ForwardCommand();
 		
 		throw new Error("library error");
 	}
