@@ -1,7 +1,9 @@
 package commands;
 
-public interface Command
-{
-	void setParameters(String nextLine);
+import java.util.Scanner;
+
+public interface Command{
+	
+	void setParameters(Scanner scanner, String type);
 	ParameterContainer getParameters();
 }
