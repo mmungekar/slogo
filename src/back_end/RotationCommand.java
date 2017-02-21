@@ -3,6 +3,7 @@ package back_end;
 import java.util.Scanner;
 
 import commands.Command;
+import commands.ParameterContainer;
 
 public class RotationCommand implements Command{
 	private int myParameter;
@@ -21,5 +22,11 @@ public class RotationCommand implements Command{
 		else if(type.equals("Left")){
 			myParameter = -scanner.nextInt();
 		}
+	}
+
+	@Override
+	public ParameterContainer getParameters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
