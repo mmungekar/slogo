@@ -19,6 +19,7 @@ public class Controller {
 	public void start(Stage s) {
 		view = new View(s);
 		model = new Model();
+		
 		stringInterpreter = new StringInterpreter();
 		stringInterpreter.setLanguage(view.getLanguage());
 		view.setLanguageChangeListener((String string) -> stringInterpreter.setLanguage(string));

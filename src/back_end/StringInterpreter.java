@@ -14,7 +14,7 @@ public class StringInterpreter
 	
 	public StringInterpreter()
 	{
-		//commandBuilder = new CommandLibrary();
+		commandBuilder = new CommandLibrary();
 	}
 	
 	public Command interpret(String commandString)
@@ -37,7 +37,7 @@ public class StringInterpreter
 
 	public void setLanguage(String language) {
 		this.currentLanguage = language;
-		resources = ResourceBundle.getBundle("resources/languages/" + currentLanguage);
+		//resources = ResourceBundle.getBundle("resources/languages/" + currentLanguage);
 		System.out.println("Language Changed To : " + language);
 
 	}

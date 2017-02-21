@@ -1,6 +1,5 @@
 package back_end;
 
-import java.io.IOException;
 import java.util.Properties;
 
 import commands.Command;
