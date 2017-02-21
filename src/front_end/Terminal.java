@@ -3,20 +3,15 @@ package front_end;
 //http://codereview.stackexchange.com/questions/52197/console-component-in-javafx
 ///http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
 
-import java.util.ArrayList;
-import java.util.List;
-
 import java.util.function.Consumer;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.ComboBoxListCell;
+
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -24,7 +19,6 @@ import javafx.scene.layout.VBox;
 public class Terminal {
 	private TextArea output = new TextArea();
 	private TextField input = new TextField();
-	private ListView<String> historyView = new ListView<String>();
 
 	public static final int CONSOLE_WIDTH = 500;
 
@@ -32,6 +26,7 @@ public class Terminal {
 
 	protected int historyPointer = 0;
 
+	private ListView<String> historyView = new ListView<String>();
 	public static final ObservableList<String> history = FXCollections.observableArrayList();
 
 	public final static String EMPTY_STRING = "";
@@ -132,5 +127,13 @@ public class Terminal {
 
 	public VBox getConsole() {
 		return console;
+	}
+	
+	public void setText(String in){
+		input.setText(in);
+	}
+	
+	public String getText(){
+		return input.getText();
 	}
 }
