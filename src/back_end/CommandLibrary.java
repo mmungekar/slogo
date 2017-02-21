@@ -2,9 +2,9 @@ package back_end;
 
 import commands.Command;
 
-public class CommandBuilder
+public class CommandLibrary
 {
-	public CommandBuilder()
+	public CommandLibrary()
 	{
 		
 	}
