@@ -1,8 +1,11 @@
 package back_end;
 
+import java.util.HashMap;
+
 public class ModelState
 {
 	public static final int HEIGHT = 600, WIDTH = 700;
+	HashMap<Integer, TurtleState> TurtleContainer;
 	private double x, y;
 	
 	public ModelState()
