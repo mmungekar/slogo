@@ -6,12 +6,12 @@ import commands.Command;
 
 public class StringInterpreter
 {
-	private CommandBuilder commandBuilder;
+	private CommandLibrary commandBuilder;
 	Scanner scanner;
 	
 	public StringInterpreter()
 	{
-		commandBuilder = new CommandBuilder();
+		commandBuilder = new CommandLibrary();
 	}
 	
 	public Command interpret(String commandString)
