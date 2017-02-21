@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import commands.Command;
+import commands.MovementCommand;
 
 public class CommandLibrary
 {
@@ -45,7 +46,6 @@ public class CommandLibrary
 			{
 				if (x.equals(resource.getString(z)))
 				{
-					System.out.println(z);
 					return createCommand(z);
 				}
 			}

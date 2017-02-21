@@ -1,12 +1,11 @@
 package back_end;
 
-import commands.Command;
-
 public class Model
 {
+	private ModelState state;
 	public Model()
 	{
-		
+		state = new ModelState();
 	}
 	
 	public Object getChanges()
@@ -15,10 +14,10 @@ public class Model
 		return null;
 	}
 
-	public void execute(Command command)
+	public ModelState getState()
 	{
-		// TODO Auto-generated method stub
-		
+		return state;
 	}
+	
 
 }

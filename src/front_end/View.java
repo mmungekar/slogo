@@ -3,7 +3,6 @@ package front_end;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;

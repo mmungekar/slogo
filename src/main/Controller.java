@@ -25,7 +25,12 @@ public class Controller {
 		
 		//view.setLanguageChangeListener((String string) -> stringInterpreter.setLanguage(string));
 
-		view.setEnterListener((String string) -> model.execute(stringInterpreter.interpret(string)));
+		view.setEnterListener((String string) -> 
+		{
+			System.out.println(model.getState().getY());
+			stringInterpreter.interpret(string).Execute(model.getState());
+			System.out.println(model.getState().getY());
+		});
 
 		initAnimation();
 	}

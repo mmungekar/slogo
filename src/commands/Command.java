@@ -1,7 +1,9 @@
 package commands;
 
+import back_end.ModelState;
+
 public interface Command
 {
 	void setParameters(String nextLine);
-	ParameterContainer getParameters();
+	void Execute(ModelState state);
 }
