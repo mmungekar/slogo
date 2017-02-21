@@ -2,14 +2,6 @@ package front_end;
 
 import java.util.function.Consumer;
 
-<<<<<<< HEAD
-public class Terminal
-{
-	public void setEnterListener(Consumer<String> action)
-	{
-		
-		
-=======
 import javafx.scene.Group;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
@@ -36,6 +28,5 @@ public class Terminal {
 
 	public TextArea getConsole() {
 		return console;
->>>>>>> mra21
 	}
 }
