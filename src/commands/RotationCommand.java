@@ -1,10 +1,8 @@
-package back_end;
+package commands;
 
 import java.util.Scanner;
 
-import commands.Command;
-import commands.MovementParameters;
-import commands.ParameterContainer;
+import back_end.ModelState;
 
 public class RotationCommand implements Command
 {
