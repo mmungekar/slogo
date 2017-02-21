@@ -7,11 +7,13 @@ public class ModelState
 	public static final int HEIGHT = 600, WIDTH = 700;
 	HashMap<Integer, TurtleState> TurtleContainer;
 	private double x, y;
+	private double angle;
 	
 	public ModelState()
 	{
 		x = HEIGHT/2;
 		y = WIDTH/2;
+		angle = 0;
 	}
 	
 	public void setX(double inX)
@@ -22,6 +24,10 @@ public class ModelState
 	{
 		y = inY;
 	}
+	public void setAngle(double inAngle)
+	{
+		angle = inAngle;
+	}
 	public double getX()
 	{
 		return x;
@@ -29,5 +35,9 @@ public class ModelState
 	public double getY()
 	{
 		return y;
+	}
+	public double getAngle()
+	{
+		return angle;
 	}
 }

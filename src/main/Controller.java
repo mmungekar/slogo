@@ -46,7 +46,7 @@ public class Controller {
 
 	private void step()
 	{
-		view.update(model.getChanges());
+		view.update(model.getState());
 	}
 
 }

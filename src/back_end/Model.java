@@ -8,12 +8,6 @@ public class Model
 		state = new ModelState();
 	}
 	
-	public Object getChanges()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public ModelState getState()
 	{
 		return state;
