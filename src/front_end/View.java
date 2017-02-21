@@ -39,6 +39,7 @@ public class View implements ViewInterface {
 		createCanvas(root);
 		createBottomBar(root);
 		// createSideBar(root);
+		// TODO add turtle
 		setLanguage(DEFAULT_LANGUAGE);
 
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND_COLOR);
