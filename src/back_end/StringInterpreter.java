@@ -1,11 +1,14 @@
 package back_end;
 
+
 import java.util.Scanner;
 
 import commands.Command;
+import java.util.ResourceBundle;
 
 public class StringInterpreter
 {
+	
 	private CommandLibrary commandBuilder;
 	Scanner scanner;
 	
@@ -22,4 +25,18 @@ public class StringInterpreter
 		command.setParameters(scanner.nextLine());
 		return command;
 	}
+	
+
+	// by miguel, can be changed
+	private String currentLanguage;
+	private ResourceBundle resources;
+
+	public void setLanguage(String language) {
+		this.currentLanguage = language;
+		resources = ResourceBundle.getBundle("resources/languages/" + currentLanguage);
+		System.out.println("Language Changed To : " + language);
+
+	}
+
+
 }
