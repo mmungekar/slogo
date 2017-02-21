@@ -30,21 +30,32 @@ public class CommandLibrary
 	{
 		for (String x : commandNames)
 		{
-			if (x.contains(firstWord))
+			String[] possibleNames = x.split("[|]");
+			for (String y : possibleNames)
 			{
-				for (String y : resource.keySet())
-				{
-					if (x.equals(resource.getString(y))) return createCommand(y);
-				}
+				if (y.equals(firstWord)) return selectCommand(x);				
 			}
 		}
-		throw new Error("command not found");
+		throw new Error("Command not found");
+	}
+
+	private Command selectCommand(String x)
+	{
+			for (String z : resource.keySet())
+			{
+				if (x.equals(resource.getString(z)))
+				{
+					System.out.println(z);
+					return createCommand(z);
+				}
+			}
+		throw new Error("back end error");
 	}
 
 	private Command createCommand(String commandName)
 	{
-		if (commandName.equals("Forward")) return new MovementCommand();
+		if ("Forward Backward Left Right".contains(commandName)) return new MovementCommand();
 		
-		throw new Error("back end error");
+		throw new Error("library error");
 	}
 }
