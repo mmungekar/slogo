@@ -50,23 +50,32 @@ public class View implements ViewInterface {
 
 	private void createBottomBar(Group root) {
 
-		terminal = new Terminal(root);
-
+		terminal = new Terminal();
+		
+		VBox console = terminal.getConsole();
+		
+		console.setLayoutY(WINDOW_HEIGHT - 250);
+		console.setLayoutX(25);
+		console.setSpacing(30);
+		
+		
+		
 		VBox buttonPanel = new VBox(0);
 
 		Button submit = new Button("SUBMIT");
-		submit.setOnAction(event -> onMessageReceivedHandler.accept(terminal.getConsole().getText()));
+		submit.setOnAction(event -> terminal.submitInput());
 
 		ComboBox<String> languageDropDown = createLanguageDropDown();
 
 		buttonPanel.getChildren().addAll(submit, languageDropDown);
 		buttonPanel.setSpacing(30);
 
-		HBox bottomBar = new HBox(terminal.getConsole(), buttonPanel);
+		HBox bottomBar = new HBox(console, buttonPanel);
 		bottomBar.setLayoutY(WINDOW_HEIGHT - 250);
 		bottomBar.setLayoutX(25);
 		bottomBar.setSpacing(30);
 		root.getChildren().add(bottomBar);
+		
 	}
 
 	private ComboBox<String> createLanguageDropDown() {
