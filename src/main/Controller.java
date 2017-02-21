@@ -16,20 +16,22 @@ public class Controller {
 	private Model model;
 	private StringInterpreter stringInterpreter;
 
-	public void start(Stage s) {
+	public void start(Stage s)
+	{
 		view = new View(s);
 		model = new Model();
 		
 		stringInterpreter = new StringInterpreter();
-		stringInterpreter.setLanguage(view.getLanguage());
-		view.setLanguageChangeListener((String string) -> stringInterpreter.setLanguage(string));
+		
+		//view.setLanguageChangeListener((String string) -> stringInterpreter.setLanguage(string));
 
 		view.setEnterListener((String string) -> model.execute(stringInterpreter.interpret(string)));
 
 		initAnimation();
 	}
 
-	private void initAnimation() {
+	private void initAnimation()
+	{
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
 		Timeline animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
@@ -37,7 +39,8 @@ public class Controller {
 		animation.play();
 	}
 
-	private void step() {
+	private void step()
+	{
 		view.update(model.getChanges());
 	}
 

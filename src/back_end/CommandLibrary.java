@@ -1,37 +1,50 @@
 package back_end;
 
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import commands.Command;
 
 public class CommandLibrary
 {
-	private Properties langProps;
+	private ResourceBundle resource;
+	private ArrayList<String> commandNames;
 	
 	public CommandLibrary()
 	{
-		langProps = new Properties();
-		try
+		buildLib("English");
+	}
+
+	public void buildLib(String language)
+	{
+		commandNames = new ArrayList<String>();
+		resource = ResourceBundle.getBundle("resources/languages/" + language);
+		
+		for (String x : resource.keySet())
 		{
-			langProps.load(getClass().getClassLoader().getResourceAsStream("English.properties"));
-		}
-		catch (Exception e1)
-		{
-			throw new Error("error in English.properties file format");
+			commandNames.add(resource.getString(x));
 		}
 	}
 
 	public Command getCommand(String firstWord)
 	{
-		return createCommand(langProps.getProperty(firstWord));
+		for (String x : commandNames)
+		{
+			if (x.contains(firstWord))
+			{
+				for (String y : resource.keySet())
+				{
+					if (x.equals(resource.getString(y))) return createCommand(y);
+				}
+			}
+		}
+		throw new Error("command not found");
 	}
 
-	private Command createCommand(String property)
+	private Command createCommand(String commandName)
 	{
-		if (property.equals("Forward"))
-		{
-			return new MovementCommand();
-		}
-		else throw new Error("Function not defined");
+		if (commandName.equals("Forward")) return new MovementCommand();
+		
+		throw new Error("back end error");
 	}
 }
