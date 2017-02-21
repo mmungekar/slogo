@@ -17,17 +17,16 @@ public class StringInterpreter
 		commandBuilder = new CommandLibrary();
 	}
 	
-	public Command interpret(String commandString)
+	public void interpret(String commandString)
 	{
 		System.out.println("Text submitted: " + commandString);
-		/*
+
 		scanner = new Scanner(commandString);
-		Command command = commandBuilder.getCommand(scanner.next());
-		
-		command.setParameters(scanner.nextLine());
-		return command;
-		*/
-		return null;
+		String type = scanner.next();
+		//NEEDS TO BE ALTERED IF REPETITION
+		Command command = commandBuilder.getCommand(type);
+		command.setParameters(scanner, type);
+
 	}
 	
 
