@@ -7,18 +7,18 @@ import java.util.function.Consumer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class Terminal {
-	private TextArea output = new TextArea();
-	private TextField input = new TextField();
+	private TextArea input = new TextArea();
 
 	public static final int CONSOLE_WIDTH = 500;
 
@@ -34,17 +34,40 @@ public class Terminal {
 	private Consumer<String> onMessageReceivedHandler;
 
 	public Terminal() {
-		output.setEditable(false);
 		console = new VBox();
+		console.getChildren().addAll(createHistoryComponents(), createInputComponents());
+	}
+
+	private HBox createInputComponents() {
+		HBox inputComponents = new HBox();
 		setupInput();
+		Button submit = new Button("SUBMIT");
+		submit.setOnAction(event -> submitInput());
+		submit.setPrefHeight(input.getPrefHeight());
+		inputComponents.getChildren().addAll(input, submit);
+		inputComponents.setSpacing(15);
+		return inputComponents;
+	}
+
+	private HBox createHistoryComponents() {
+		HBox historyComponents = new HBox();
 		setupHistoryView();
-		console.getChildren().addAll(historyView, input);
+		Button clear = new Button("CLEAR");
+		clear.setOnAction(event -> clearHistory());
+		clear.setPrefHeight(historyView.getPrefHeight());
+		historyComponents.getChildren().addAll(historyView, clear);
+		historyComponents.setSpacing(15);
+		return historyComponents;
+	}
+
+	private void clearHistory() {
+		history.clear();
 	}
 
 	private void setupHistoryView() {
 		historyView.setItems(history);
 		historyView.setPrefWidth(CONSOLE_WIDTH);
-		historyView.setPrefHeight(175);		
+		historyView.setPrefHeight(100);
 		setMouseActionOnListView();
 
 	}
@@ -52,31 +75,28 @@ public class Terminal {
 	private void setMouseActionOnListView() {
 		// http://stackoverflow.com/questions/23622703/deselect-an-item-on-an-javafx-listview-on-click
 		historyView.setCellFactory(lv -> {
-            ListCell<String> cell = new ListCell<>();
-            cell.textProperty().bind(cell.itemProperty());
-            cell.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-                historyView.requestFocus();
-                if (! cell.isEmpty()) {
-                    int index = cell.getIndex();
-                    if (!historyView.getSelectionModel().getSelectedIndices().contains(index)) {
-                    	historyView.getSelectionModel().select(index);
-                    	input.setText(cell.getItem());
-    				    submitInput();
-                    	historyView.getSelectionModel().clearSelection(index);
-                    }
-                    event.consume();
-                }
-            });
-            return cell ;
-        });
+			ListCell<String> cell = new ListCell<>();
+			cell.textProperty().bind(cell.itemProperty());
+			cell.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+				historyView.requestFocus();
+				if (!cell.isEmpty()) {
+					int index = cell.getIndex();
+					if (!historyView.getSelectionModel().getSelectedIndices().contains(index)) {
+						historyView.getSelectionModel().select(index);
+						input.setText(cell.getItem());
+						submitInput();
+						historyView.getSelectionModel().clearSelection(index);
+					}
+					event.consume();
+				}
+			});
+			return cell;
+		});
 	}
 
 	private void setupInput() {
 		input.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
 			switch (keyEvent.getCode()) {
-			case ENTER:
-				submitInput();
-				break;
 			case UP:
 				if (historyPointer == 0) {
 					break;
@@ -98,6 +118,7 @@ public class Terminal {
 			}
 		});
 		input.setPrefWidth(CONSOLE_WIDTH);
+		input.setPrefHeight(100);
 	}
 
 	private void loadHistoryIntoTextInput() {
@@ -108,10 +129,9 @@ public class Terminal {
 
 	void submitInput() {
 		String text = input.getText();
-		historyView.scrollTo(history.size()-1);
+		historyView.scrollTo(history.size() - 1);
 		if (!text.equals(EMPTY_STRING)) {
-			// output.appendText(text + System.lineSeparator());
-			history.add(text);
+			history.add(text.trim());
 			historyPointer = history.size();
 			if (onMessageReceivedHandler != null) {
 				onMessageReceivedHandler.accept(text);
@@ -128,12 +148,12 @@ public class Terminal {
 	public VBox getConsole() {
 		return console;
 	}
-	
-	public void setText(String in){
+
+	public void setText(String in) {
 		input.setText(in);
 	}
-	
-	public String getText(){
+
+	public String getText() {
 		return input.getText();
 	}
 }

@@ -27,6 +27,9 @@ public class View implements ViewInterface {
 	public static final int CANVAS_WIDTH = 600;
 	public static final Color BACKGROUND_COLOR = Color.GREY;
 	public static final String DEFAULT_LANGUAGE = "English";
+	public static final String CUSTOM_COMMANDS = "customCommands";
+	public static final String CUSTOM_VARIABLES = "customVariables";
+	public static final int DEFAULT_SPACING = 30;
 
 	private Consumer<String> onMessageReceivedHandler;
 	private Consumer<String> languageHandler;
@@ -39,11 +42,10 @@ public class View implements ViewInterface {
 	private Color canvasColor = Color.WHITE;
 	private String currentLanguage;
 
-	private ListView<String> customVariablesView = new ListView<String>();
+	
 	public static final ObservableList<String> customVariables = FXCollections.observableArrayList();
-
-	private ListView<String> customCommandsView = new ListView<String>();
 	public static final ObservableList<String> customCommands = FXCollections.observableArrayList();
+	
 
 	public View(Stage s) {
 		Group root = new Group();
@@ -61,28 +63,34 @@ public class View implements ViewInterface {
 
 	private void createSideBar(Group root) {
 		VBox sideBar = new VBox();
+		
+		sideBar.getChildren().add(createCustomsView(CUSTOM_COMMANDS));
+		sideBar.getChildren().add(createCustomsView(CUSTOM_VARIABLES));
 
-		customVariablesView.setItems(customVariables);
-		customVariablesView.setPrefWidth(150);
-		customVariablesView.setPrefHeight(175);
-		
-		setMouseActionOnListView(customVariablesView);
-
-		customCommandsView.setItems(customCommands);
-		customCommandsView.setPrefWidth(150);
-		customCommandsView.setPrefHeight(175);
-		
-		sideBar.getChildren().addAll(customVariablesView, customCommandsView);
-		
-		sideBar.setSpacing(30);
-		sideBar.setLayoutY(50);
+		sideBar.setSpacing(DEFAULT_SPACING);
+		sideBar.setLayoutY(DEFAULT_SPACING);
 		sideBar.setLayoutX(CANVAS_WIDTH + 100);
 		
 		root.getChildren().add(sideBar);
 
 	}
 
-	private void setMouseActionOnListView(ListView<String> lW) {
+	private ListView<String> createCustomsView(String customType) {
+		ListView<String> myListView = new ListView<String>();
+		if (customType.equals(CUSTOM_COMMANDS)){
+			myListView.setItems(customCommands);
+		} else if (customType.equals(CUSTOM_VARIABLES)) {
+			myListView.setItems(customVariables);
+		}
+		myListView.setPrefWidth(150);
+		myListView.setPrefHeight(175);
+		
+		setClickActionOnCustomListView(myListView);
+		
+		return myListView;
+	}
+
+	private void setClickActionOnCustomListView(ListView<String> lW) {
 		// http://stackoverflow.com/questions/23622703/deselect-an-item-on-an-javafx-listview-on-click
 		lW.setCellFactory(lv -> {
 			ListCell<String> cell = new ListCell<>();
@@ -93,6 +101,7 @@ public class View implements ViewInterface {
 					int index = cell.getIndex();
 					if (!lW.getSelectionModel().getSelectedIndices().contains(index)) {
 						lW.getSelectionModel().select(index);
+						// adds the selected string to the input
 						terminal.setText(terminal.getText() + cell.getItem());
 						lW.getSelectionModel().clearSelection(index);
 					}
@@ -108,14 +117,10 @@ public class View implements ViewInterface {
 		terminal = new Terminal();
 
 		VBox console = terminal.getConsole();
-		console.setSpacing(30);
+		console.setSpacing(DEFAULT_SPACING);
 
 		/*
-		 * VBox buttonPanel = new VBox(0);
-		 * 
-		 * Button submit = new Button("SUBMIT"); submit.setOnAction(event ->
-		 * terminal.submitInput());
-		 * 
+
 		 * ComboBox<String> languageDropDown = createLanguageDropDown();
 		 * 
 		 * buttonPanel.getChildren().addAll(submit, languageDropDown);
@@ -123,12 +128,12 @@ public class View implements ViewInterface {
 		 * 
 		 * HBox bottomBar = new HBox(console, buttonPanel);
 		 */
-		HBox bottomBar = new HBox(console);
+		
 
-		bottomBar.setLayoutY(WINDOW_HEIGHT - 250);
-		bottomBar.setLayoutX(40);
-		bottomBar.setSpacing(30);
-		root.getChildren().add(bottomBar);
+		console.setLayoutY(WINDOW_HEIGHT - 250);
+		console.setLayoutX(40);
+		
+		root.getChildren().add(console);
 
 	}
 
@@ -150,7 +155,7 @@ public class View implements ViewInterface {
 
 	private void createCanvas(Group root) {
 		canvas = new Canvas(root);
-		canvas.setPosition(new int[] { 25, 25 });
+		canvas.setPosition(new int[] { DEFAULT_SPACING, DEFAULT_SPACING });
 		canvas.setSize(new int[] { CANVAS_WIDTH, CANVAS_HEIGHT });
 		canvas.setBackgroundColor(canvasColor);
 	}
