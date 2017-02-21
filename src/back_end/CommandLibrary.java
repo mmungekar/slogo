@@ -16,7 +16,7 @@ public class CommandLibrary
 		{
 			langProps.load(getClass().getClassLoader().getResourceAsStream("English.properties"));
 		}
-		catch (IOException e1)
+		catch (Exception e1)
 		{
 			throw new Error("error in English.properties file format");
 		}

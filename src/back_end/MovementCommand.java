@@ -3,6 +3,7 @@ package back_end;
 import java.util.Scanner;
 
 import commands.Command;
+import commands.ParameterContainer;
 
 public class MovementCommand implements Command {
 	private String myType;
@@ -16,6 +17,12 @@ public class MovementCommand implements Command {
 		myType = type;
 		myParameter = scanner.nextInt();
 
+	}
+
+	@Override
+	public ParameterContainer getParameters() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
