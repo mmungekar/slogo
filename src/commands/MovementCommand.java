@@ -1,11 +1,8 @@
-package back_end;
+package commands;
 
 import java.util.Scanner;
 
 import back_end.ModelState;
-import commands.Command;
-import commands.MovementParameters;
-import commands.ParameterContainer;
 
 public class MovementCommand implements Command
 {

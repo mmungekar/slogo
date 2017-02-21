@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import back_end.ModelState;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -91,10 +92,9 @@ public class View implements ViewInterface {
 		canvas.setBackgroundColor(canvasColor);
 	}
 
-	public void update(Object changes) {
-		if (changes == null)
-			return;
-
+	public void update(ModelState state)
+	{
+		canvas.update(state);
 	}
 
 	public void setEnterListener(Consumer<String> action) {

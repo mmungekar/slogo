@@ -1,5 +1,6 @@
 package front_end;
 
+import back_end.ModelState;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -33,5 +34,10 @@ public class Canvas {
 	public void setSize(int[] size) {
 		Frame.setWidth(size[0]);
 		Frame.setHeight(size[1]);
+	}
+
+	public void update(ModelState state)
+	{
+		// TODO Auto-generated method stub
 	}
 }

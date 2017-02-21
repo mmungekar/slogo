@@ -1,24 +1,17 @@
 package back_end;
 
-import commands.Command;
-
 public class Model
 {
+	private ModelState state;
 	public Model()
 	{
-		
+		state = new ModelState();
 	}
 	
-	public Object getChanges()
+	public ModelState getState()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return state;
 	}
-
-	public void execute(Command command)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }

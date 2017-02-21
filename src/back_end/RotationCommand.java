@@ -3,11 +3,17 @@ package back_end;
 import java.util.Scanner;
 
 import commands.Command;
+import commands.MovementParameters;
 import commands.ParameterContainer;
 
-public class RotationCommand implements Command{
-	private int myParameter;
+public class RotationCommand implements Command
+{
+	private ParameterContainer myParameter;
 
+	public RotationCommand()
+	{
+		myParameter = new MovementParameters();
+	}
 	/**
 	 *  Sets the factor by which the turtle needs to rotate so that the Model can simply
 	 *  call setRotate 
@@ -15,18 +21,16 @@ public class RotationCommand implements Command{
 	 *  remainder of the user-entered command can be parsed here
 	 */
 	@Override
-	public void setParameters (Scanner scanner, String type) {
-		if(type.equals("Right")){
-			myParameter = scanner.nextInt();
-		}
-		else if(type.equals("Left")){
-			myParameter = -scanner.nextInt();
-		}
+	public void setParameters (String nextLine)
+	{
+		Scanner scanner = new Scanner(nextLine);
+		((MovementParameters)myParameter).setMovementMagnitude(scanner.nextInt());
+		scanner.close();
 	}
 
 	@Override
-	public ParameterContainer getParameters() {
-		// TODO Auto-generated method stub
-		return null;
+	public void Execute(ModelState state)
+	{
+		state.setAngle(((MovementParameters)myParameter).getMovementMagnitude());
 	}
 }

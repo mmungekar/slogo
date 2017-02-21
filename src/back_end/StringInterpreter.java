@@ -2,44 +2,29 @@ package back_end;
 
 
 import java.util.Scanner;
-
 import commands.Command;
-import java.util.ResourceBundle;
 
 public class StringInterpreter
 {
-	
-	private CommandLibrary commandBuilder;
+
+	private CommandLibrary commandLib;
 	Scanner scanner;
-	
+
 	public StringInterpreter()
 	{
-		//commandBuilder = new CommandLibrary();
+		commandLib = new CommandLibrary();
 	}
-	
-	public void interpret(String commandString)
+
+	public Command interpret(String commandString)
 	{
+		scanner = new Scanner(commandString);
 		System.out.println("Text submitted: " + commandString);
 
 		scanner = new Scanner(commandString);
-		String type = scanner.next();
 		//NEEDS TO BE ALTERED IF REPETITION
-		Command command = commandBuilder.getCommand(type);
-		command.setParameters(scanner, type);
-
+		Command command = commandLib.getCommand(scanner.next());
+		command.setParameters(scanner.nextLine());
+		return command;
 	}
 	
-
-	// by miguel, can be changed
-	private String currentLanguage;
-	private ResourceBundle resources;
-
-	public void setLanguage(String language) {
-		this.currentLanguage = language;
-		resources = ResourceBundle.getBundle("resources/languages/" + currentLanguage);
-		System.out.println("Language Changed To : " + language);
-
-	}
-
-
 }

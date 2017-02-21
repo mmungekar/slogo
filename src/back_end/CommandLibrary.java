@@ -1,38 +1,61 @@
 package back_end;
 
-import java.io.IOException;
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import commands.Command;
+import commands.MovementCommand;
 
 public class CommandLibrary
 {
-	private Properties langProps;
+	private ResourceBundle resource;
+	private ArrayList<String> commandNames;
 	
 	public CommandLibrary()
 	{
-		langProps = new Properties();
-		try
+		buildLib("English");
+	}
+
+	public void buildLib(String language)
+	{
+		commandNames = new ArrayList<String>();
+		resource = ResourceBundle.getBundle("resources/languages/" + language);
+		
+		for (String x : resource.keySet())
 		{
-			langProps.load(getClass().getClassLoader().getResourceAsStream("English.properties"));
-		}
-		catch (Exception e1)
-		{
-			throw new Error("error in English.properties file format");
+			commandNames.add(resource.getString(x));
 		}
 	}
 
 	public Command getCommand(String firstWord)
 	{
-		return createCommand(langProps.getProperty(firstWord));
+		for (String x : commandNames)
+		{
+			String[] possibleNames = x.split("[|]");
+			for (String y : possibleNames)
+			{
+				if (y.equals(firstWord)) return selectCommand(x);				
+			}
+		}
+		throw new Error("Command not found");
 	}
 
-	private Command createCommand(String property)
+	private Command selectCommand(String x)
 	{
-		if (property.equals("Forward"))
-		{
-			return new MovementCommand();
-		}
-		else throw new Error("Function not defined");
+			for (String z : resource.keySet())
+			{
+				if (x.equals(resource.getString(z)))
+				{
+					return createCommand(z);
+				}
+			}
+		throw new Error("back end error");
+	}
+
+	private Command createCommand(String commandName)
+	{
+		if ("Forward Backward Left Right".contains(commandName)) return new MovementCommand();
+		
+		throw new Error("library error");
 	}
 }

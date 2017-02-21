@@ -1,9 +1,9 @@
 package commands;
 
-import java.util.Scanner;
+import back_end.ModelState;
 
-public interface Command{
-	
-	void setParameters(Scanner scanner, String type);
-	ParameterContainer getParameters();
+public interface Command
+{
+	void setParameters(String nextLine);
+	void Execute(ModelState state);
 }
