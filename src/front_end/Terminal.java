@@ -11,6 +11,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 
 import javafx.scene.input.KeyEvent;
@@ -19,32 +21,58 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class Terminal {
-	private TextArea input = new TextArea();
-
 	public static final int CONSOLE_WIDTH = 500;
-
+	
 	private VBox console;
+	private TextArea input;
+	private TextArea output;
+	private ListView<String> historyView = new ListView<String>();
 
 	protected int historyPointer = 0;
-
-	private ListView<String> historyView = new ListView<String>();
 	public static final ObservableList<String> history = FXCollections.observableArrayList();
-
 	public final static String EMPTY_STRING = "";
-
 	private Consumer<String> onMessageReceivedHandler;
 
 	public Terminal() {
 		console = new VBox();
-		console.getChildren().addAll(createHistoryComponents(), createInputComponents());
+		console.getChildren().addAll(createInputComponents(), createHistoryAndOutputComponents());
+	}
+
+	private Node createHistoryAndOutputComponents() {
+		TabPane tabPane = new TabPane();
+	    
+		initializeOutput();
+	    Tab tabOutput = new Tab();
+	    tabOutput.setText("Output");
+	    tabOutput.setContent(output);
+	    
+	    Tab tabHistory = new Tab();
+	    tabHistory.setText("History");
+	    tabHistory.setContent(createHistoryComponents());
+	    
+	    tabPane.getTabs().addAll(tabOutput, tabHistory);
+
+		tabPane.setPrefHeight(input.getPrefHeight());
+		
+		tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+	    
+		return tabPane;
+	}
+
+	private void initializeOutput() {
+		output = new TextArea();
+		output.setEditable(false);
 	}
 
 	private HBox createInputComponents() {
 		HBox inputComponents = new HBox();
-		setupInput();
+		
+		initializeInput();
+		
 		Button submit = new Button("SUBMIT");
 		submit.setOnAction(event -> submitInput());
 		submit.setPrefHeight(input.getPrefHeight());
+		
 		inputComponents.getChildren().addAll(input, submit);
 		inputComponents.setSpacing(15);
 		return inputComponents;
@@ -52,10 +80,13 @@ public class Terminal {
 
 	private HBox createHistoryComponents() {
 		HBox historyComponents = new HBox();
+		
 		setupHistoryView();
+		
 		Button clear = new Button("CLEAR");
 		clear.setOnAction(event -> clearHistory());
 		clear.setPrefHeight(historyView.getPrefHeight());
+		
 		historyComponents.getChildren().addAll(historyView, clear);
 		historyComponents.setSpacing(15);
 		return historyComponents;
@@ -68,7 +99,6 @@ public class Terminal {
 	private void setupHistoryView() {
 		historyView.setItems(history);
 		historyView.setPrefWidth(CONSOLE_WIDTH);
-		historyView.setPrefHeight(100);
 		setMouseActionOnListView();
 
 	}
@@ -95,7 +125,8 @@ public class Terminal {
 		});
 	}
 
-	private void setupInput() {
+	private void initializeInput() {
+		input = new TextArea();
 		input.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
 			switch (keyEvent.getCode()) {
 			case ENTER:
@@ -125,7 +156,7 @@ public class Terminal {
 			}
 		});
 		input.setPrefWidth(CONSOLE_WIDTH);
-		input.setPrefHeight(100);
+		input.setPrefHeight(150);
 	}
 
 	private void loadHistoryIntoTextInput() {
@@ -161,5 +192,10 @@ public class Terminal {
 
 	public String getText() {
 		return input.getText();
+	}
+
+	void setOutputText(String output2) {
+		output.setText(output2);
+		
 	}
 }
