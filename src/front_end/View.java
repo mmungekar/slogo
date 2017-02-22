@@ -83,12 +83,25 @@ public class View implements ViewInterface {
 		createCanvas(root);
 		createTerminal(root);
 		createCustomViews(root);
-		createTurtleImageSelection(s, root);
-		addTurtleButton(root);
-		createBackgroundColorSelectionTool(root);
+		createSideButtons(s, root);
 	}
 	
-	private void createBackgroundColorSelectionTool(Group root) {
+	private void createSideButtons(Stage s, Group root) {
+		VBox sideButtons = new VBox();
+		
+		sideButtons.getChildren().addAll(createLanguageDropDown(),
+				createBackgroundColorSelectionTool(),
+				addTurtleButton(),
+				createTurtleImageSelection(s));
+		
+		sideButtons.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
+		sideButtons.setLayoutY(DEFAULT_SPACING);
+		sideButtons.setSpacing(DEFAULT_SPACING / 2);
+		
+		root.getChildren().add(sideButtons);
+	}
+
+	private ComboBox<String> createBackgroundColorSelectionTool() {
 		// from
 		// http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
 		
@@ -116,11 +129,8 @@ public class View implements ViewInterface {
 	                	changeBackgroundColor(Color.web(new_val));
 	            }
 	        });
-		
-		backgroundColors.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
-		backgroundColors.setLayoutY(DEFAULT_SPACING);
-		
-		root.getChildren().add(backgroundColors);
+				
+		return backgroundColors;
 	}
 
 	private void createCustomViews(Group root) {
@@ -160,12 +170,11 @@ public class View implements ViewInterface {
 		root.getChildren().add(console);
 	}
 
-	private void addTurtleButton(Group root) {
+	private Button addTurtleButton() {
 		Button turtleCreation = new Button("Add New Turtle");
 		turtleCreation.setOnAction(event -> {createTurtle(); updateTurtleSelection();});
-		turtleCreation.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
-		turtleCreation.setLayoutY(2 * DEFAULT_SPACING);
-		root.getChildren().add(turtleCreation);
+
+		return turtleCreation;
 	}
 
 	private void updateTurtleSelection() {
@@ -173,7 +182,7 @@ public class View implements ViewInterface {
 		turtleIDs.getItems().addAll(canvas.getTurtleIDs());
 	}
 
-	private void createTurtleImageSelection(Stage s, Group root) {
+	private HBox createTurtleImageSelection(Stage s) {
 		HBox turtleImageControl = new HBox();
 		
 		turtleIDs = new ComboBox<Integer>(); 
@@ -201,7 +210,7 @@ public class View implements ViewInterface {
 		
 		turtleImageControl.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
 		turtleImageControl.setLayoutY(3 * DEFAULT_SPACING);
-		root.getChildren().add(turtleImageControl);
+		return turtleImageControl;
 	}
 	
 	private File chooseFile(Stage s){
@@ -302,7 +311,7 @@ public class View implements ViewInterface {
 		terminal.setOutputText(output);
 	}
 	
-	/*
+	
 	private ComboBox<String> createLanguageDropDown() {
 		// from stack overflow:
 		// http://stackoverflow.com/questions/22191954/javafx-casting-arraylist-to-observablelist
@@ -318,7 +327,7 @@ public class View implements ViewInterface {
 		});
 		return languageDropDown;
 	}
-	*/
+	
 	
 	private static class ColorRectCell extends ListCell<String> {
         @Override
