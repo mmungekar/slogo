@@ -4,15 +4,14 @@ import java.util.HashMap;
 
 public class ModelState
 {
-	public static final int HEIGHT = 600, WIDTH = 700;
 	HashMap<Integer, TurtleState> TurtleContainer;
 	private double x, y;
 	private double angle;
 	
 	public ModelState()
 	{
-		x = HEIGHT/2;
-		y = WIDTH/2;
+		x = 0;
+		y = 0;
 		angle = 0;
 	}
 	
@@ -40,4 +39,19 @@ public class ModelState
 	{
 		return angle;
 	}
+
+	public boolean equals(ModelState other) {
+		return (this.getAngle() == other.getAngle()
+				&& this.getX() == other.getX()
+				&& this.getY() == other.getY());
+	}
+
+	public ModelState copy() {
+		ModelState copy = new ModelState();
+		copy.setX(this.getX());
+		copy.setY(this.getY());
+		copy.setAngle(this.getAngle());
+		return copy;
+	}
+		
 }

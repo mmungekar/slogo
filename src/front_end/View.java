@@ -9,15 +9,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -32,6 +30,7 @@ public class View implements ViewInterface {
 	public static final String CUSTOM_COMMANDS = "customCommands";
 	public static final String CUSTOM_VARIABLES = "customVariables";
 	public static final int DEFAULT_SPACING = 30;
+	public static final Point2D HOME = new Point2D(CANVAS_WIDTH / 2 + DEFAULT_SPACING, CANVAS_HEIGHT / 2 + DEFAULT_SPACING);
 
 	private Consumer<String> onMessageReceivedHandler;
 	private Consumer<String> languageHandler;
@@ -147,6 +146,7 @@ public class View implements ViewInterface {
 
 	}
 
+	/*
 	private ComboBox<String> createLanguageDropDown() {
 		// from stack overflow:
 		// http://stackoverflow.com/questions/22191954/javafx-casting-arraylist-to-observablelist
@@ -162,9 +162,10 @@ public class View implements ViewInterface {
 		});
 		return languageDropDown;
 	}
+	*/
 
 	private void createCanvas(Group root) {
-		canvas = new Canvas(root);
+		canvas = new Canvas(root, HOME);
 		canvas.setPosition(new int[] { DEFAULT_SPACING, DEFAULT_SPACING });
 		canvas.setSize(new int[] { CANVAS_WIDTH, CANVAS_HEIGHT });
 		canvas.setBackgroundColor(canvasColor);
