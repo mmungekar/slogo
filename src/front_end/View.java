@@ -10,9 +10,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -21,8 +25,13 @@ import javafx.stage.Stage;
 public class View implements ViewInterface {
 	public static final int WINDOW_HEIGHT = 700;
 	public static final int WINDOW_WIDTH = 900;
+	public static final int CANVAS_HEIGHT = 400;
+	public static final int CANVAS_WIDTH = 600;
 	public static final Color BACKGROUND_COLOR = Color.GREY;
 	public static final String DEFAULT_LANGUAGE = "English";
+	public static final String CUSTOM_COMMANDS = "customCommands";
+	public static final String CUSTOM_VARIABLES = "customVariables";
+	public static final int DEFAULT_SPACING = 30;
 
 	private Consumer<String> onMessageReceivedHandler;
 	private Consumer<String> languageHandler;
@@ -35,11 +44,17 @@ public class View implements ViewInterface {
 	private Color canvasColor = Color.WHITE;
 	private String currentLanguage;
 
+	
+	public static final ObservableList<String> customVariables = FXCollections.observableArrayList();
+	public static final ObservableList<String> customCommands = FXCollections.observableArrayList();
+	
+
 	public View(Stage s) {
 		Group root = new Group();
 		createCanvas(root);
 		createBottomBar(root);
-		// createSideBar(root);
+		createSideBar(root);
+		// TODO add turtle
 		setLanguage(DEFAULT_LANGUAGE);
 
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND_COLOR);
@@ -48,25 +63,88 @@ public class View implements ViewInterface {
 		s.show();
 	}
 
+	private void createSideBar(Group root) {
+		VBox sideBar = new VBox();
+		
+		sideBar.getChildren().addAll(createCommandView(), createVariableView());
+
+		sideBar.setSpacing(DEFAULT_SPACING);
+		sideBar.setLayoutY(DEFAULT_SPACING);
+		sideBar.setLayoutX(CANVAS_WIDTH + 100);
+		
+		root.getChildren().add(sideBar);
+
+	}
+
+	/*
+	 * I know this is repeated code.
+	 * The createVariableView method will be changed once I 
+	 * figure out how to make it editable.
+	 */
+	private ListView<String> createVariableView() {
+		ListView<String> myListView = new ListView<String>();
+		myListView.setItems(customVariables);
+		myListView.setPrefWidth(150);
+		myListView.setPrefHeight(175);
+		setClickActionOnCustomListView(myListView); // this will be replaced
+		return myListView;
+	}
+
+	private ListView<String> createCommandView() {
+		ListView<String> myListView = new ListView<String>();
+		myListView.setItems(customCommands);
+		myListView.setPrefWidth(150);
+		myListView.setPrefHeight(175);
+		setClickActionOnCustomListView(myListView);
+		return myListView;
+	}
+
+	private void setClickActionOnCustomListView(ListView<String> lW) {
+		// http://stackoverflow.com/questions/23622703/deselect-an-item-on-an-javafx-listview-on-click
+		lW.setCellFactory(lv -> {
+			ListCell<String> cell = new ListCell<>();
+			cell.textProperty().bind(cell.itemProperty());
+			cell.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+				lW.requestFocus();
+				if (!cell.isEmpty()) {
+					int index = cell.getIndex();
+					if (!lW.getSelectionModel().getSelectedIndices().contains(index)) {
+						lW.getSelectionModel().select(index);
+						// add commmand to terminal and execute
+						terminal.setText(cell.getItem());
+						terminal.submitInput();
+						lW.getSelectionModel().clearSelection(index);
+					}
+					event.consume();
+				}
+			});
+			return cell;
+		});
+	}
+
 	private void createBottomBar(Group root) {
 
-		terminal = new Terminal(root);
+		terminal = new Terminal();
 
-		VBox buttonPanel = new VBox(0);
+		VBox console = terminal.getConsole();
+		console.setSpacing(DEFAULT_SPACING);
 
-		Button submit = new Button("SUBMIT");
-		submit.setOnAction(event -> onMessageReceivedHandler.accept(terminal.getConsole().getText()));
+		/*
 
-		ComboBox<String> languageDropDown = createLanguageDropDown();
+		 * ComboBox<String> languageDropDown = createLanguageDropDown();
+		 * 
+		 * buttonPanel.getChildren().addAll(submit, languageDropDown);
+		 * buttonPanel.setSpacing(30);
+		 * 
+		 * HBox bottomBar = new HBox(console, buttonPanel);
+		 */
+		
 
-		buttonPanel.getChildren().addAll(submit, languageDropDown);
-		buttonPanel.setSpacing(30);
+		console.setLayoutY(WINDOW_HEIGHT - 250);
+		console.setLayoutX(40);
+		
+		root.getChildren().add(console);
 
-		HBox bottomBar = new HBox(terminal.getConsole(), buttonPanel);
-		bottomBar.setLayoutY(WINDOW_HEIGHT - 250);
-		bottomBar.setLayoutX(25);
-		bottomBar.setSpacing(30);
-		root.getChildren().add(bottomBar);
 	}
 
 	private ComboBox<String> createLanguageDropDown() {
@@ -87,8 +165,8 @@ public class View implements ViewInterface {
 
 	private void createCanvas(Group root) {
 		canvas = new Canvas(root);
-		canvas.setPosition(new int[] { 25, 25 });
-		canvas.setSize(new int[] { WINDOW_WIDTH - 50, 400 });
+		canvas.setPosition(new int[] { DEFAULT_SPACING, DEFAULT_SPACING });
+		canvas.setSize(new int[] { CANVAS_WIDTH, CANVAS_HEIGHT });
 		canvas.setBackgroundColor(canvasColor);
 	}
 
