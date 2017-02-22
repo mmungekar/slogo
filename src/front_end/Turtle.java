@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 
 public class Turtle extends ImageView{
 	private Point2D pos;
+	private double velo;
 	
 	Turtle(Image image, Point2D initPos){
 		super(image);
@@ -34,7 +35,13 @@ public class Turtle extends ImageView{
 		this.setX(pos.getX());
 		this.setY(pos.getY());
 	}
-	
-	
-	
+
+	public double getVelo() {
+		return velo;
+	}
+
+	public void setVelo(double velo) {
+		this.velo = velo;
+	}
+
 }

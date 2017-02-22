@@ -8,16 +8,20 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Canvas {
-	private Rectangle Frame;
-	private Turtle myTurtle;
-	public static final int arc = 25;
-	
 	public static final String IMAGE_SRC_FOLDER = "resources/images/";
 	public static final String BALL_IMAGE = "ball.gif";
 	public static final String BALL_IMAGE_FIRE = "ball_fire.gif";
 	public static final String BALL_IMAGE_GIVEN = "ball_given.gif";
-
+	
+	public static final int arc = 25;
+	
+	private Rectangle Frame;
+	private Turtle myTurtle;
+	private Point2D home;
+	private ModelState oldState;
+	
 	public Canvas(Group root, Point2D home) {
+		this.home = home;
 		createRectangle();
 		root.getChildren().add(Frame);
 		String imageLocation = IMAGE_SRC_FOLDER + BALL_IMAGE_GIVEN;
@@ -48,8 +52,18 @@ public class Canvas {
 		Frame.setHeight(size[1]);
 	}
 
-	void update(ModelState state) {
-		// TODO Auto-generated method stub
+	void update(ModelState state) {		
+		
+		if (oldState == null || !oldState.equals(state)){
+			oldState = state.copy();
+			moveTurtle(myTurtle, state);
+		}
+	}
+
+	private void moveTurtle(Turtle turtle, ModelState state) {
+		turtle.setX(state.getX() + home.getX());
+		turtle.setY(state.getY() + home.getY());
+		//turtle.setAngle(state.getAngle());
 		
 	}
 }

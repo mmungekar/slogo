@@ -39,4 +39,19 @@ public class ModelState
 	{
 		return angle;
 	}
+
+	public boolean equals(ModelState other) {
+		return (this.getAngle() == other.getAngle()
+				&& this.getX() == other.getX()
+				&& this.getY() == other.getY());
+	}
+
+	public ModelState copy() {
+		ModelState copy = new ModelState();
+		copy.setX(this.getX());
+		copy.setY(this.getY());
+		copy.setAngle(this.getAngle());
+		return copy;
+	}
+		
 }
