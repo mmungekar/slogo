@@ -98,6 +98,12 @@ public class Terminal {
 	private void setupInput() {
 		input.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
 			switch (keyEvent.getCode()) {
+			case ENTER:
+				// http://stackoverflow.com/questions/19002059/get-key-combination-code
+				if (keyEvent.isShiftDown()){
+					submitInput();
+					break;
+				}
 			case UP:
 				if (historyPointer == 0) {
 					break;

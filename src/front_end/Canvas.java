@@ -1,17 +1,29 @@
 package front_end;
 
 import back_end.ModelState;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Canvas {
 	private Rectangle Frame;
+	private Turtle myTurtle;
 	public static final int arc = 25;
+	
+	public static final String IMAGE_SRC_FOLDER = "resources/images/";
+	public static final String BALL_IMAGE = "ball.gif";
+	public static final String BALL_IMAGE_FIRE = "ball_fire.gif";
+	public static final String BALL_IMAGE_GIVEN = "ball_given.gif";
 
-	public Canvas(Group root) {
+	public Canvas(Group root, Point2D home) {
 		createRectangle();
 		root.getChildren().add(Frame);
+		String imageLocation = IMAGE_SRC_FOLDER + BALL_IMAGE_GIVEN;
+		Image imageTurtle = new Image(getClass().getClassLoader().getResourceAsStream(imageLocation));
+		myTurtle = new Turtle(imageTurtle, home);
+		root.getChildren().add(myTurtle);
 	}
 
 	private void createRectangle() {
@@ -36,8 +48,8 @@ public class Canvas {
 		Frame.setHeight(size[1]);
 	}
 
-	public void update(ModelState state)
-	{
+	void update(ModelState state) {
 		// TODO Auto-generated method stub
+		
 	}
 }
