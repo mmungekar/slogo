@@ -1,5 +1,10 @@
 package front_end;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import back_end.ModelState;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -8,26 +13,34 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Canvas {
-	public static final String IMAGE_SRC_FOLDER = "resources/images/";
+	public static final String IMAGE_DIRECTORY = "resources/images/";
 	public static final String BALL_IMAGE = "ball.gif";
 	public static final String BALL_IMAGE_FIRE = "ball_fire.gif";
-	public static final String BALL_IMAGE_GIVEN = "ball_given.gif";
+	public static final String DEFAULT_TURTLE = "ball_given.gif";
 	
 	public static final int arc = 25;
 	
 	private Rectangle Frame;
-	private Turtle myTurtle;
+	private Map<Integer, Turtle> myTurtles = new HashMap<Integer, Turtle>();
 	private Point2D home;
 	private ModelState oldState;
+	private Group myRoot;
 	
 	public Canvas(Group root, Point2D home) {
 		this.home = home;
+		this.myRoot = root;
 		createRectangle();
 		root.getChildren().add(Frame);
-		String imageLocation = IMAGE_SRC_FOLDER + BALL_IMAGE_GIVEN;
+		initializeTurtles();
+		for (Integer ID : myTurtles.keySet()){
+			root.getChildren().add(myTurtles.get(ID));
+		}
+	}
+
+	private void initializeTurtles() {
+		String imageLocation = IMAGE_DIRECTORY + DEFAULT_TURTLE;
 		Image imageTurtle = new Image(getClass().getClassLoader().getResourceAsStream(imageLocation));
-		myTurtle = new Turtle(imageTurtle, home);
-		root.getChildren().add(myTurtle);
+		myTurtles.put(0, new Turtle(imageTurtle, home));
 	}
 
 	private void createRectangle() {
@@ -56,7 +69,7 @@ public class Canvas {
 		
 		if (oldState == null || !oldState.equals(state)){
 			oldState = state.copy();
-			moveTurtle(myTurtle, state);
+			moveTurtle(myTurtles.get(0), state);
 		}
 	}
 
@@ -65,5 +78,16 @@ public class Canvas {
 		turtle.setY(state.getY() + home.getY());
 		//turtle.setAngle(state.getAngle());
 		
+	}
+
+	void changeTurtleImage(int ID, File newImageFile) {
+		Image newTurtleImage = new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_DIRECTORY + newImageFile.getName()));
+		myRoot.getChildren().remove(myTurtles.get(ID));
+		myTurtles.put(ID, new Turtle(newTurtleImage, myTurtles.get(ID)));
+		myRoot.getChildren().add(myTurtles.get(ID));
+	}
+
+	Collection<Integer> getTurtleIDs() {
+		return myTurtles.keySet();
 	}
 }
