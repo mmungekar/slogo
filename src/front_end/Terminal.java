@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -122,7 +123,6 @@ public class Terminal {
 	}
 
 	private void loadHistoryIntoTextInput() {
-		System.out.println(historyPointer);
 		input.setText(history.get(historyPointer));
 		input.selectAll();
 	}

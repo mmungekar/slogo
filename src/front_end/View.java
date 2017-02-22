@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -64,8 +65,7 @@ public class View implements ViewInterface {
 	private void createSideBar(Group root) {
 		VBox sideBar = new VBox();
 		
-		sideBar.getChildren().add(createCustomsView(CUSTOM_COMMANDS));
-		sideBar.getChildren().add(createCustomsView(CUSTOM_VARIABLES));
+		sideBar.getChildren().addAll(createCommandView(), createVariableView());
 
 		sideBar.setSpacing(DEFAULT_SPACING);
 		sideBar.setLayoutY(DEFAULT_SPACING);
@@ -75,18 +75,26 @@ public class View implements ViewInterface {
 
 	}
 
-	private ListView<String> createCustomsView(String customType) {
+	/*
+	 * I know this is repeated code.
+	 * The createVariableView method will be changed once I 
+	 * figure out how to make it editable.
+	 */
+	private ListView<String> createVariableView() {
 		ListView<String> myListView = new ListView<String>();
-		if (customType.equals(CUSTOM_COMMANDS)){
-			myListView.setItems(customCommands);
-		} else if (customType.equals(CUSTOM_VARIABLES)) {
-			myListView.setItems(customVariables);
-		}
+		myListView.setItems(customVariables);
 		myListView.setPrefWidth(150);
 		myListView.setPrefHeight(175);
-		
+		setClickActionOnCustomListView(myListView); // this will be replaced
+		return myListView;
+	}
+
+	private ListView<String> createCommandView() {
+		ListView<String> myListView = new ListView<String>();
+		myListView.setItems(customCommands);
+		myListView.setPrefWidth(150);
+		myListView.setPrefHeight(175);
 		setClickActionOnCustomListView(myListView);
-		
 		return myListView;
 	}
 
@@ -101,8 +109,9 @@ public class View implements ViewInterface {
 					int index = cell.getIndex();
 					if (!lW.getSelectionModel().getSelectedIndices().contains(index)) {
 						lW.getSelectionModel().select(index);
-						// adds the selected string to the input
-						terminal.setText(terminal.getText() + cell.getItem());
+						// add commmand to terminal and execute
+						terminal.setText(cell.getItem());
+						terminal.submitInput();
 						lW.getSelectionModel().clearSelection(index);
 					}
 					event.consume();
