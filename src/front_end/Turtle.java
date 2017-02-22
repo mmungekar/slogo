@@ -6,19 +6,30 @@ import javafx.scene.image.ImageView;
 
 public class Turtle extends ImageView{
 	private Point2D pos;
-	private double velo;
+	private boolean penDown;
+	private double[] halfDems = new double[2];
+	private double angle;
 	
 	Turtle(Image image, Point2D initPos){
 		super(image);
+		initializeSize(image);
 		updatePosition(initPos);
+		penDown = true;
 	}
 	
+	private void initializeSize(Image image) {
+		halfDems[0] = image.getWidth() / 2.0;
+		halfDems[1] = image.getHeight() / 2.0;
+		
+	}
+
 	Turtle(Image image, double x, double y){
 		this(image, new Point2D(x, y));
 	}
 	
 	Turtle(Image newImage, Turtle oldTurtle){
 		super(newImage);
+		initializeSize(newImage);
 		copyOverAttributes(oldTurtle);
 	}
 	
@@ -26,22 +37,48 @@ public class Turtle extends ImageView{
 		updatePosition(new Point2D(x, y));	
 	}
 
-	private void copyOverAttributes(Turtle oldTurtle) {
-		updatePosition(oldTurtle.getX(), oldTurtle.getY());
-	}
-
 	private void updatePosition(Point2D newPos) {
 		this.pos = newPos;
-		this.setX(pos.getX());
-		this.setY(pos.getY());
+		this.setCenterX(pos.getX());
+		this.setCenterY(pos.getY());
+	}
+	
+	private void copyOverAttributes(Turtle oldTurtle) {
+		updatePosition(oldTurtle.getCenterX(), oldTurtle.getCenterY());
+		this.penDown = oldTurtle.isPenDown();
 	}
 
-	public double getVelo() {
-		return velo;
+	public boolean isPenDown() {
+		return penDown;
 	}
 
-	public void setVelo(double velo) {
-		this.velo = velo;
+	public void setPenDown(boolean penDown) {
+		this.penDown = penDown;
+	}
+	
+	public void setCenterX(double x){
+		this.setX(x - halfDems[0]);
+	}
+	
+	public void setCenterY(double y){
+		this.setY(y - halfDems[1]);
+	}
+	
+	public double getCenterX(){
+		return this.getX() + halfDems[0];
+	}
+	
+	public double getCenterY(){
+		return this.getY() + halfDems[1];
+	}
+
+	public double getAngle() {
+		return angle;
+	}
+
+	public void setAngle(double angle) {
+		this.angle = angle;
+		this.setRotate(this.angle);
 	}
 
 }
