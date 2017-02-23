@@ -21,6 +21,7 @@ public class ExpressionTree {
 			ExpressionTreeNode node;
 	            // make a new node if the expression is an operator or a command
 			// will need to create method for this
+			/*
 				if(myExpressions[i].isAnOperator()){
 				node = new ExpressionTreeNode(myExpressions[i]);
 				i++;
@@ -34,6 +35,8 @@ public class ExpressionTree {
 					i++;
 				}
 				return node;
+				*/
+			return null;
 		}
 			
 		}
