@@ -27,9 +27,9 @@ public class Controller {
 
 		view.setEnterListener((String string) -> 
 		{
-			System.out.println(model.getState().getY());
+			System.out.println(model.getState().getY(0));
 			stringInterpreter.interpret(string).execute(model.getState());
-			System.out.println(model.getState().getY());
+			System.out.println(model.getState().getY(0));
 		});
 
 		initAnimation();
