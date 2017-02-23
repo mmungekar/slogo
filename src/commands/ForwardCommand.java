@@ -7,6 +7,7 @@ import back_end.ModelState;
 public class ForwardCommand implements Command
 {
 	private ParameterContainer parameters;
+	private int parameterCount = 1;
 	
 	public ForwardCommand()
 	{
@@ -24,6 +25,10 @@ public class ForwardCommand implements Command
 		Scanner scanner = new Scanner(nextLine);
 		((MovementParameters) parameters).setMovementMagnitude(scanner.nextInt());
 		scanner.close();
+	}
+	@Override
+	public int getParameterCount(){
+		return this.parameterCount;
 	}
 
 }

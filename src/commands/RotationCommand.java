@@ -7,6 +7,7 @@ import back_end.ModelState;
 public class RotationCommand implements Command
 {
 	private ParameterContainer myParameter;
+	private int parameterCount = 1;
 
 	public RotationCommand()
 	{
@@ -30,5 +31,10 @@ public class RotationCommand implements Command
 	public void Execute(ModelState state)
 	{
 		state.setAngle(((MovementParameters)myParameter).getMovementMagnitude());
+	}
+	
+	@Override
+	public int getParameterCount(){
+		return this.parameterCount;
 	}
 }

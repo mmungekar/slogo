@@ -6,4 +6,5 @@ public interface Command
 {
 	void setParameters(String nextLine);
 	void Execute(ModelState state);
+	int getParameterCount();
 }
