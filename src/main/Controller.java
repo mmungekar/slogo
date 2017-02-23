@@ -28,7 +28,7 @@ public class Controller {
 		view.setEnterListener((String string) -> 
 		{
 			System.out.println(model.getState().getY());
-			stringInterpreter.interpret(string).Execute(model.getState());
+			stringInterpreter.interpret(string).execute(model.getState());
 			System.out.println(model.getState().getY());
 		});
 

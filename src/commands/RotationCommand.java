@@ -27,7 +27,7 @@ public class RotationCommand implements Command
 	}
 
 	@Override
-	public void Execute(ModelState state)
+	public void execute(ModelState state)
 	{
 		state.setAngle(((MovementParameters)myParameter).getMovementMagnitude());
 	}

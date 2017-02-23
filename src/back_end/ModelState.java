@@ -1,43 +1,46 @@
 package back_end;
 
 import java.util.HashMap;
+import java.util.Observable;
 
-public class ModelState
+import javafx.scene.paint.Color;
+
+
+public class ModelState extends Observable
 {
-	HashMap<Integer, TurtleState> TurtleContainer;
-	private double x, y;
-	private double angle;
+	HashMap<Integer, TurtleState> turtleContainer;
+	private Color backgroundColor;
+	
 	
 	public ModelState()
 	{
-		x = 0;
-		y = 0;
-		angle = 0;
+		turtleContainer.put(0, new TurtleState());
+		setBackgroundColor(Color.WHITE);
 	}
 	
-	public void setX(double inX)
+	public void setX(int ID, double inX)
 	{
-		x = inX;
+		 turtleContainer.get(ID).setX(inX);
 	}
-	public void setY(double inY)
+	public void setY(int ID, double inY)
 	{
-		y = inY;
+		turtleContainer.get(ID).setY(inY);
 	}
-	public void setAngle(double inAngle)
+	public void setAngle(int ID, double inAngle)
 	{
-		angle = inAngle;
+		turtleContainer.get(ID).setAngle(inAngle);
 	}
-	public double getX()
+	public double getX(int ID)
 	{
-		return x;
+		return turtleContainer.get(ID).getX();
 	}
-	public double getY()
+	public double getY(int ID)
 	{
-		return y;
+		return  turtleContainer.get(ID).getX();
 	}
-	public double getAngle()
+	public double getAngle(int ID)
 	{
-		return angle;
+		return  turtleContainer.get(ID).getAngle();
 	}
 
 	public boolean equals(ModelState other) {
@@ -53,5 +56,15 @@ public class ModelState
 		copy.setAngle(this.getAngle());
 		return copy;
 	}
-		
+
+	public Color getBackgroundColor()
+	{
+		return backgroundColor;
+	}
+
+	public void setBackgroundColor(Color backgroundColor)
+	{
+		this.backgroundColor = backgroundColor;
+	}
+	
 }
