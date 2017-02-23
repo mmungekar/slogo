@@ -19,23 +19,22 @@ public class ModelState extends Observable {
 	private Point2D home;
 
 	public ModelState() {
-		turtleContainer.put(0, new Turtle(getDefaultTurtleImage(), home));
 		setBackgroundColor(Color.WHITE);
-		setChangedAndNotifyObservers();
 	}
 
 	private void setChangedAndNotifyObservers() {
 		setChanged();
 		notifyObservers();
+		System.out.println("peeps notified");
 	}
 
 	public void setX(int ID, double inX) {
-		turtleContainer.get(ID).setX(inX);
+		turtleContainer.get(ID).setX(inX - home.getX());
 		setChangedAndNotifyObservers();
 	}
 
 	public void setY(int ID, double inY) {
-		turtleContainer.get(ID).setY(inY);
+		turtleContainer.get(ID).setY(inY - home.getY());
 		setChangedAndNotifyObservers();
 	}
 
@@ -60,11 +59,15 @@ public class ModelState extends Observable {
 		Integer nextID = Collections.max(turtleContainer.keySet()) + 1;
 		turtleContainer.put(nextID, new Turtle(getDefaultTurtleImage(), home));
 		setChangedAndNotifyObservers();
-		
 	}
 
 	public void setHome(Point2D home) {
 		this.home = home;
+		System.out.println(home);
+		// create first turtle once home is set
+		turtleContainer.put(0, new Turtle(getDefaultTurtleImage(), home));
+		System.out.println("first turtle out");
+		setChangedAndNotifyObservers();
 	}
 
 	public double getX(int ID) {

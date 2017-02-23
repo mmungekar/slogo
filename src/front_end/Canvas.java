@@ -27,9 +27,9 @@ public class Canvas implements Observer{
 	public Canvas(ModelState observedState, Group root, Point2D home) {
 		this.observedState = observedState;
 		this.myRoot = root;
-		
 		createRectangle();
 		root.getChildren().add(Frame);
+		observedState.setHome(home);
 	}
 
 	private void createRectangle() {
@@ -84,9 +84,11 @@ public class Canvas implements Observer{
 	}
 
 	private void updateTurtles() {
+		System.out.println("update received by Canvas");
 		this.turtleContainer = observedState.getTurtleContainer();
 		for (Turtle turtle : turtleContainer.values()){
 			if (!myRoot.getChildren().contains(turtle)){
+				System.out.println("added new turtle");
 				myRoot.getChildren().add(turtle);
 			}
 		}
