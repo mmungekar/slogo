@@ -79,6 +79,7 @@ public class Turtle extends ImageView{
 	public void setAngle(double angle) {
 		this.angle = angle;
 		this.setRotate(this.angle);
+		//TODO decide on angle rotation
 	}
 
 }

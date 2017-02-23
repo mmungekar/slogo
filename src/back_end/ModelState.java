@@ -53,5 +53,10 @@ public class ModelState
 		copy.setAngle(this.getAngle());
 		return copy;
 	}
+	
+	@Override
+	public String toString(){
+		return ("X: " + this.getX() + " Y: " + this.getY() + " Angle: " + this.getAngle()); 
+	}
 		
 }

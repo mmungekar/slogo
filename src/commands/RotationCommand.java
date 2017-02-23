@@ -7,10 +7,16 @@ import back_end.ModelState;
 public class RotationCommand implements Command
 {
 	private ParameterContainer myParameter;
+	private int scale;
 
-	public RotationCommand()
+	public RotationCommand(boolean b)
 	{
 		myParameter = new MovementParameters();
+		if (b){
+			scale = 1;
+		} else {
+			scale = -1;
+		}
 	}
 	/**
 	 *  Sets the factor by which the turtle needs to rotate so that the Model can simply
@@ -22,13 +28,13 @@ public class RotationCommand implements Command
 	public void setParameters (String nextLine)
 	{
 		Scanner scanner = new Scanner(nextLine);
-		((MovementParameters)myParameter).setMovementMagnitude(scanner.nextInt());
+		((MovementParameters)myParameter).setMovementMagnitude(scale * scanner.nextInt());
 		scanner.close();
 	}
 
 	@Override
 	public void Execute(ModelState state)
 	{
-		state.setAngle(((MovementParameters)myParameter).getMovementMagnitude());
+		state.setAngle(state.getAngle() + ((MovementParameters)myParameter).getMovementMagnitude());
 	}
 }

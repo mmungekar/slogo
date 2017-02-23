@@ -52,7 +52,6 @@ public class StringInterpreter
 	
 	public Command interpret(String commandString)
 	{
-		scanner = new Scanner(commandString);
 		System.out.println("Text submitted: " + commandString);
 
 		scanner = new Scanner(commandString);

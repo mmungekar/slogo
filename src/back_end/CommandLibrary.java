@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import commands.Command;
 import commands.ForwardCommand;
+import commands.RotationCommand;
 
 public class CommandLibrary
 {
@@ -30,6 +31,7 @@ public class CommandLibrary
 
 	public Command getCommand(String firstWord)
 	{
+		firstWord = firstWord.toLowerCase();
 		for (String x : commandNames)
 		{
 			String[] possibleNames = x.split("[|]");
@@ -55,7 +57,9 @@ public class CommandLibrary
 
 	private Command createCommand(String commandName)
 	{
-		if ("Forward Backward Left Right".contains(commandName)) return new ForwardCommand();
+		if ("Forward Backward".contains(commandName)) return new ForwardCommand("Forward".contains(commandName));
+		
+		if ("Left Right".contains(commandName)) return new RotationCommand("Left".contains(commandName));
 		
 		throw new Error("library error");
 	}
