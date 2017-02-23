@@ -3,7 +3,7 @@ package back_end;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import commands.Command;
+import commands.CommandInterface;
 import commands.ForwardCommand;
 import commands.RotationCommand;
 
@@ -29,7 +29,7 @@ public class CommandLibrary
 		}
 	}
 
-	public Command getCommand(String firstWord)
+	public CommandInterface getCommand(String firstWord)
 	{
 		firstWord = firstWord.toLowerCase();
 		for (String x : commandNames)
@@ -43,7 +43,7 @@ public class CommandLibrary
 		throw new Error("Command not found");
 	}
 
-	private Command selectCommand(String x)
+	private CommandInterface selectCommand(String x)
 	{
 			for (String z : resource.keySet())
 			{
@@ -55,11 +55,11 @@ public class CommandLibrary
 		throw new Error("back end error");
 	}
 
-	private Command createCommand(String commandName)
+	private CommandInterface createCommand(String commandName)
 	{
 		if ("Forward Backward".contains(commandName)) return new ForwardCommand("Forward".contains(commandName));
 		
-		if ("Left Right".contains(commandName)) return new RotationCommand("Left".contains(commandName));
+		if ("Left Right".contains(commandName)) return new RotationCommand("Right".contains(commandName));
 		
 		throw new Error("library error");
 	}

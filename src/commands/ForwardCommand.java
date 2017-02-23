@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import back_end.ModelState;
 
-public class ForwardCommand implements Command
+public class ForwardCommand implements CommandInterface
 {
 	public static final String X = "X";
 	public static final String Y = "Y";
@@ -39,7 +39,7 @@ public class ForwardCommand implements Command
 	}
 	private double calculateComponentMovementMagnitude(double angle, int movementMagnitude, String string) {
 		if (string.equals(X)){
-			return movementMagnitude * Math.sin(Math.toRadians(angle));
+			return -1 * movementMagnitude * Math.sin(Math.toRadians(angle));
 		} else if (string.equals(Y)){
 			return movementMagnitude * Math.cos(Math.toRadians(angle));
 		}

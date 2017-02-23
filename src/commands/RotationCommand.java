@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import back_end.ModelState;
 
-public class RotationCommand implements Command
+public class RotationCommand implements CommandInterface
 {
 	private ParameterContainer myParameter;
 	private int scale;

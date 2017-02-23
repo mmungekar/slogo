@@ -90,7 +90,7 @@ public class Canvas {
 		turtle.setCenterX(state.getX() + home.getX());
 		turtle.setCenterY(state.getY() + home.getY());
 		
-		//turtle.setAngle(state.getAngle());
+		turtle.setAngle(state.getAngle());
 		
 	}
 

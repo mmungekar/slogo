@@ -138,8 +138,8 @@ public class Terminal {
 				// http://stackoverflow.com/questions/19002059/get-key-combination-code
 				if (keyEvent.isShiftDown()){
 					submitInput();
-					break;
 				}
+				break;
 			case UP:
 				if (historyPointer == 0) {
 					break;
@@ -150,6 +150,7 @@ public class Terminal {
 				break;
 			case DOWN:
 				if (historyPointer == history.size() - 1) {
+					input.clear();
 					break;
 				}
 				historyPointer++;
