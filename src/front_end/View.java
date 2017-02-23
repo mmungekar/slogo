@@ -22,7 +22,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -55,6 +54,7 @@ public class View implements ViewInterface {
 	private Canvas canvas;
 	private Color canvasColor = Color.WHITE;
 	private String currentLanguage;
+	private ModelState modelState;
 	
 	private ComboBox<Integer> turtleIDs;
 
@@ -63,11 +63,12 @@ public class View implements ViewInterface {
 	public static final ObservableList<String> customCommands = FXCollections.observableArrayList();
 	
 
-	public View(Stage s) {
+	public View(Stage s, ModelState modelState) {
+		this.modelState = modelState;
 		setLanguage(DEFAULT_LANGUAGE);
 		
 		Group root = new Group();
-		createViewComponents(s, root);
+		createViewComponents(s, modelState, root);
 		
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND_COLOR);
 
@@ -75,12 +76,8 @@ public class View implements ViewInterface {
 		s.show();
 	}
 	
-	public void update(ModelState state){
-		canvas.update(state);
-	}
-
-	private void createViewComponents(Stage s, Group root) {
-		createCanvas(root);
+	private void createViewComponents(Stage s, ModelState modelState, Group root) {
+		createCanvas(modelState, root);
 		createTerminal(root);
 		createCustomViews(root);
 		createSideButtons(s, root);
@@ -154,8 +151,8 @@ public class View implements ViewInterface {
 	    root.getChildren().add(tabPane);
 	}
 
-	private void createCanvas(Group root) {
-		canvas = new Canvas(root, HOME);
+	private void createCanvas(ModelState modelState, Group root) {
+		canvas = new Canvas(modelState, root, HOME);
 		canvas.setPosition(new int[] { DEFAULT_SPACING, DEFAULT_SPACING });
 		canvas.setSize(new int[] { CANVAS_WIDTH, CANVAS_HEIGHT });
 		canvas.setBackgroundColor(canvasColor);
@@ -173,8 +170,11 @@ public class View implements ViewInterface {
 	private Button addTurtleButton() {
 		Button turtleCreation = new Button("Add New Turtle");
 		turtleCreation.setOnAction(event -> {createTurtle(); updateTurtleSelection();});
-
 		return turtleCreation;
+	}
+
+	private void createTurtle() {
+		modelState.createTurtle();
 	}
 
 	private void updateTurtleSelection() {
@@ -196,7 +196,7 @@ public class View implements ViewInterface {
 				if (turtleIDs.getSelectionModel().getSelectedItem() != null){
 					File newImageFile = chooseFile(s);
 					if(newImageFile != null){
-						canvas.changeTurtleImage(turtleIDs.getSelectionModel().getSelectedItem(), newImageFile);
+						modelState.changeTurtleImage(turtleIDs.getSelectionModel().getSelectedItem(), newImageFile);
 					} else {
 						// wrong file
 					}
@@ -298,11 +298,7 @@ public class View implements ViewInterface {
 		this.languageHandler = action;
 
 	}
-	
-	public void createTurtle(){
-		canvas.createTurtle();
-	}
-	
+		
 	public void changeBackgroundColor(Color newColor){
 		canvas.setBackgroundColor(newColor);
 	}

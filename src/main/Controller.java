@@ -18,8 +18,8 @@ public class Controller {
 
 	public void start(Stage s)
 	{
-		view = new View(s);
 		model = new Model();
+		view = new View(s, model.getState());
 		
 		stringInterpreter = new StringInterpreter();
 		
@@ -46,7 +46,7 @@ public class Controller {
 
 	private void step()
 	{
-		view.update(model.getState());
+		//view.update(model.getState());
 	}
 
 }
