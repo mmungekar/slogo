@@ -21,14 +21,23 @@ public class ModelState extends Observable
 	public void setX(int ID, double inX)
 	{
 		 turtleContainer.get(ID).setX(inX);
+		 
+		 setChanged();
+		 notifyObservers();
 	}
 	public void setY(int ID, double inY)
 	{
 		turtleContainer.get(ID).setY(inY);
+		
+		setChanged();
+		notifyObservers();
 	}
 	public void setAngle(int ID, double inAngle)
 	{
 		turtleContainer.get(ID).setAngle(inAngle);
+		
+		setChanged();
+		notifyObservers();
 	}
 	public double getX(int ID)
 	{
@@ -65,6 +74,8 @@ public class ModelState extends Observable
 	public void setBackgroundColor(Color backgroundColor)
 	{
 		this.backgroundColor = backgroundColor;
+		setChanged();
+		notifyObservers();
 	}
 	
 }

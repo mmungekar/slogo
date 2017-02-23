@@ -21,6 +21,9 @@ public class Controller {
 		view = new View(s);
 		model = new Model();
 		
+		//TODO:
+		//model.getState().addObserver(view.getObserver());
+		
 		stringInterpreter = new StringInterpreter();
 		
 		//view.setLanguageChangeListener((String string) -> stringInterpreter.setLanguage(string));
