@@ -10,6 +10,7 @@ public class CommandLibrary
 {
 	private ResourceBundle resource;
 	private ArrayList<String> commandNames;
+	public static final String LANGUAGE_DIRECTORY = "resources/languages/";
 	
 	public CommandLibrary()
 	{
@@ -19,7 +20,7 @@ public class CommandLibrary
 	public void buildLib(String language)
 	{
 		commandNames = new ArrayList<String>();
-		resource = ResourceBundle.getBundle("resources/languages/" + language);
+		resource = ResourceBundle.getBundle(LANGUAGE_DIRECTORY + language);
 		
 		for (String x : resource.keySet())
 		{

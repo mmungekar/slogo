@@ -16,8 +16,6 @@ import javafx.scene.shape.Rectangle;
 
 public class Canvas {
 	public static final String IMAGE_DIRECTORY = "resources/images/";
-	public static final String BALL_IMAGE = "ball.gif";
-	public static final String BALL_IMAGE_FIRE = "ball_fire.gif";
 	public static final String DEFAULT_TURTLE = "ball_given.gif";
 	
 	public static final int arc = 25;

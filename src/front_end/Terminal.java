@@ -1,5 +1,7 @@
 package front_end;
 
+import java.util.ResourceBundle;
+
 //http://codereview.stackexchange.com/questions/52197/console-component-in-javafx
 ///http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
 
@@ -22,6 +24,8 @@ import javafx.scene.layout.VBox;
 
 public class Terminal {
 	public static final int CONSOLE_WIDTH = 500;
+	public static final String LANGUAGE_DIRECTORY = "resources/languages/";
+	private ResourceBundle resource;
 	
 	private VBox console;
 	private TextArea input;
@@ -33,7 +37,8 @@ public class Terminal {
 	public final static String EMPTY_STRING = "";
 	private Consumer<String> onMessageReceivedHandler;
 
-	public Terminal() {
+	public Terminal(String language) {
+		resource = ResourceBundle.getBundle(LANGUAGE_DIRECTORY + language);
 		console = new VBox();
 		console.getChildren().addAll(createInputComponents(), createHistoryAndOutputComponents());
 	}
@@ -43,11 +48,11 @@ public class Terminal {
 	    
 		initializeOutput();
 	    Tab tabOutput = new Tab();
-	    tabOutput.setText("Output");
+	    tabOutput.setText(resource.getString("Output"));
 	    tabOutput.setContent(output);
 	    
 	    Tab tabHistory = new Tab();
-	    tabHistory.setText("History");
+	    tabHistory.setText(resource.getString("History"));
 	    tabHistory.setContent(createHistoryComponents());
 	    
 	    tabPane.getTabs().addAll(tabOutput, tabHistory);
@@ -69,7 +74,7 @@ public class Terminal {
 		
 		initializeInput();
 		
-		Button submit = new Button("SUBMIT");
+		Button submit = new Button(resource.getString("Submit"));
 		submit.setOnAction(event -> submitInput());
 		submit.setPrefHeight(input.getPrefHeight());
 		
@@ -83,7 +88,7 @@ public class Terminal {
 		
 		setupHistoryView();
 		
-		Button clear = new Button("CLEAR");
+		Button clear = new Button(resource.getString("Clear"));
 		clear.setOnAction(event -> clearHistory());
 		clear.setPrefHeight(historyView.getPrefHeight());
 		
