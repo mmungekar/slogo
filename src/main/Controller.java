@@ -22,13 +22,10 @@ public class Controller {
 
 		stringInterpreter = new StringInterpreter();
 
-		// view.setLanguageChangeListener((String string) ->
-		// stringInterpreter.setLanguage(string));
-
 		view.setEnterListener((String string) -> {
-			System.out.println(model.getState().getY(0));
+			System.out.println(model.printState());
 			stringInterpreter.interpret(string).Execute(model.getState());
-			System.out.println(model.getState().getY(0));
+			System.out.println(model.printState());
 		});
 
 		initAnimation();

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import commands.Command;
+import commands.CommandInterface;
 /**
  * The StringInterpreter class receives user-input commands, 
  * and parses through them to determine command type and parameter 
@@ -52,14 +52,13 @@ public class StringInterpreter
 		lineScanner.close();
 	}
 	
-	public Command interpret(String commandString)
+	public CommandInterface interpret(String commandString)
 	{
-		scanner = new Scanner(commandString);
 		System.out.println("Text submitted: " + commandString);
 
 		scanner = new Scanner(commandString);
 		//NEEDS TO BE ALTERED IF REPETITION
-		Command command = commandLib.getCommand(scanner.next());
+		CommandInterface command = commandLib.getCommand(scanner.next());
 		command.setParameters(scanner.nextLine());
 		return command;
 	}

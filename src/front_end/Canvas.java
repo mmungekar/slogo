@@ -14,16 +14,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
-public class Canvas implements Observer{
-	
+public class Canvas implements Observer {
 	public static final int arc = 25;
-	
+
 	private Rectangle Frame;
 	private Group myRoot;
-	
+
 	private ModelState observedState = null;
 	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
-	
+
 	public Canvas(ModelState observedState, Group root, Point2D home) {
 		this.observedState = observedState;
 		this.myRoot = root;
@@ -63,7 +62,7 @@ public class Canvas implements Observer{
 		line.setEndY(endY);
 		line.setStroke(Color.BLACK);
 		myRoot.getChildren().add(line);
-		
+
 	}
 
 	Collection<Integer> getTurtleIDs() {
@@ -72,13 +71,13 @@ public class Canvas implements Observer{
 
 	@Override
 	public void update(Observable obs, Object obj) {
-		//System.out.println("(from Canvas/Observer end) Observers Notified ");
-		if (obs == observedState){
+		// System.out.println("(from Canvas/Observer end) Observers Notified ");
+		if (obs == observedState) {
 			// update all parts of modelstate that canvas has
 			updateTurtles();
 			updateBackground();
 		}
-		
+
 	}
 
 	private void updateBackground() {
@@ -87,12 +86,11 @@ public class Canvas implements Observer{
 
 	private void updateTurtles() {
 		this.turtleContainer = observedState.getTurtleContainer();
-		for (Turtle turtle : turtleContainer.values()){
-			if (!myRoot.getChildren().contains(turtle)){
+		for (Turtle turtle : turtleContainer.values()) {
+			if (!myRoot.getChildren().contains(turtle)) {
 				myRoot.getChildren().add(turtle);
 			}
 		}
 	}
 
-	
 }

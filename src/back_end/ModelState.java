@@ -93,4 +93,10 @@ public class ModelState extends Observable {
 		Image imageTurtle = new Image(getClass().getClassLoader().getResourceAsStream(imageLocation));
 		return imageTurtle;
 	}
+	
+	@Override
+	public String toString(){
+		return ("X: " + this.getX(0) + " Y: " + this.getY(0) + " Angle: " + this.getAngle(0)); 
+	}
+
 }
