@@ -37,17 +37,19 @@ public class StringInterpreter
 	 *@param String commandLine and commandString refer to the user-input commands. Everything bounded
 	 *by whitespace characters is parsed, stored as an input object, and put into a list.
 	 */
-	private void parseLine(String commandLine){
-		Scanner lineScanner = new Scanner(commandLine);
-		Input newInput = new Input(lineScanner.next(), myParser.getSymbol(lineScanner.next()));
-		myInputs.add(newInput);
-	}
-	
 	private void storeInput(String commandString){
 		Scanner inputScanner = new Scanner(commandString);
 		while (inputScanner.hasNextLine()) {
             parseLine(inputScanner.nextLine());
 		}
+		inputScanner.close();
+	}
+	
+	private void parseLine(String commandLine){
+		Scanner lineScanner = new Scanner(commandLine);
+		Input newInput = new Input(lineScanner.next(), myParser.getSymbol(lineScanner.next()));
+		myInputs.add(newInput);
+		lineScanner.close();
 	}
 	
 	public Command interpret(String commandString)

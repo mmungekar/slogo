@@ -1,4 +1,4 @@
-package front_end;
+package back_end;
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -27,12 +27,6 @@ public class Turtle extends ImageView{
 		this(image, new Point2D(x, y));
 	}
 	
-	Turtle(Image newImage, Turtle oldTurtle){
-		super(newImage);
-		initializeSize(newImage);
-		copyOverAttributes(oldTurtle);
-	}
-	
 	private void updatePosition(double x, double y) {
 		updatePosition(new Point2D(x, y));	
 	}
@@ -43,11 +37,6 @@ public class Turtle extends ImageView{
 		this.setCenterY(pos.getY());
 	}
 	
-	private void copyOverAttributes(Turtle oldTurtle) {
-		updatePosition(oldTurtle.getCenterX(), oldTurtle.getCenterY());
-		this.penDown = oldTurtle.isPenDown();
-	}
-
 	public boolean isPenDown() {
 		return penDown;
 	}
