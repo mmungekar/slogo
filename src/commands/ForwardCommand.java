@@ -28,12 +28,11 @@ public class ForwardCommand implements CommandInterface {
 	}
 
 	private void moveForward(ModelState state, int movementMagnitude) {
-		double xDis = calculateComponentMovementMagnitude(state.getAngle(0), movementMagnitude, X);
-		double yDis = calculateComponentMovementMagnitude(state.getAngle(0), movementMagnitude, Y);
+		double xDisplacement = calculateComponentMovementMagnitude(state.getAngle(0), movementMagnitude, X);
+		double yDisplacement = calculateComponentMovementMagnitude(state.getAngle(0), movementMagnitude, Y);
 
 		// TODO turtle ID
-		state.setX(0, state.getX(0) - xDis);
-		state.setY(0, state.getY(0) - yDis);
+		state.setPos(0, state.getX(0) - xDisplacement, state.getY(0) - yDisplacement);
 
 	}
 

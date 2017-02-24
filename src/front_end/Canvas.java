@@ -21,7 +21,7 @@ public class Canvas implements Observer {
 	private Group myRoot;
 
 	private ModelState observedState = null;
-	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
+	//private Map<Integer, Turtle> turtleContainer = new HashMap<>();
 
 	public Canvas(ModelState observedState, Group root, Point2D home) {
 		this.observedState = observedState;
@@ -30,6 +30,7 @@ public class Canvas implements Observer {
 		root.getChildren().add(Frame);
 		observedState.addObserver(this);
 		observedState.setHome(home);
+		//this.turtleContainer = observedState.getTurtleContainer();
 	}
 
 	private void createRectangle() {
@@ -54,27 +55,17 @@ public class Canvas implements Observer {
 		Frame.setHeight(size[1]);
 	}
 
-	private void drawLine(double startX, double startY, double endX, double endY) {
-		Line line = new Line();
-		line.setStartX(startX);
-		line.setStartY(startY);
-		line.setEndX(endX);
-		line.setEndY(endY);
-		line.setStroke(Color.BLACK);
-		myRoot.getChildren().add(line);
-
-	}
-
-	Collection<Integer> getTurtleIDs() {
-		return turtleContainer.keySet();
-	}
-
 	@Override
 	public void update(Observable obs, Object obj) {
 		// System.out.println("(from Canvas/Observer end) Observers Notified ");
 		if (obs == observedState) {
 			// update all parts of modelstate that canvas has
-			updateTurtles();
+			for (Turtle turtle : observedState.getTurtleContainer().values()){
+				if(turtle.hasMoved() && turtle.isPenDown()){
+					drawLine(turtle.getPrevCenterPosition(), turtle.getCenterPosition());
+				}
+			}
+			addNewTurtles();
 			updateBackground();
 		}
 
@@ -84,9 +75,18 @@ public class Canvas implements Observer {
 		this.setBackgroundColor(observedState.getBackgroundColor());
 	}
 
-	private void updateTurtles() {
-		this.turtleContainer = observedState.getTurtleContainer();
-		for (Turtle turtle : turtleContainer.values()) {
+	public void drawLine(Point2D startPos, Point2D endPos) {
+		Line line = new Line();
+		line.setStartX(startPos.getX());
+		line.setStartY(startPos.getY());
+		line.setEndX(endPos.getX());
+		line.setEndY(endPos.getY());
+		line.setStroke(Color.BLACK);
+		myRoot.getChildren().add(line);
+	}
+
+	private void addNewTurtles() {
+		for (Turtle turtle : observedState.getTurtleContainer().values()) {
 			if (!myRoot.getChildren().contains(turtle)) {
 				myRoot.getChildren().add(turtle);
 			}

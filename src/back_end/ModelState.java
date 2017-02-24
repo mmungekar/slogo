@@ -25,21 +25,25 @@ public class ModelState extends Observable {
 	private void setChangedAndNotifyObservers() {
 		setChanged();
 		notifyObservers();
-		//System.out.println("(from ModelState/Observable end) Observers Notified ");
 	}
 
-	public void setX(int ID, double inX) {
-		turtleContainer.get(ID).setCenterX(inX);
-		setChangedAndNotifyObservers();
-	}
-
-	public void setY(int ID, double inY) {
-		turtleContainer.get(ID).setCenterY(inY);
+	public void setPos(int ID, double inX, double inY){
+		turtleContainer.get(ID).setPosition(inX, inY);
 		setChangedAndNotifyObservers();
 	}
 
 	public void setAngle(int ID, double inAngle) {
 		turtleContainer.get(ID).setAngle(inAngle);
+		setChangedAndNotifyObservers();
+	}
+	
+	public void setPenDown(int ID){
+		turtleContainer.get(ID).setPenDown(true);
+		setChangedAndNotifyObservers();
+	}
+	
+	public void setPenUp(int ID){
+		turtleContainer.get(ID).setPenDown(false);
 		setChangedAndNotifyObservers();
 	}
 
@@ -51,7 +55,7 @@ public class ModelState extends Observable {
 	public void changeTurtleImage(Integer ID, File newImageFile) {
 		Image newTurtleImage = new Image(
 				getClass().getClassLoader().getResourceAsStream(IMAGE_DIRECTORY + newImageFile.getName()));
-		turtleContainer.get(ID).setImage(newTurtleImage);
+		turtleContainer.get(ID).changeImage(newTurtleImage);
 		setChangedAndNotifyObservers();
 	}
 
@@ -69,15 +73,19 @@ public class ModelState extends Observable {
 	}
 
 	public double getX(int ID) {
-		return turtleContainer.get(ID).getCenterX();
+		return turtleContainer.get(ID).getCenterPosition().getX();
 	}
 
 	public double getY(int ID) {
-		return turtleContainer.get(ID).getCenterY();
+		return turtleContainer.get(ID).getCenterPosition().getY();
 	}
 
 	public double getAngle(int ID) {
 		return turtleContainer.get(ID).getAngle();
+	}
+	
+	public boolean isPenDown(int ID){
+		return turtleContainer.get(ID).isPenDown();
 	}
 
 	public Color getBackgroundColor() {
@@ -96,7 +104,7 @@ public class ModelState extends Observable {
 	
 	@Override
 	public String toString(){
-		return ("X: " + this.getX(0) + " Y: " + this.getY(0) + " Angle: " + this.getAngle(0)); 
+		return ("X: " + (this.getX(0) - home.getX()) + " Y: " + -1 * (this.getY(0) - home.getY()) + " Angle: " + this.getAngle(0)); 
 	}
 
 }

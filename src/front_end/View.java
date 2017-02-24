@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import back_end.ModelState;
 import javafx.beans.value.ChangeListener;
@@ -15,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -22,11 +24,11 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableColumn;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -40,117 +42,61 @@ public class View implements ViewInterface {
 	public static final Color BACKGROUND_COLOR = Color.GREY;
 	public static final String DEFAULT_LANGUAGE = "English";
 	public static final int DEFAULT_SPACING = 30;
-	public static final Point2D HOME = new Point2D(CANVAS_WIDTH / 2 + DEFAULT_SPACING, CANVAS_HEIGHT / 2 + DEFAULT_SPACING);
-	public static final String IMAGE_FILE_DIRECTORY = "src/resources/images/";
-	public static final String IMAGE_EXTENSION = ".gif";
+	public static final Point2D HOME = new Point2D(CANVAS_WIDTH / 2 + DEFAULT_SPACING,
+			CANVAS_HEIGHT / 2 + DEFAULT_SPACING);
 	public static final String LANGUAGE_DIRECTORY = "resources/languages/";
 	private ResourceBundle resource;
 
 	private Consumer<String> onMessageReceivedHandler;
 	private Consumer<String> languageHandler;
 
-	private List<String> languages = Arrays.asList(new String[] { "Chinese", "English", "French", "German", "Italian",
-			"Portuguese", "Russian", "Spanish"});
-
+	
 	private Terminal terminal;
 	private Canvas canvas;
 	private Color canvasColor = Color.WHITE;
 	private String currentLanguage;
-	private ModelState modelState;
-	
-	private ComboBox<Integer> turtleIDs;
 
-	
 	public static final ObservableList<String> customVariables = FXCollections.observableArrayList();
 	public static final ObservableList<String> customCommands = FXCollections.observableArrayList();
-	
 
 	public View(Stage s, ModelState modelState) {
-		this.modelState = modelState;
 		setLanguage(DEFAULT_LANGUAGE);
-		
+
 		Group root = new Group();
 		createViewComponents(s, modelState, root);
-		
+
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND_COLOR);
 
 		s.setScene(scene);
 		s.show();
 	}
-	
+
 	private void createViewComponents(Stage s, ModelState modelState, Group root) {
 		createCanvas(modelState, root);
 		createTerminal(root);
 		createCustomViews(root);
-		createSideButtons(s, root);
-	}
-	
-	private void createSideButtons(Stage s, Group root) {
-		VBox sideButtons = new VBox();
-		
-		sideButtons.getChildren().addAll(createLanguageDropDown(),
-				createBackgroundColorSelectionTool(),
-				addTurtleButton(),
-				createTurtleImageSelection(s));
-		
-		sideButtons.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
-		sideButtons.setLayoutY(DEFAULT_SPACING);
-		sideButtons.setSpacing(DEFAULT_SPACING / 2);
-		
-		root.getChildren().add(sideButtons);
-	}
-
-	private ComboBox<String> createBackgroundColorSelectionTool() {
-		// from
-		// http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
-		
-		ObservableList<String> data = FXCollections.observableArrayList(
-	            "white","chocolate", "salmon", "gold", "coral", "darkorchid",
-	            "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue",
-	            "blueviolet", "brown");
-		
-		ComboBox<String> backgroundColors = new ComboBox<String>();
-		
-		backgroundColors.setItems(data);
-		backgroundColors.setPromptText(resource.getString("SelectBackground"));
-		backgroundColors.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-					@Override 
-		            public ListCell<String> call(ListView<String> list) {
-		                return new ColorRectCell();
-		            }
-	            }
-	        );
-		
-		backgroundColors.getSelectionModel().selectedItemProperty().addListener(
-	            new ChangeListener<String>() {
-	                public void changed(ObservableValue<? extends String> ov, 
-	                    String old_val, String new_val) {
-	                	changeBackgroundColor(Color.web(new_val));
-	            }
-	        });
-				
-		return backgroundColors;
+		SideBar sideBar = new SideBar(s, modelState, root, this);
 	}
 
 	private void createCustomViews(Group root) {
 		TabPane tabPane = new TabPane();
-	    
-	    Tab tabCommands = new Tab();
-	    tabCommands.setText(resource.getString("CustomCommands"));
-	    tabCommands.setContent(createCommandView());
-	    
-	    Tab tabVariables = new Tab();
-	    tabVariables.setText(resource.getString("CustomVariables"));
-	    tabVariables.setContent(createVariableView());
-	    
-	    tabPane.getTabs().addAll(tabCommands, tabVariables);
-	    tabPane.setLayoutY(WINDOW_HEIGHT - 350);
+
+		Tab tabCommands = new Tab();
+		tabCommands.setText(resource.getString("CustomCommands"));
+		tabCommands.setContent(createCommandView());
+
+		Tab tabVariables = new Tab();
+		tabVariables.setText(resource.getString("CustomVariables"));
+		tabVariables.setContent(createVariableView());
+
+		tabPane.getTabs().addAll(tabCommands, tabVariables);
+		tabPane.setLayoutY(WINDOW_HEIGHT - 350);
 		tabPane.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
 		tabPane.setPrefHeight(350 - DEFAULT_SPACING);
-		
+
 		tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-	    
-	    root.getChildren().add(tabPane);
+
+		root.getChildren().add(tabPane);
 	}
 
 	private void createCanvas(ModelState modelState, Group root) {
@@ -159,7 +105,7 @@ public class View implements ViewInterface {
 		canvas.setSize(new int[] { CANVAS_WIDTH, CANVAS_HEIGHT });
 		canvas.setBackgroundColor(canvasColor);
 	}
-	
+
 	private void createTerminal(Group root) {
 		terminal = new Terminal(this.currentLanguage);
 		VBox console = terminal.getConsole();
@@ -169,84 +115,21 @@ public class View implements ViewInterface {
 		root.getChildren().add(console);
 	}
 
-	private Button addTurtleButton() {
-		Button turtleCreation = new Button(resource.getString("AddNewTurtle"));
-		turtleCreation.setOnAction(event -> {createTurtle(); updateTurtleSelection();});
-		return turtleCreation;
-	}
-
-	private void createTurtle() {
-		modelState.createTurtle();
-	}
-
-	private void updateTurtleSelection() {
-		turtleIDs.getItems().clear();
-		turtleIDs.getItems().addAll(canvas.getTurtleIDs());
-	}
-
-	private HBox createTurtleImageSelection(Stage s) {
-		HBox turtleImageControl = new HBox();
-		
-		turtleIDs = new ComboBox<Integer>(); 
-		turtleIDs.setPromptText(resource.getString("TurtleIDs"));
-		turtleIDs.getItems().addAll(canvas.getTurtleIDs());
-		
-		Button fileChoose = new Button(resource.getString("ChooseTurtleImage"));
-		fileChoose.setOnAction(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event) {
-				if (turtleIDs.getSelectionModel().getSelectedItem() != null){
-					File newImageFile = chooseFile(s);
-					if(newImageFile != null){
-						modelState.changeTurtleImage(turtleIDs.getSelectionModel().getSelectedItem(), newImageFile);
-					} else {
-						// wrong file
-					}
-				} else {
-					// no turtle ID selected
-				}
-			}
-		});
-		
-		turtleImageControl.getChildren().addAll(turtleIDs, fileChoose);
-		
-		turtleImageControl.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
-		turtleImageControl.setLayoutY(3 * DEFAULT_SPACING);
-		return turtleImageControl;
-	}
-	
-	private File chooseFile(Stage s){
-		FileChooser xmlChooser = new FileChooser();
-		xmlChooser.setTitle(resource.getString("ChooseTurtleImage"));
-		xmlChooser.setInitialDirectory(new File(IMAGE_FILE_DIRECTORY));
-		File file = xmlChooser.showOpenDialog(s);
-		if(file != null){
-				String name = file.getName();
-				String fileType = name.substring(name.lastIndexOf("."), name.length());
-				if(!fileType.equals(IMAGE_EXTENSION)){
-					return null;
-				}
-				return file;
-		}
-		return null;
-	}
 
 	/*
-	 * I know this is repeated code.
-	 * The createVariableView method will be changed once I 
-	 * figure out how to make it editable.
+	 * I know this is repeated code. The createVariableView method will be
+	 * changed once I figure out how to make it editable.
 	 * 
 	 * TODO: Make values in this editable, not executable
 	 */
 	private ListView<String> createVariableView() {
 		/*
-		TableView table = new TableView();
-		TableColumn variableNameCol = new TableColumn("Name");
-		TableColumn variableValueCol = new TableColumn("Value");
-		variableNameCol.setEditable(false);
-		variableValueCol.setEditable(true);
-		*/
-		
+		 * TableView table = new TableView(); TableColumn variableNameCol = new
+		 * TableColumn("Name"); TableColumn variableValueCol = new
+		 * TableColumn("Value"); variableNameCol.setEditable(false);
+		 * variableValueCol.setEditable(true);
+		 */
+
 		ListView<String> myListView = new ListView<String>();
 		myListView.setItems(customVariables);
 		myListView.setPrefWidth(150);
@@ -297,7 +180,7 @@ public class View implements ViewInterface {
 		return this.currentLanguage;
 	}
 
-	protected void setLanguage(String language) {
+	void setLanguage(String language) {
 		this.currentLanguage = language;
 		if (this.languageHandler != null) {
 			this.languageHandler.accept(language);
@@ -310,42 +193,26 @@ public class View implements ViewInterface {
 		this.languageHandler = action;
 
 	}
-		
-	public void changeBackgroundColor(Color newColor){
+
+	public void changeBackgroundColor(Color newColor) {
 		canvas.setBackgroundColor(newColor);
 	}
-	
-	public void setOutputText(String output){
+
+	public void setOutputText(String output) {
 		terminal.setOutputText(output);
 	}
 	
-	
-	private ComboBox<String> createLanguageDropDown() {
-		// from stack overflow:
-		// http://stackoverflow.com/questions/22191954/javafx-casting-arraylist-to-observablelist
-		ObservableList<String> obsNames = FXCollections.observableArrayList(languages);
-		ComboBox<String> languageDropDown = new ComboBox<String>(obsNames);
-		languageDropDown.setMaxWidth(200);
-		languageDropDown.setPromptText(resource.getString("SetLanguage"));
-		languageDropDown.valueProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue ov, String oldParam, String newParam) {
-				setLanguage(newParam);
-			}
-		});
-		return languageDropDown;
+	double[] getCanvasDimensions(){
+		return new double[]{CANVAS_WIDTH, CANVAS_HEIGHT};
 	}
 	
+	double getDefaultSpacing(){
+		return DEFAULT_SPACING;
+	}
 	
-	private static class ColorRectCell extends ListCell<String> {
-        @Override
-        public void updateItem(String item, boolean empty) {
-            super.updateItem(item, empty);
-            Rectangle rect = new Rectangle(100, 20);
-            if (item != null) {
-                rect.setFill(Color.web(item));
-                setGraphic(rect);
-            }
-        }
-    }
+	ResourceBundle getCurrentResource(){
+		return resource;
+	}
+
+
 }
