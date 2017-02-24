@@ -29,6 +29,7 @@ public class Canvas implements Observer{
 		this.myRoot = root;
 		createRectangle();
 		root.getChildren().add(Frame);
+		observedState.addObserver(this);
 		observedState.setHome(home);
 	}
 
@@ -71,7 +72,7 @@ public class Canvas implements Observer{
 
 	@Override
 	public void update(Observable obs, Object obj) {
-		System.out.println("(from Canvas/Observer end) Observers Notified ");
+		//System.out.println("(from Canvas/Observer end) Observers Notified ");
 		if (obs == observedState){
 			// update all parts of modelstate that canvas has
 			updateTurtles();
@@ -88,7 +89,6 @@ public class Canvas implements Observer{
 		this.turtleContainer = observedState.getTurtleContainer();
 		for (Turtle turtle : turtleContainer.values()){
 			if (!myRoot.getChildren().contains(turtle)){
-				System.out.println("added new turtle");
 				myRoot.getChildren().add(turtle);
 			}
 		}

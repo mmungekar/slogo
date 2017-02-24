@@ -25,16 +25,16 @@ public class ModelState extends Observable {
 	private void setChangedAndNotifyObservers() {
 		setChanged();
 		notifyObservers();
-		System.out.println("(from ModelState/Observable end) Observers Notified ");
+		//System.out.println("(from ModelState/Observable end) Observers Notified ");
 	}
 
 	public void setX(int ID, double inX) {
-		turtleContainer.get(ID).setX(inX - home.getX());
+		turtleContainer.get(ID).setCenterX(inX);
 		setChangedAndNotifyObservers();
 	}
 
 	public void setY(int ID, double inY) {
-		turtleContainer.get(ID).setY(inY - home.getY());
+		turtleContainer.get(ID).setCenterY(inY);
 		setChangedAndNotifyObservers();
 	}
 
@@ -65,16 +65,15 @@ public class ModelState extends Observable {
 		this.home = home;
 		// create first turtle once home is set
 		turtleContainer.put(0, new Turtle(getDefaultTurtleImage(), home));
-		System.out.println("first turtle placed in container");
 		setChangedAndNotifyObservers();
 	}
 
 	public double getX(int ID) {
-		return turtleContainer.get(ID).getX();
+		return turtleContainer.get(ID).getCenterX();
 	}
 
 	public double getY(int ID) {
-		return turtleContainer.get(ID).getX();
+		return turtleContainer.get(ID).getCenterY();
 	}
 
 	public double getAngle(int ID) {

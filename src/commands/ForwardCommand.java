@@ -16,7 +16,6 @@ public class ForwardCommand implements Command
 	public void execute(ModelState state)
 	{
 		state.setY(0, state.getY(0)-((MovementParameters)parameters).getMovementMagnitude());
-		
 	}
 	@Override
 	public void setParameters(String nextLine)
