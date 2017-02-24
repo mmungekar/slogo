@@ -25,7 +25,7 @@ public class ModelState extends Observable {
 	private void setChangedAndNotifyObservers() {
 		setChanged();
 		notifyObservers();
-		System.out.println("peeps notified");
+		System.out.println("(from ModelState/Observable end) Observers Notified ");
 	}
 
 	public void setX(int ID, double inX) {
@@ -63,10 +63,9 @@ public class ModelState extends Observable {
 
 	public void setHome(Point2D home) {
 		this.home = home;
-		System.out.println(home);
 		// create first turtle once home is set
 		turtleContainer.put(0, new Turtle(getDefaultTurtleImage(), home));
-		System.out.println("first turtle out");
+		System.out.println("first turtle placed in container");
 		setChangedAndNotifyObservers();
 	}
 

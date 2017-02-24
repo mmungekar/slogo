@@ -71,6 +71,7 @@ public class Canvas implements Observer{
 
 	@Override
 	public void update(Observable obs, Object obj) {
+		System.out.println("(from Canvas/Observer end) Observers Notified ");
 		if (obs == observedState){
 			// update all parts of modelstate that canvas has
 			updateTurtles();
@@ -84,7 +85,6 @@ public class Canvas implements Observer{
 	}
 
 	private void updateTurtles() {
-		System.out.println("update received by Canvas");
 		this.turtleContainer = observedState.getTurtleContainer();
 		for (Turtle turtle : turtleContainer.values()){
 			if (!myRoot.getChildren().contains(turtle)){
