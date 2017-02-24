@@ -16,27 +16,22 @@ public class Controller {
 	private Model model;
 	private StringInterpreter stringInterpreter;
 
-	public void start(Stage s)
-	{
-		view = new View(s);
+	public void start(Stage s) {
 		model = new Model();
-		
-		stringInterpreter = new StringInterpreter();
-		
-		//view.setLanguageChangeListener((String string) -> stringInterpreter.setLanguage(string));
+		view = new View(s, model.getState());
 
-		view.setEnterListener((String string) -> 
-		{
-			System.out.println(model.getState().getY());
+		stringInterpreter = new StringInterpreter();
+
+		view.setEnterListener((String string) -> {
+			System.out.println(model.printState());
 			stringInterpreter.interpret(string).Execute(model.getState());
-			System.out.println(model.getState().getY());
+			System.out.println(model.printState());
 		});
 
 		initAnimation();
 	}
 
-	private void initAnimation()
-	{
+	private void initAnimation() {
 		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY), e -> step());
 		Timeline animation = new Timeline();
 		animation.setCycleCount(Timeline.INDEFINITE);
@@ -44,9 +39,8 @@ public class Controller {
 		animation.play();
 	}
 
-	private void step()
-	{
-		view.update(model.getState());
+	private void step() {
+		// view.update(model.getState());
 	}
 
 }
