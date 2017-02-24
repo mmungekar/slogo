@@ -9,13 +9,15 @@ import commands.RotationCommand;
 
 public class CommandLibrary
 {
+	private String language = "English";
 	private ResourceBundle resource;
 	private ArrayList<String> commandNames;
 	public static final String LANGUAGE_DIRECTORY = "resources/languages/";
 	
+	
 	public CommandLibrary()
 	{
-		buildLib("English");
+		buildLib(this.language);
 	}
 
 	public void buildLib(String language)
