@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import back_end.ModelState;
+import back_end.Model;
 import back_end.Turtle;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -20,10 +20,10 @@ public class Canvas implements Observer {
 	private Rectangle Frame;
 	private Group myRoot;
 
-	private ModelState observedState = null;
+	private Model observedState = null;
 	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
 
-	public Canvas(ModelState observedState, Group root, Point2D home) {
+	public Canvas(Model observedState, Group root, Point2D home) {
 		this.observedState = observedState;
 		this.myRoot = root;
 		createRectangle();

@@ -2,7 +2,7 @@ package commands;
 
 import java.util.Scanner;
 
-import back_end.ModelState;
+import back_end.Model;
 
 public class ForwardCommand implements CommandInterface {
 	public static final String X = "X";
@@ -23,11 +23,11 @@ public class ForwardCommand implements CommandInterface {
 	}
 
 	@Override
-	public void Execute(ModelState state) {
+	public void Execute(Model state) {
 		moveForward(state, ((MovementParameters) parameters).getMovementMagnitude());
 	}
 
-	private void moveForward(ModelState state, int movementMagnitude) {
+	private void moveForward(Model state, int movementMagnitude) {
 		double xDis = calculateComponentMovementMagnitude(state.getAngle(0), movementMagnitude, X);
 		double yDis = calculateComponentMovementMagnitude(state.getAngle(0), movementMagnitude, Y);
 
