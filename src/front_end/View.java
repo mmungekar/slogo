@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-import back_end.ModelState;
+import back_end.Model;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -56,7 +56,7 @@ public class View implements ViewInterface {
 	private Canvas canvas;
 	private Color canvasColor = Color.WHITE;
 	private String currentLanguage;
-	private ModelState modelState;
+	private Model modelState;
 	
 	private ComboBox<Integer> turtleIDs;
 
@@ -65,7 +65,7 @@ public class View implements ViewInterface {
 	public static final ObservableList<String> customCommands = FXCollections.observableArrayList();
 	
 
-	public View(Stage s, ModelState modelState) {
+	public View(Stage s, Model modelState) {
 		this.modelState = modelState;
 		setLanguage(DEFAULT_LANGUAGE);
 		
@@ -78,7 +78,7 @@ public class View implements ViewInterface {
 		s.show();
 	}
 	
-	private void createViewComponents(Stage s, ModelState modelState, Group root) {
+	private void createViewComponents(Stage s, Model modelState, Group root) {
 		createCanvas(modelState, root);
 		createTerminal(root);
 		createCustomViews(root);
@@ -153,7 +153,7 @@ public class View implements ViewInterface {
 	    root.getChildren().add(tabPane);
 	}
 
-	private void createCanvas(ModelState modelState, Group root) {
+	private void createCanvas(Model modelState, Group root) {
 		canvas = new Canvas(modelState, root, HOME);
 		canvas.setPosition(new int[] { DEFAULT_SPACING, DEFAULT_SPACING });
 		canvas.setSize(new int[] { CANVAS_WIDTH, CANVAS_HEIGHT });
