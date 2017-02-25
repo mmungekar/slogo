@@ -22,6 +22,7 @@ public class ModelState extends Observable {
 		setBackgroundColor(Color.WHITE);
 	}
 
+
 	private void setChangedAndNotifyObservers() {
 		setChanged();
 		notifyObservers();
@@ -31,6 +32,7 @@ public class ModelState extends Observable {
 	public void setX(int ID, double inX) {
 		turtleContainer.get(ID).setCenterX(inX);
 		setChangedAndNotifyObservers();
+
 	}
 
 	public void setY(int ID, double inY) {
@@ -83,6 +85,7 @@ public class ModelState extends Observable {
 	public Color getBackgroundColor() {
 		return backgroundColor;
 	}
+
 
 	public Map<Integer, Turtle> getTurtleContainer() {
 		return turtleContainer;

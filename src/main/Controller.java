@@ -18,6 +18,7 @@ public class Controller {
 
 	public void start(Stage s) {
 		model = new Model();
+
 		view = new View(s, model.getState());
 
 		stringInterpreter = new StringInterpreter();
