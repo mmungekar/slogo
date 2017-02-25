@@ -39,12 +39,12 @@ public class ModelState extends Observable {
 	
 	public void setPenDown(int ID){
 		turtleContainer.get(ID).setPenDown(true);
-		setChangedAndNotifyObservers();
+		//setChangedAndNotifyObservers();
 	}
 	
 	public void setPenUp(int ID){
 		turtleContainer.get(ID).setPenDown(false);
-		setChangedAndNotifyObservers();
+		//setChangedAndNotifyObservers();
 	}
 
 	public void setBackgroundColor(Color backgroundColor) {
@@ -56,6 +56,11 @@ public class ModelState extends Observable {
 		Image newTurtleImage = new Image(
 				getClass().getClassLoader().getResourceAsStream(IMAGE_DIRECTORY + newImageFile.getName()));
 		turtleContainer.get(ID).changeImage(newTurtleImage);
+		setChangedAndNotifyObservers();
+	}
+	
+	public void sendTurtleHome(int ID){
+		turtleContainer.get(ID).setPosition(home);
 		setChangedAndNotifyObservers();
 	}
 

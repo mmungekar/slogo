@@ -18,6 +18,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -36,7 +40,7 @@ public class SideBar {
 	private View myView;
 	private ComboBox<Integer> turtleIDs;
 	private ModelState modelState;
-	
+
 	public SideBar(Stage s, ModelState modelState, Group root, View view) {
 		this.myView = view;
 		this.modelState = modelState;
@@ -51,7 +55,7 @@ public class SideBar {
 
 		root.getChildren().add(sideButtons);
 	}
-	
+
 	private ComboBox<String> createLanguageDropDown() {
 		// from stack overflow:
 		// http://stackoverflow.com/questions/22191954/javafx-casting-arraylist-to-observablelist
@@ -67,7 +71,7 @@ public class SideBar {
 		});
 		return languageDropDown;
 	}
-	
+
 	private ComboBox<String> createBackgroundColorSelectionTool() {
 		// from
 		// http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
@@ -95,9 +99,9 @@ public class SideBar {
 
 		return backgroundColors;
 	}
-	
+
 	private Node createClearLinesButton(Group root) {
-		Button clearLines = new Button("Clear Lines");
+		Button clearLines = new Button("Clear All Lines");
 		clearLines.setOnAction(event -> clearLines(root));
 		return clearLines;
 	}
@@ -105,7 +109,7 @@ public class SideBar {
 	private void clearLines(Group root) {
 		root.getChildren().removeIf(new LinePredicate());
 	}
-	
+
 	private Button addTurtleButton() {
 		Button turtleCreation = new Button(myView.getCurrentResource().getString("AddNewTurtle"));
 		turtleCreation.setOnAction(event -> {
@@ -123,24 +127,63 @@ public class SideBar {
 		turtleIDs.getItems().clear();
 		turtleIDs.getItems().addAll(modelState.getTurtleContainer().keySet());
 	}
-	
+
 	private VBox createTurtleSpecficCommands(Stage s) {
 		VBox turtleSpecificControls = new VBox();
 
 		createTurtleIDSelector();
 
 		Button imageChoose = createTurtleImageChoose(s);
-		// TODO pen toggle switch
-		// TODO go home
-		
+		Button sendHome = createSendHomeButton();
+		HBox penControls = createPenToggle();
 
-		turtleSpecificControls.getChildren().addAll(turtleIDs, imageChoose);
+		turtleSpecificControls.getChildren().addAll(turtleIDs, imageChoose, sendHome);
 
 		turtleSpecificControls.setLayoutX(myView.getCanvasDimensions()[0] + 3 * myView.getDefaultSpacing());
 		turtleSpecificControls.setLayoutY(3 * myView.getDefaultSpacing());
 		return turtleSpecificControls;
 	}
 
+	private HBox createPenToggle() {
+		HBox penControls = new HBox();
+		ToggleGroup penToggle = new ToggleGroup();
+		RadioButton penDown = new RadioButton("Pen Down");
+		penDown.setToggleGroup(penToggle);
+		RadioButton penUp = new RadioButton("Pen Up");
+		penUp.setToggleGroup(penToggle);
+		penToggle.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
+				if (turtleIDs.getSelectionModel().getSelectedItem() != null && penToggle.getSelectedToggle() != null) {
+					if (penToggle.getSelectedToggle().equals(penUp)) {
+						modelState.setPenUp(turtleIDs.getSelectionModel().getSelectedItem());
+					} else {
+						modelState.setPenDown(turtleIDs.getSelectionModel().getSelectedItem());
+					}
+				} else {
+					// no turtle ID selected
+				}
+			}
+		});
+		
+		penControls.getChildren().addAll(penDown, penUp);
+
+		return penControls;
+	}
+
+	private Button createSendHomeButton() {
+		Button sendHome = new Button("Send Home");
+		sendHome.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (turtleIDs.getSelectionModel().getSelectedItem() != null) {
+					modelState.sendTurtleHome(turtleIDs.getSelectionModel().getSelectedItem());
+				} else {
+					// no turtle ID selected
+				}
+			}
+		});
+		return sendHome;
+	}
 
 	private Button createTurtleImageChoose(Stage s) {
 		Button fileChoose = new Button(myView.getCurrentResource().getString("ChooseTurtleImage"));
@@ -183,7 +226,7 @@ public class SideBar {
 		}
 		return null;
 	}
-	
+
 	private static class ColorRectCell extends ListCell<String> {
 		@Override
 		public void updateItem(String item, boolean empty) {
@@ -195,11 +238,11 @@ public class SideBar {
 			}
 		}
 	}
-	
-	private class LinePredicate implements Predicate{
+
+	private class LinePredicate implements Predicate {
 		@Override
-		  public boolean test(Object child){
-			  return (child instanceof Line);
-		  }
+		public boolean test(Object child) {
+			return (child instanceof Line);
+		}
 	}
 }
