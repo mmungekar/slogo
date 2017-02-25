@@ -13,5 +13,10 @@ public class Model
 		return state;
 	}
 	
+	public String printState(){
+		return state.toString();
+		
+	}
+	
 
 }
