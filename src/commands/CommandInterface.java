@@ -4,7 +4,7 @@ import back_end.Model;
 
 public interface CommandInterface
 {
-	void setParameters(String nextLine);
-	void Execute(Model state);
+	void setParameters(String nextLine) throws ParameterException;
+	void Execute(Model model);
 	int getParameterCount();
 }

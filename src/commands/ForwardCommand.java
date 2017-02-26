@@ -23,17 +23,17 @@ public class ForwardCommand implements CommandInterface {
 	}
 
 	@Override
-	public void Execute(Model state) {
-		moveForward(state, ((MovementParameters) parameters).getMovementMagnitude());
+	public void Execute(Model model) {
+		moveForward(model, ((MovementParameters) parameters).getMovementMagnitude());
 	}
 
-	private void moveForward(Model state, int movementMagnitude) {
-		double xDis = calculateComponentMovementMagnitude(state.getAngle(0), movementMagnitude, X);
-		double yDis = calculateComponentMovementMagnitude(state.getAngle(0), movementMagnitude, Y);
 
+	private void moveForward(Model model, int movementMagnitude) {
+		double xDisplacement = calculateComponentMovementMagnitude(model.getAngle(0), movementMagnitude, X);
+		double yDisplacement = calculateComponentMovementMagnitude(model.getAngle(0), movementMagnitude, Y);
+		
 		// TODO turtle ID
-		state.setX(0, state.getX(0) - xDis);
-		state.setY(0, state.getY(0) - yDis);
+		model.setPos(0, model.getX(0) - xDisplacement, model.getY(0) - yDisplacement);
 
 	}
 
@@ -52,6 +52,7 @@ public class ForwardCommand implements CommandInterface {
 		((MovementParameters) parameters).setMovementMagnitude(scale * scanner.nextInt());
 		scanner.close();
 	}
+
 
 	@Override
 	public int getParameterCount() {

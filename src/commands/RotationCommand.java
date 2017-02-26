@@ -34,9 +34,9 @@ public class RotationCommand implements CommandInterface {
 	}
 
 	@Override
-	public void Execute(Model state) {
+	public void Execute(Model model) {
 		// TODO turtle ID
-		state.setAngle(0, state.getAngle(0) + ((MovementParameters) myParameter).getMovementMagnitude());
+		model.setAngle(0, model.getAngle(0) + ((MovementParameters) myParameter).getMovementMagnitude());
 	}
 
 	@Override

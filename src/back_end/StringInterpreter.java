@@ -4,8 +4,10 @@ package back_end;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import commands.CommandInterface;
+import commands.ParameterException;
 /**
  * The StringInterpreter class receives user-input commands, 
  * and parses through them to determine command type and parameter 
@@ -52,14 +54,18 @@ public class StringInterpreter
 		lineScanner.close();
 	}
 	
-	public CommandInterface interpret(String commandString)
+	public CommandInterface interpret(String commandString) throws UnrecognizedCommandException, LibraryLookUpException, ParameterException
 	{
 		System.out.println("Text submitted: " + commandString);
 
 		scanner = new Scanner(commandString);
 		//NEEDS TO BE ALTERED IF REPETITION
 		CommandInterface command = commandLib.getCommand(scanner.next());
-		command.setParameters(scanner.nextLine());
+		try{
+			command.setParameters(scanner.nextLine());
+		} catch (NoSuchElementException e){
+			throw new ParameterException(commandString, command.getParameterCount(),0);
+		}
 		return command;
 	}
 	
