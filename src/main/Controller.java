@@ -3,6 +3,7 @@ package main;
 import front_end.View;
 
 import back_end.*;
+import commands.ParameterException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.stage.Stage;
@@ -24,7 +25,11 @@ public class Controller {
 
 		view.setEnterListener((String string) -> {
 			System.out.println(model.printState());
-			stringInterpreter.interpret(string).Execute(model.getState());
+			try {
+				stringInterpreter.interpret(string).Execute(model.getState());
+			} catch (UnrecognizedCommandException | LibraryLookUpException | ParameterException e) {
+				view.printToOutput(e);
+			}
 			System.out.println(model.printState());
 		});
 

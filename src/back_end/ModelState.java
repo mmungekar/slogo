@@ -38,12 +38,12 @@ public class ModelState extends Observable {
 	}
 	
 	public void setPenDown(int ID){
-		turtleContainer.get(ID).setPenDown(true);
+		turtleContainer.get(ID).setPenDown();
 		//setChangedAndNotifyObservers();
 	}
 	
 	public void setPenUp(int ID){
-		turtleContainer.get(ID).setPenDown(false);
+		turtleContainer.get(ID).setPenUp();
 		//setChangedAndNotifyObservers();
 	}
 
@@ -61,7 +61,9 @@ public class ModelState extends Observable {
 	
 	public void sendTurtleHome(int ID){
 		turtleContainer.get(ID).setPosition(home);
+		turtleContainer.get(ID).dontDrawLine();
 		setChangedAndNotifyObservers();
+		
 	}
 
 	public void createTurtle() {

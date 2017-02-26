@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import java.util.function.Consumer;
 
+import back_end.UnrecognizedCommandException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -176,10 +177,12 @@ public class Terminal {
 		if (!text.equals(EMPTY_STRING)) {
 			history.add(text.trim());
 			historyPointer = history.size();
+			output.clear();
 			if (onMessageReceivedHandler != null) {
 				onMessageReceivedHandler.accept(text);
 			}
 			input.clear();
+			
 		}
 	}
 
@@ -203,5 +206,9 @@ public class Terminal {
 	void setOutputText(String output2) {
 		output.setText(output2);
 		
+	}
+
+	void printToOutput(Exception e) {
+		output.setText(e.getMessage());
 	}
 }

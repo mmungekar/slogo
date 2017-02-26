@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import back_end.UnrecognizedCommandException;
 import back_end.ModelState;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -212,6 +213,11 @@ public class View implements ViewInterface {
 	
 	ResourceBundle getCurrentResource(){
 		return resource;
+	}
+
+	public void printToOutput(Exception e) {
+		terminal.printToOutput(e);
+		
 	}
 
 

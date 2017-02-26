@@ -3,14 +3,16 @@ package back_end;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class Turtle extends ImageView {
 	private Point2D topLeftPos;
-	private Point2D centerPos;
-	private Point2D prevCenterPos;
+	private Point2D centerPos = null;
+	private Point2D prevCenterPos = null;
 	private boolean penDown;
 	private double[] halfDems = new double[2];
 	private double angle;
+	private Color penColor = Color.BLACK;
 
 	Turtle(Image image, Point2D initPos) {
 		super(image);
@@ -48,8 +50,12 @@ public class Turtle extends ImageView {
 		return penDown;
 	}
 
-	public void setPenDown(boolean penDown) {
-		this.penDown = penDown;
+	public void setPenDown() {
+		this.penDown = true;
+	}
+	
+	public void setPenUp() {
+		this.penDown = false;
 	}
 
 	public Point2D getCenterPosition() {
@@ -81,6 +87,19 @@ public class Turtle extends ImageView {
 
 	public boolean hasMoved() {
 		return (!this.prevCenterPos.equals(this.centerPos));
+	}
+
+	public void dontDrawLine() {
+		this.prevCenterPos = this.centerPos;
+	}
+	
+	public Color getPenColor(){
+		return this.penColor;
+	}
+
+	public void changePenColor(Color newColor) {
+		this.penColor = newColor;
+		
 	}
 
 }

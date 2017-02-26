@@ -1,6 +1,7 @@
 package front_end;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -12,8 +13,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
@@ -27,26 +30,30 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class SideBar {
+	private static final String RESOURCES_MISC_HELP_HTML = "/resources/misc/help.html";
 	public static final String IMAGE_FILE_DIRECTORY = "src/resources/images/";
 	public static final String IMAGE_EXTENSION = ".gif";
 	private List<String> languages = Arrays.asList(
 			new String[] { "Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish" });
 
 	private View myView;
-	private ComboBox<Integer> turtleIDs;
 	private ModelState modelState;
+	
+	private ComboBox<Integer> turtleIDs;
 
 	public SideBar(Stage s, ModelState modelState, Group root, View view) {
 		this.myView = view;
 		this.modelState = modelState;
 		VBox sideButtons = new VBox();
 
-		sideButtons.getChildren().addAll(createLanguageDropDown(), createBackgroundColorSelectionTool(),
+		sideButtons.getChildren().addAll(createHelpButton(), createLanguageDropDown(), createBackgroundColorSelectionTool(),
 				createClearLinesButton(root), addTurtleButton(), createTurtleSpecficCommands(s));
 
 		sideButtons.setLayoutX(myView.getCanvasDimensions()[0] + 3 * myView.getDefaultSpacing());
@@ -54,6 +61,25 @@ public class SideBar {
 		sideButtons.setSpacing(myView.getDefaultSpacing() / 2);
 
 		root.getChildren().add(sideButtons);
+	}
+
+	private Node createHelpButton() {
+		Button helpButton = new Button("Help");
+		helpButton.setOnAction(event -> displayHelpScreen());
+		return helpButton;
+	}
+
+	private void displayHelpScreen() {
+		Group root = new Group();
+		WebView browser = new WebView();
+		Scene helpScene = new Scene(root);
+		root.getChildren().add(browser);
+		Stage helpStage = new Stage();
+		helpStage.setTitle("Help Page");
+		helpStage.setScene(helpScene);
+		URL url = getClass().getResource(RESOURCES_MISC_HELP_HTML);
+		browser.getEngine().load(url.toExternalForm());
+		helpStage.show();
 	}
 
 	private ComboBox<String> createLanguageDropDown() {
@@ -124,8 +150,11 @@ public class SideBar {
 	}
 
 	private void updateTurtleSelection() {
-		turtleIDs.getItems().clear();
-		turtleIDs.getItems().addAll(modelState.getTurtleContainer().keySet());
+		for (Integer ID : modelState.getTurtleContainer().keySet()){
+			if(!turtleIDs.getItems().contains(ID)){
+				turtleIDs.getItems().add(ID);
+			}
+		}
 	}
 
 	private VBox createTurtleSpecficCommands(Stage s) {
@@ -135,26 +164,68 @@ public class SideBar {
 
 		Button imageChoose = createTurtleImageChoose(s);
 		Button sendHome = createSendHomeButton();
-		HBox penControls = createPenToggle();
+		VBox penControls = createPenToggle();
+		
+		
 
-		turtleSpecificControls.getChildren().addAll(turtleIDs, imageChoose, sendHome);
+		turtleSpecificControls.getChildren().addAll(turtleIDs, imageChoose, sendHome, penControls);
 
 		turtleSpecificControls.setLayoutX(myView.getCanvasDimensions()[0] + 3 * myView.getDefaultSpacing());
 		turtleSpecificControls.setLayoutY(3 * myView.getDefaultSpacing());
 		return turtleSpecificControls;
 	}
 
-	private HBox createPenToggle() {
-		HBox penControls = new HBox();
-		ToggleGroup penToggle = new ToggleGroup();
+	private VBox createPenToggle() {
+		VBox penControls = new VBox();
+		
+		HBox penSwitch = createPenSwitch();
+		ComboBox<String> penColorSelectionTool = createPenColorSelectionTool();
+		
+		penControls.getChildren().addAll(penColorSelectionTool, penSwitch);
+
+		return penControls;
+	}
+	
+	private ComboBox<String> createPenColorSelectionTool() {
+		// from
+		// http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
+
+		ObservableList<String> data = FXCollections.observableArrayList("black", "white" ,"chocolate", "salmon", "gold", "coral",
+				"darkorchid", "darkgoldenrod", "lightsalmon", "rosybrown", "blue", "blueviolet", "brown");
+
+		ComboBox<String> penColors = new ComboBox<String>();
+
+		penColors.setItems(data);
+		penColors.setPromptText("Select Pen Color");
+		penColors.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+			@Override
+			public ListCell<String> call(ListView<String> list) {
+				return new ColorRectCell();
+			}
+		});
+
+		penColors.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
+				if (turtleIDs.getSelectionModel().getSelectedItem() != null){
+					modelState.getTurtleContainer().get(turtleIDs.getSelectionModel().getSelectedItem()).changePenColor(Color.web(new_val));
+				}
+			}
+		});
+
+		return penColors;
+	}
+
+	private HBox createPenSwitch() {
+		HBox penSwitch = new HBox();
+		ToggleGroup penSwitchGroup = new ToggleGroup();
 		RadioButton penDown = new RadioButton("Pen Down");
-		penDown.setToggleGroup(penToggle);
+		penDown.setToggleGroup(penSwitchGroup);
 		RadioButton penUp = new RadioButton("Pen Up");
-		penUp.setToggleGroup(penToggle);
-		penToggle.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+		penUp.setToggleGroup(penSwitchGroup);
+		penSwitchGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-				if (turtleIDs.getSelectionModel().getSelectedItem() != null && penToggle.getSelectedToggle() != null) {
-					if (penToggle.getSelectedToggle().equals(penUp)) {
+				if (turtleIDs.getSelectionModel().getSelectedItem() != null && penSwitchGroup.getSelectedToggle() != null) {
+					if (penSwitchGroup.getSelectedToggle().equals(penUp)) {
 						modelState.setPenUp(turtleIDs.getSelectionModel().getSelectedItem());
 					} else {
 						modelState.setPenDown(turtleIDs.getSelectionModel().getSelectedItem());
@@ -165,9 +236,17 @@ public class SideBar {
 			}
 		});
 		
-		penControls.getChildren().addAll(penDown, penUp);
-
-		return penControls;
+		penSwitch.getChildren().addAll(penDown, penUp);
+		turtleIDs.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
+			public void changed(ObservableValue<? extends Integer> ov, Integer old_val, Integer new_val) {
+				if (modelState.getTurtleContainer().get(new_val).isPenDown()){
+					penSwitchGroup.selectToggle(penDown);
+				} else {
+					penSwitchGroup.selectToggle(penUp);
+				}
+			}
+		});
+		return penSwitch;
 	}
 
 	private Button createSendHomeButton() {
@@ -211,11 +290,13 @@ public class SideBar {
 		turtleIDs.getItems().addAll(modelState.getTurtleContainer().keySet());
 	}
 
+
+
 	private File chooseFile(Stage s) {
-		FileChooser xmlChooser = new FileChooser();
-		xmlChooser.setTitle(myView.getCurrentResource().getString("ChooseTurtleImage"));
-		xmlChooser.setInitialDirectory(new File(IMAGE_FILE_DIRECTORY));
-		File file = xmlChooser.showOpenDialog(s);
+		FileChooser gifChooser = new FileChooser();
+		gifChooser.setTitle(myView.getCurrentResource().getString("ChooseTurtleImage"));
+		gifChooser.setInitialDirectory(new File(IMAGE_FILE_DIRECTORY));
+		File file = gifChooser.showOpenDialog(s);
 		if (file != null) {
 			String name = file.getName();
 			String fileType = name.substring(name.lastIndexOf("."), name.length());

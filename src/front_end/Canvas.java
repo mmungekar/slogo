@@ -62,7 +62,8 @@ public class Canvas implements Observer {
 			// update all parts of modelstate that canvas has
 			for (Turtle turtle : observedState.getTurtleContainer().values()){
 				if(turtle.hasMoved() && turtle.isPenDown()){
-					drawLine(turtle.getPrevCenterPosition(), turtle.getCenterPosition());
+					drawLine(turtle, turtle.getPrevCenterPosition(), turtle.getCenterPosition());
+					turtle.dontDrawLine();
 				}
 			}
 			addNewTurtles();
@@ -75,13 +76,13 @@ public class Canvas implements Observer {
 		this.setBackgroundColor(observedState.getBackgroundColor());
 	}
 
-	public void drawLine(Point2D startPos, Point2D endPos) {
+	public void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {
 		Line line = new Line();
 		line.setStartX(startPos.getX());
 		line.setStartY(startPos.getY());
 		line.setEndX(endPos.getX());
 		line.setEndY(endPos.getY());
-		line.setStroke(Color.BLACK);
+		line.setStroke(turtle.getPenColor());
 		myRoot.getChildren().add(line);
 	}
 
@@ -92,5 +93,4 @@ public class Canvas implements Observer {
 			}
 		}
 	}
-
 }

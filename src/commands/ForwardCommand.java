@@ -52,6 +52,7 @@ public class ForwardCommand implements CommandInterface {
 		scanner.close();
 	}
 
+
 	@Override
 	public int getParameterCount() {
 		return this.parameterCount;
