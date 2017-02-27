@@ -23,7 +23,7 @@ public class ExpressionTreeNode {
 	private double mValue;
 	private ExpressionTreeNode myParent;
 	private List<ExpressionTreeNode> myChildren;
-	private boolean mSatisfied;
+	private boolean mExecuted;
 	// private final String CommandMapLocation =
 	// "src.resources.languages/CommandMap";
 	// private ResourceBundle CommandMap =
@@ -59,10 +59,12 @@ public class ExpressionTreeNode {
 		mInterpreter = new Interpreter();
 		myChildren = new ArrayList<ExpressionTreeNode>();
 		mCommand = null;
-		mSatisfied = false;
+		mExecuted = false;
 		myParent = parent;
 		mInput = x;
 		switch (x.getType()) {
+		case Constant.ROOT_TYPE:
+			break;
 		case Constant.CONSTANT_TYPE:
 			mValue = Double.parseDouble(x.getParameter());
 			break;
@@ -90,12 +92,20 @@ public class ExpressionTreeNode {
 	public Collection<ExpressionTreeNode> getChildren() {
 		return myChildren;
 	}
+	
+	public void setValue(double value){
+		mValue = value;
+	}
+	
+	public double getValue(){
+		return mValue;
+	}
 
 	public Input getInput() {
 		return mInput;
 	}
 
-	public void setSatisfied() {
-		mSatisfied = true;
+	public void setExecuted() {
+		mExecuted = true;
 	}
 }

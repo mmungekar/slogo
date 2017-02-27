@@ -1,6 +1,7 @@
 package back_end.constant;
 
 public interface Constant {
+	public static final String ROOT_TYPE = "Root";
 	public static final String COMMAND_TYPE = "Command";
 	public static final String CONSTANT_TYPE = "Constant";
 	public static final String VARIABLE_TYPE = "Variable";

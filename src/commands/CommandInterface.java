@@ -5,7 +5,7 @@ import back_end.ModelState;
 
 public interface CommandInterface
 {
-	void setParameters(Input... input);
+	void setParameters(double...ds);
 	double Execute(ModelState state);
 	int getParameterCount();
 }

@@ -1,11 +1,14 @@
 package back_end;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
 import back_end.constant.Constant;
+import commands.CommandInterface;
 
 /**
  * Main language parsing structure, construct all commands and constants in a
@@ -37,7 +40,7 @@ public class ExpressionTree {
 	}
 
 	/**
-	 * NOTE TO SELF- LAMBDA EXPRESSIONS/MAP???
+	 * Construct the ExpressionTree
 	 * 
 	 * @throws Exception
 	 */
@@ -55,20 +58,6 @@ public class ExpressionTree {
 			mInputs.add(input);
 		}
 		cScanner.close();
-
-		/*
-		 * ExpressionTreeNode root = new ExpressionTreeNode();
-		 * ExpressionTreeNode current = new ExpressionTreeNode();
-		 * ExpressionTreeNode parent = new ExpressionTreeNode(); for (Input
-		 * input : myInput) { if (root == null) { root = new
-		 * ExpressionTreeNode(input, null);
-		 * 
-		 * } else if (input.getType().equals("ListStart")) { current = new
-		 * ExpressionTreeNode(input, parent); current = parent; } else if
-		 * (input.getType().equals("ListEnd")) { parent = parent.getParent(); }
-		 * else { current = new ExpressionTreeNode(input, parent); } } return
-		 * root;
-		 */
 		return constructBranch(mInputs);
 	}
 
@@ -77,32 +66,15 @@ public class ExpressionTree {
 		if (inputs.size() == 0)
 			return null;
 		try {
-			int index = 0;
-			Input curr = inputs.get(index);
-			ExpressionTreeNode root = new ExpressionTreeNode(curr, null);
-			if (isCommand(curr)) {
-				int numParams = mCommandLib.getNumParam(curr.getParameter());
-				System.out.println(numParams);
-				while (numParams > 0) {
-					numParams--;
-					if(index >= inputs.size())
-						throw new Exception("Not Enough Inputs.");
-					curr = inputs.get(index);
-					if (isConstant(curr)) {
-						ExpressionTreeNode child = new ExpressionTreeNode(curr, root);
-						root.addChild(child);
-						index++;
-						continue;
-					} else {
-						List<Input> shortest = getShortestCompleteCommand(index, inputs);
-						ExpressionTreeNode child = constructBranch(shortest);
-						root.addChild(child);
-						index += shortest.size();
-						continue;
-					}
-				}
+			Input rootInput = new Input(null, Constant.ROOT_TYPE);
+			mRootNode = new ExpressionTreeNode(rootInput, null);
+			ExpressionTreeNode currentNode = mRootNode;
+			for(Input input : inputs){
+				System.out.println("Input: " + input.getParameter());
+				System.out.println("CurrNode: " + currentNode.getInput().getParameter());
+				currentNode = buildBranch(input, currentNode);
 			}
-			return root;
+			return mRootNode;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -110,41 +82,29 @@ public class ExpressionTree {
 
 	}
 
-	/**
-	 * Retrieve the shortest list of input that can make up a complete command
-	 * starting at given index.
-	 * 
-	 * @param index
-	 * @param inputs
-	 * @return
-	 * @throws Exception
-	 */
-	private List<Input> getShortestCompleteCommand(int index, List<Input> inputs) throws Exception {
-		if (inputs.size() == 0)
-			return null;
-		ArrayList<Input> result = new ArrayList<>();
-		Input curr = inputs.get(index);
-		if (isConstant(curr)) {
-			result.add(curr);
-			return result;
+	private ExpressionTreeNode buildBranch(Input input, ExpressionTreeNode currNode)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		ExpressionTreeNode inputNode = new ExpressionTreeNode(input, null);
+		if (!isChildrenFull(currNode)) {
+			currNode.getChildren().add(inputNode);
+			currNode = inputNode;
+			return currNode;
 		}
-		if (isCommand(curr)) {
-			int requiredNum = mCommandLib.getNumParam(curr.getParameter());
-			while (requiredNum >= 0) {
-				index++;
-				if (index >= inputs.size())
-					throw new Exception("No Complete Command found.");
-				curr = inputs.get(index);
-				if (isConstant(curr))
-					requiredNum --;
-				else if (isCommand(curr))
-					requiredNum += mCommandLib.getNumParam(curr.getParameter());
-				result.add(curr);
-			}
-
+		while (isChildrenFull(currNode)) {
+			if (currNode == mRootNode)
+				return mRootNode;
+			currNode = currNode.getParent();
+			System.out.println("Parent Node: "+ currNode.getInput().getParameter());
 		}
-		return result;
+		currNode.getChildren().add(inputNode);
+		currNode = inputNode;
+		return currNode;
+	}
 
+	private boolean isChildrenFull(ExpressionTreeNode node) {
+		return node != mRootNode
+				&& (isConstant(node.getInput())
+				|| mCommandLib.getNumParam(node.getInput().getParameter()) == node.getChildren().size());
 	}
 
 	private boolean isCommand(Input i) {
@@ -155,20 +115,56 @@ public class ExpressionTree {
 		return i.getType().equals(Constant.CONSTANT_TYPE);
 	}
 
-	public void traverseTree() {
-		
+	/**
+	 * Given an already-built ExpressionTree, we traverse it using depth first
+	 * search and execute all the possible commands as we go.
+	 * 
+	 * @param ModelState
+	 *            (Should be the static state from the canvas)
+	 * @throws Exception
+	 */
+	public void traverse(ModelState ms) throws Exception {
+		// Execute each commands in order
+		for(ExpressionTreeNode childrenNode : mRootNode.getChildren()){
+			traverseKid(childrenNode, ms);
+		}	
+	}
+
+	private void traverseKid(ExpressionTreeNode node, ModelState state) throws Exception {
+		if (node == null)
+			return;
+		Input currInput = node.getInput();
+		if (isConstant(currInput)) {
+			node.setExecuted();
+			return;
+		} else if (isCommand(currInput)) {
+			for (ExpressionTreeNode kid : node.getChildren()) {
+				traverseKid(kid, state);
+			}
+			int paramNum = mCommandLib.getNumParam(currInput.getParameter());
+			CommandInterface command = mCommandLib.getCommand(currInput.getParameter());
+			if (paramNum != node.getChildren().size())
+				throw new Exception("Children size doesn't match Parameter's.");
+			double[] params = new double[paramNum];
+			Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
+			for (int i = 0; i < params.length; i++) {
+				params[i] = iter.next().getValue();
+			}
+			command.setParameters(params);
+			double value = command.Execute(state);
+			node.setExecuted();
+			node.setValue(value);
+		}
 	}
 
 	public static void main(String[] args) {
 		ExpressionTree test = new ExpressionTree("english");
-		Interpreter inter = new Interpreter();
 		String s = "GREATER? 3 6";
 		try {
 			ExpressionTreeNode root = test.constructTree(s);
 			int layer = 0;
 			System.out.println("First layer: " + root.getChildren().size());
 			for (ExpressionTreeNode node : root.getChildren()) {
-				System.out.println("Layer: " + layer + 1);
 				System.out.println("Type: " + node.getInput().getType());
 				System.out.println("Param: " + node.getInput().getParameter());
 			}
