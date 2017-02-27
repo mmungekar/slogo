@@ -26,7 +26,6 @@ public class StringInterpreter
 	 */
 	public StringInterpreter()
 	{
-		commandLib = new CommandLibrary();
 		myParser = new ProgramParser();
 		myParser.addPatterns(FILEPATH);
 	    myInputs = new ArrayList<Input>();
@@ -47,20 +46,19 @@ public class StringInterpreter
 	
 	private void parseLine(String commandLine){
 		Scanner lineScanner = new Scanner(commandLine);
-		Input newInput = new Input(lineScanner.next(), myParser.getSymbol(lineScanner.next()));
+		Input newInput = new Input(lineScanner.next().trim().toLowerCase(), myParser.getSymbol(lineScanner.next()));
 		myInputs.add(newInput);
 		lineScanner.close();
 	}
 	
-	public CommandInterface interpret(String commandString)
-	{
-		System.out.println("Text submitted: " + commandString);
-
-		scanner = new Scanner(commandString);
-		//NEEDS TO BE ALTERED IF REPETITION
-		CommandInterface command = commandLib.getCommand(scanner.next());
-		command.setParameters(scanner.nextLine());
-		return command;
+	/**
+	 * TODO: Currently not able to match comment type
+	 * @param s
+	 * @return
+	 */
+	public String getType(String s){
+		return myParser.getSymbol(s);
 	}
+	
 	
 }
