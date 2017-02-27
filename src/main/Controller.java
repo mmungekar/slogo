@@ -21,6 +21,7 @@ public class Controller {
 		view.setEnterListener((String string) -> {
 			System.out.println(model.toString());
 			try {
+				// This line should stay the same, all changes should happen in the backend
 				stringInterpreter.interpret(string).Execute(model);
 			} catch (UnrecognizedCommandException | LibraryLookUpException | ParameterException e) {
 				view.printToOutput(e);
