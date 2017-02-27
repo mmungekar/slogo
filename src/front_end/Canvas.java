@@ -1,12 +1,9 @@
 package front_end;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
-import back_end.ModelState;
+import back_end.Model;
 import back_end.Turtle;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -19,17 +16,17 @@ public class Canvas implements Observer {
 
 	private Rectangle Frame;
 	private Group myRoot;
+	private Model observedModel = null;
 
-	private ModelState observedState = null;
-	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
 
-	public Canvas(ModelState observedState, Group root, Point2D home) {
-		this.observedState = observedState;
+	public Canvas(Model model, Group root, Point2D home) {
+		this.observedModel = model;
 		this.myRoot = root;
 		createRectangle();
 		root.getChildren().add(Frame);
-		observedState.addObserver(this);
-		observedState.setHome(home);
+		model.addObserver(this);
+		model.setHome(home);
+		//this.turtleContainer = observedState.getTurtleContainer();
 	}
 
 	private void createRectangle() {
@@ -54,43 +51,42 @@ public class Canvas implements Observer {
 		Frame.setHeight(size[1]);
 	}
 
-	private void drawLine(double startX, double startY, double endX, double endY) {
-		Line line = new Line();
-		line.setStartX(startX);
-		line.setStartY(startY);
-		line.setEndX(endX);
-		line.setEndY(endY);
-		line.setStroke(Color.BLACK);
-		myRoot.getChildren().add(line);
-
-	}
-
-	Collection<Integer> getTurtleIDs() {
-		return turtleContainer.keySet();
-	}
-
 	@Override
 	public void update(Observable obs, Object obj) {
 		// System.out.println("(from Canvas/Observer end) Observers Notified ");
-		if (obs == observedState) {
+		if (obs == observedModel) {
 			// update all parts of modelstate that canvas has
-			updateTurtles();
+			for (Turtle turtle : observedModel.getTurtleContainer().values()){
+				if(turtle.hasMoved() && turtle.isPenDown()){
+					drawLine(turtle, turtle.getPrevCenterPosition(), turtle.getCenterPosition());
+					turtle.dontDrawLine();
+				}
+			}
+			addNewTurtles();
 			updateBackground();
 		}
 
 	}
 
 	private void updateBackground() {
-		this.setBackgroundColor(observedState.getBackgroundColor());
+		this.setBackgroundColor(observedModel.getBackgroundColor());
 	}
 
-	private void updateTurtles() {
-		this.turtleContainer = observedState.getTurtleContainer();
-		for (Turtle turtle : turtleContainer.values()) {
+	public void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {
+		Line line = new Line();
+		line.setStartX(startPos.getX());
+		line.setStartY(startPos.getY());
+		line.setEndX(endPos.getX());
+		line.setEndY(endPos.getY());
+		line.setStroke(turtle.getPenColor());
+		myRoot.getChildren().add(line);
+	}
+
+	private void addNewTurtles() {
+		for (Turtle turtle : observedModel.getTurtleContainer().values()) {
 			if (!myRoot.getChildren().contains(turtle)) {
 				myRoot.getChildren().add(turtle);
 			}
 		}
 	}
-
 }

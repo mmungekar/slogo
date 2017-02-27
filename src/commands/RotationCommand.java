@@ -2,7 +2,7 @@ package commands;
 
 import java.util.Scanner;
 
-import back_end.ModelState;
+import back_end.Model;
 
 public class RotationCommand implements CommandInterface {
 	private ParameterContainer myParameter;
@@ -34,9 +34,9 @@ public class RotationCommand implements CommandInterface {
 	}
 
 	@Override
-	public void Execute(ModelState state) {
+	public void Execute(Model model) {
 		// TODO turtle ID
-		state.setAngle(0, state.getAngle(0) + ((MovementParameters) myParameter).getMovementMagnitude());
+		model.setAngle(0, model.getAngle(0) + ((MovementParameters) myParameter).getMovementMagnitude());
 	}
 
 	@Override

@@ -31,14 +31,13 @@ public class ProgramParser {
         }
     }
     // returns the language's type associated with the given text if one exists 
-    public String getSymbol (String text) {
-        final String ERROR = "NO MATCH";
+    public String getSymbol (String text) throws UnrecognizedCommandException {
         for (Entry<String, Pattern> e : mySymbols) {
             if (match(text, e.getValue())) {
                 return e.getKey();
             }
         }
-        return ERROR;
+        throw new UnrecognizedCommandException(text);
     }
     // returns true if the given text matches the given regular expression pattern
     private boolean match (String text, Pattern regex) {

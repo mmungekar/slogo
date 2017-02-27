@@ -1,10 +1,10 @@
 package commands;
 
-import back_end.ModelState;
+import back_end.Model;
 
 public interface CommandInterface
 {
-	void setParameters(String nextLine);
-	void Execute(ModelState state);
+	void setParameters(String nextLine) throws ParameterException;
+	void Execute(Model model);
 	int getParameterCount();
 }

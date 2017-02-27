@@ -13,7 +13,9 @@ import commands.CommandInterface;
 public class ExpressionTree {
 	/**
 	 * The constructor takes in a list of input objects and forms a tree
-	 * @param myInput is a list of inputs
+	 * 
+	 * @param myInput
+	 *            is a list of inputs
 	 * @throws ClassNotFoundException
 	 * @throws NoSuchMethodException
 	 * @throws SecurityException
@@ -21,26 +23,29 @@ public class ExpressionTree {
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 * @throws InstantiationException
+	 * @throws LibraryLookUpException
+	 * @throws UnrecognizedCommandException
 	 */
-	public ExpressionTree (List<Input> myInput) throws ClassNotFoundException, NoSuchMethodException, 
-	SecurityException, IllegalAccessException, 
-	IllegalArgumentException, InvocationTargetException, 
-	InstantiationException {
+	public ExpressionTree(List<Input> myInput) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
+			IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException,
+			UnrecognizedCommandException, LibraryLookUpException {
 		constructTree(myInput);
-		
+
 	}
-	
+
 	private ExpressionTreeNode root = new ExpressionTreeNode();
 	private ExpressionTreeNode current = new ExpressionTreeNode();
 	private ExpressionTreeNode parent = root;
-	
+
 	/**
-	 *Constructs tree based on types of inputs are given to it
+	 * Constructs tree based on types of inputs are given to it
+	 * 
+	 * @throws LibraryLookUpException
+	 * @throws UnrecognizedCommandException
 	 */
-	private ExpressionTreeNode constructTree(List<Input> myInput) throws ClassNotFoundException, NoSuchMethodException, 
-																		SecurityException, IllegalAccessException, 
-																		IllegalArgumentException, InvocationTargetException, 
-																		InstantiationException {
+	private ExpressionTreeNode constructTree(List<Input> myInput) throws ClassNotFoundException, NoSuchMethodException,
+			SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			InstantiationException, UnrecognizedCommandException, LibraryLookUpException {
 		for (Input input : myInput) {
 			checkParamCount(parent);
 			checkListStart(current, parent, input);
@@ -49,7 +54,7 @@ public class ExpressionTree {
 		}
 		return root;
 	}
-	
+
 	private void checkListEnd(ExpressionTreeNode current, ExpressionTreeNode parent, Input input) {
 		if (input.getType().equals("ListEnd")) {
 			parent = parent.getParent();
@@ -57,58 +62,56 @@ public class ExpressionTree {
 	}
 
 	private void checkListStart(ExpressionTreeNode current, ExpressionTreeNode parent, Input input) {
-		if (input.getType().equals("ListStart")){
+		if (input.getType().equals("ListStart")) {
 			current = parent;
 		}
 	}
-/**
- * If a command input is given, create a new node and designate it as a parent node
- */
-	private void checkCommand(Input input, ExpressionTreeNode current, ExpressionTreeNode parent) throws ClassNotFoundException, 
-																										NoSuchMethodException,
-																										SecurityException, 
-																										IllegalAccessException,
-																										IllegalArgumentException,
-																										InvocationTargetException,
-																										InstantiationException{
-		if(input.getType().equals("Command")){
-			current = new ExpressionTreeNode(input, parent);
-			current = parent;
-		}
-		else {
-			current = new ExpressionTreeNode(input, parent);
-		}
-	}
+
 	/**
-	 * If the parent node is a command node, and it has its maximum number of parameters, the tree goes up levels
-	 * until it find a parent node which has not fulfilled its needed parameter count
+	 * If a command input is given, create a new node and designate it as a
+	 * parent node
+	 * 
+	 * @throws LibraryLookUpException
+	 * @throws UnrecognizedCommandException
 	 */
-	private void checkParamCount(ExpressionTreeNode parent) throws NoSuchMethodException, SecurityException{
-		if(parent.getInput().getType().equals("Command") &&
-				parent.getRequiredChildNumber()==parent.getChildren().size()){
-				parent = parent.getParent();
-				checkParamCount(parent);
+	private void checkCommand(Input input, ExpressionTreeNode current, ExpressionTreeNode parent)
+			throws ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, InstantiationException, UnrecognizedCommandException,
+			LibraryLookUpException {
+		if (input.getType().equals("Command")) {
+			current = new ExpressionTreeNode(input, parent);
+			current = parent;
+		} else {
+			current = new ExpressionTreeNode(input, parent);
+		}
+	}
+
+	/**
+	 * If the parent node is a command node, and it has its maximum number of
+	 * parameters, the tree goes up levels until it find a parent node which has
+	 * not fulfilled its needed parameter count
+	 */
+	private void checkParamCount(ExpressionTreeNode parent) throws NoSuchMethodException, SecurityException {
+		if (parent.getInput().getType().equals("Command")
+				&& parent.getRequiredChildNumber() == parent.getChildren().size()) {
+			parent = parent.getParent();
+			checkParamCount(parent);
 		}
 		return;
 	}
-	
-	
-/*	private void traverseTree() throws NoSuchMethodException, SecurityException {
-		Stack<ExpressionTreeNode> processor = new Stack<ExpressionTreeNode>();
-		processor.push(root);
-		ExpressionTreeNode temp = root;
-		while(temp.getChildren().size>0)){
-		for(ExpressionTreeNode node:temp.getChildren()){
-			if(node.getContents() instanceof CommandInterface ){
-				java.lang.reflect.Method method = ((Class<?>) node.getContents()).getMethod("setParameters",null);
-				//call method.invoke
-				//call method.execute and get a return value (let's say it's stored as the value "g")
-			//	Input newInput = new Input(g.toString, "Double");
-			//ExpressionTreeNode replacementNode = new ExpressionTreeNode(newInput);
-			//replacementNode.replace(node);
-			}
-		}
-	}
-} */
+
+	/*
+	 * private void traverseTree() throws NoSuchMethodException,
+	 * SecurityException { Stack<ExpressionTreeNode> processor = new
+	 * Stack<ExpressionTreeNode>(); processor.push(root); ExpressionTreeNode
+	 * temp = root; while(temp.getChildren().size>0)){ for(ExpressionTreeNode
+	 * node:temp.getChildren()){ if(node.getContents() instanceof
+	 * CommandInterface ){ java.lang.reflect.Method method = ((Class<?>)
+	 * node.getContents()).getMethod("setParameters",null); //call method.invoke
+	 * //call method.execute and get a return value (let's say it's stored as
+	 * the value "g") // Input newInput = new Input(g.toString, "Double");
+	 * //ExpressionTreeNode replacementNode = new ExpressionTreeNode(newInput);
+	 * //replacementNode.replace(node); } } } }
+	 */
 
 }

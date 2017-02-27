@@ -3,64 +3,73 @@ package back_end;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
-public class Turtle extends ImageView{
-	private Point2D pos;
+public class Turtle extends ImageView {
+	private Point2D topLeftPos;
+	private Point2D centerPos = null;
+	private Point2D prevCenterPos = null;
 	private boolean penDown;
 	private double[] halfDems = new double[2];
 	private double angle;
-	
-	Turtle(Image image, Point2D initPos){
+	private Color penColor = Color.BLACK;
+
+	Turtle(Image image, Point2D initPos) {
 		super(image);
-		initializeSize(image);
-		updatePosition(initPos);
+		calcHalfDems();
+		setPosition(initPos);
 		penDown = true;
 	}
-	
-	private void initializeSize(Image image) {
-		halfDems[0] = image.getWidth() / 2.0;
-		halfDems[1] = image.getHeight() / 2.0;
-		
+
+	private void calcHalfDems() {
+		halfDems[0] = this.getImage().getWidth() / 2.0;
+		halfDems[1] = this.getImage().getHeight() / 2.0;
 	}
 
-	Turtle(Image image, double x, double y){
+	Turtle(Image image, double x, double y) {
 		this(image, new Point2D(x, y));
 	}
-	
-	private void updatePosition(double x, double y) {
-		updatePosition(new Point2D(x, y));	
+
+	public void setPosition(double inX, double inY) {
+		setPosition(new Point2D(inX, inY));
 	}
 
-	private void updatePosition(Point2D newPos) {
-		this.pos = newPos;
-		this.setCenterX(pos.getX());
-		this.setCenterY(pos.getY());
+	public void setPosition(Point2D newPos) {
+		if (this.centerPos != null) {
+			this.prevCenterPos = this.centerPos;
+		} else {
+			this.prevCenterPos = newPos;
+		}
+		this.centerPos = newPos;
+		this.setX(this.centerPos.getX() - halfDems[0]);
+		this.setY(this.centerPos.getY() - halfDems[1]);
+		this.topLeftPos = new Point2D(this.getX(), this.getY());
 	}
-	
+
 	public boolean isPenDown() {
 		return penDown;
 	}
 
-	public void setPenDown(boolean penDown) {
-		this.penDown = penDown;
+	public void setPenDown() {
+		this.penDown = true;
 	}
 	
-	public void setCenterX(double x){
-		this.setX(x - halfDems[0]);
-	}
-	
-	public void setCenterY(double y){
-		this.setY(y - halfDems[1]);
-	}
-	
-	public double getCenterX(){
-		return this.getX() + halfDems[0];
-	}
-	
-	public double getCenterY(){
-		return this.getY() + halfDems[1];
+	public void setPenUp() {
+		this.penDown = false;
 	}
 
+	public Point2D getCenterPosition() {
+		return this.centerPos;
+	}
+
+	public Point2D getTopLeftPosition() {
+		return this.topLeftPos;
+	}
+	
+	public Point2D getPrevCenterPosition() {
+		return this.prevCenterPos;
+	}
+	
 	public double getAngle() {
 		return angle;
 	}
@@ -68,7 +77,29 @@ public class Turtle extends ImageView{
 	public void setAngle(double angle) {
 		this.angle = angle;
 		this.setRotate(this.angle);
-		//TODO decide on angle rotation
+	}
+
+	public void changeImage(Image newTurtleImage) {
+		this.setImage(newTurtleImage);
+		calcHalfDems();
+		setPosition(this.centerPos);
+	}
+
+	public boolean hasMoved() {
+		return (!this.prevCenterPos.equals(this.centerPos));
+	}
+
+	public void dontDrawLine() {
+		this.prevCenterPos = this.centerPos;
+	}
+	
+	public Color getPenColor(){
+		return this.penColor;
+	}
+
+	public void changePenColor(Color newColor) {
+		this.penColor = newColor;
+		
 	}
 
 }
