@@ -158,7 +158,7 @@ public class ExpressionTreeNode {
  		return command;
  	}
      
-     public void setSatisfied() {
+     public void setExecuted() {
  		isExecuted = true;
  	}
  }
