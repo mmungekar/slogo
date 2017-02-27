@@ -20,6 +20,7 @@ public class Canvas implements Observer {
 	private Rectangle Frame;
 	private Group myRoot;
 
+	// This is the key ModelState object that all commands execute upon
 	private ModelState observedState = null;
 	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
 

@@ -14,13 +14,13 @@ public class Controller {
 
 	private View view;
 	private Model model;
-	private StringInterpreter stringInterpreter;
+	private Interpreter stringInterpreter;
 
 	public void start(Stage s) {
 		model = new Model();
 		view = new View(s, model.getState());
 
-		stringInterpreter = new StringInterpreter();
+		stringInterpreter = new Interpreter();
 
 		view.setEnterListener((String string) -> {
 			System.out.println(model.printState());

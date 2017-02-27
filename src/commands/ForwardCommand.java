@@ -2,6 +2,7 @@ package commands;
 
 import java.util.Scanner;
 
+import back_end.Input;
 import back_end.ModelState;
 
 public class ForwardCommand implements CommandInterface {
@@ -23,8 +24,9 @@ public class ForwardCommand implements CommandInterface {
 	}
 
 	@Override
-	public void Execute(ModelState state) {
+	public int Execute(ModelState state) {
 		moveForward(state, ((MovementParameters) parameters).getMovementMagnitude());
+		return ((MovementParameters) parameters).getMovementMagnitude();
 	}
 
 	private void moveForward(ModelState state, int movementMagnitude) {
@@ -47,10 +49,9 @@ public class ForwardCommand implements CommandInterface {
 	}
 
 	@Override
-	public void setParameters(String nextLine) {
-		Scanner scanner = new Scanner(nextLine);
-		((MovementParameters) parameters).setMovementMagnitude(scale * scanner.nextInt());
-		scanner.close();
+	public void setParameters(Input... inputs) {
+		int mag = Integer.parseInt(inputs[0].getParameter());
+		((MovementParameters) parameters).setMovementMagnitude(scale * mag);
 	}
 
 	@Override

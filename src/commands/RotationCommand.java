@@ -2,6 +2,7 @@ package commands;
 
 import java.util.Scanner;
 
+import back_end.Input;
 import back_end.ModelState;
 
 public class RotationCommand implements CommandInterface {
@@ -27,16 +28,15 @@ public class RotationCommand implements CommandInterface {
 	 *            remainder of the user-entered command can be parsed here
 	 */
 	@Override
-	public void setParameters(String nextLine) {
-		Scanner scanner = new Scanner(nextLine);
-		((MovementParameters) myParameter).setMovementMagnitude(scale * scanner.nextInt());
-		scanner.close();
+	public void setParameters(Input... inputs) {
+		((MovementParameters) myParameter).setMovementMagnitude(scale * Integer.parseInt(inputs[0].getParameter()));
 	}
 
 	@Override
-	public void Execute(ModelState state) {
+	public int Execute(ModelState state) {
 		// TODO turtle ID
 		state.setAngle(0, state.getAngle(0) + ((MovementParameters) myParameter).getMovementMagnitude());
+		return ((MovementParameters) myParameter).getMovementMagnitude();
 	}
 
 	@Override
