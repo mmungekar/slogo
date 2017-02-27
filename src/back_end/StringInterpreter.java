@@ -1,6 +1,5 @@
 package back_end;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,13 +7,13 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import commands.CommandInterface;
 import commands.ParameterException;
+
 /**
- * The StringInterpreter class receives user-input commands, 
- * and parses through them to determine command type and parameter 
+ * The StringInterpreter class receives user-input commands, and parses through
+ * them to determine command type and parameter
  *
  */
-public class StringInterpreter
-{
+public class StringInterpreter {
 	private final String FILEPATH = "resources/languages/Syntax";
 	private ProgramParser myParser;
 	private CommandLibrary commandLib;
@@ -22,51 +21,51 @@ public class StringInterpreter
 	Scanner scanner;
 
 	/**
-	 * The StringInterpreter constructor initiates a command library, a parser to 
-	 * go through the user's input, and a map to store the index number of the user-entered input 
-	 * along with its type (i.e., variable, integer, command, etc...)
+	 * The StringInterpreter constructor initiates a command library, a parser
+	 * to go through the user's input, and a map to store the index number of
+	 * the user-entered input along with its type (i.e., variable, integer,
+	 * command, etc...)
 	 */
-	public StringInterpreter()
-	{
-		commandLib = new CommandLibrary();
+	public StringInterpreter() {
 		myParser = new ProgramParser();
 		myParser.addPatterns(FILEPATH);
-	    myInputs = new ArrayList<Input>();
+		myInputs = new ArrayList<Input>();
 	}
 
 	/**
-	 * Added the following two methods to store every input parameter as well as its type
-	 *@param String commandLine and commandString refer to the user-input commands. Everything bounded
-	 *by whitespace characters is parsed, stored as an input object, and put into a list.
+	 * Added the following two methods to store every input parameter as well as
+	 * its type
+	 * 
+	 * @param String
+	 *            commandLine and commandString refer to the user-input
+	 *            commands. Everything bounded by whitespace characters is
+	 *            parsed, stored as an input object, and put into a list.
+	 * @throws UnrecognizedCommandException
 	 */
-	private void storeInput(String commandString){
+	private void storeInput(String commandString) throws UnrecognizedCommandException {
 		Scanner inputScanner = new Scanner(commandString);
 		while (inputScanner.hasNextLine()) {
-            parseLine(inputScanner.nextLine());
+			parseLine(inputScanner.nextLine());
 		}
 		inputScanner.close();
 	}
-	
-	private void parseLine(String commandLine){
+
+	private void parseLine(String commandLine) throws UnrecognizedCommandException {
 		Scanner lineScanner = new Scanner(commandLine);
-		Input newInput = new Input(lineScanner.next(), myParser.getSymbol(lineScanner.next()));
+		Input newInput = new Input(lineScanner.next().trim().toLowerCase(), myParser.getSymbol(lineScanner.next()));
 		myInputs.add(newInput);
 		lineScanner.close();
 	}
-	
-	public CommandInterface interpret(String commandString) throws UnrecognizedCommandException, LibraryLookUpException, ParameterException
-	{
-		System.out.println("Text submitted: " + commandString);
 
-		scanner = new Scanner(commandString);
-		//NEEDS TO BE ALTERED IF REPETITION
-		CommandInterface command = commandLib.getCommand(scanner.next());
-		try{
-			command.setParameters(scanner.nextLine());
-		} catch (NoSuchElementException e){
-			throw new ParameterException(commandString, command.getParameterCount(),0);
-		}
-		return command;
+	/**
+	 * TODO: Currently not able to match comment type
+	 * 
+	 * @param s
+	 * @return
+	 * @throws UnrecognizedCommandException
+	 */
+	public String getType(String s) throws UnrecognizedCommandException {
+		return myParser.getSymbol(s);
 	}
-	
+
 }

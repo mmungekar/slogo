@@ -11,20 +11,34 @@ public class Controller {
 	private View view;
 	private Model model;
 	private StringInterpreter stringInterpreter;
+	
 
 	public void start(Stage s) {
 		model = new Model();
 		view = new View(s, model);
-
 		stringInterpreter = new StringInterpreter();
+		
 
 		view.setEnterListener((String string) -> {
 			System.out.println(model.toString());
+			
+			// TODO waiting on stringInterpreter command to execute and catch all errors
+			/*
 			try {
-				stringInterpreter.interpret(string).Execute(model);
+				stringInterpreter.parseLine(string).Execute(model);
 			} catch (UnrecognizedCommandException | LibraryLookUpException | ParameterException e) {
 				view.printToOutput(e);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			*/
 			System.out.println(model.toString());
 		});
 	}
