@@ -1,17 +1,17 @@
 package commands;
 
 public class MovementParameters implements ParameterContainer {
-	private int magnitude;
+	private double magnitude;
 
 	public MovementParameters() {
 		magnitude = 0;
 	}
 
-	public void setMovementMagnitude(int in) {
+	public void setMovementMagnitude(double in) {
 		magnitude = in;
 	}
 
-	public int getMovementMagnitude() {
+	public double getMovementMagnitude() {
 		return magnitude;
 	}
 }

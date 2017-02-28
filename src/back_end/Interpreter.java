@@ -9,11 +9,11 @@ import commands.CommandInterface;
 import commands.ParameterException;
 
 /**
- * The StringInterpreter class receives user-input commands, and parses through
- * them to determine command type and parameter
+ * The StringInterpreter class receives Inputs, and parses through them to
+ * determine command type and parameter
  *
  */
-public class StringInterpreter {
+public class Interpreter {
 	private final String FILEPATH = "resources/languages/Syntax";
 	private ProgramParser myParser;
 	private CommandLibrary commandLib;
@@ -26,7 +26,8 @@ public class StringInterpreter {
 	 * the user-entered input along with its type (i.e., variable, integer,
 	 * command, etc...)
 	 */
-	public StringInterpreter() {
+	public Interpreter() {
+		commandLib = new CommandLibrary();
 		myParser = new ProgramParser();
 		myParser.addPatterns(FILEPATH);
 		myInputs = new ArrayList<Input>();
@@ -66,6 +67,12 @@ public class StringInterpreter {
 	 */
 	public String getType(String s) throws UnrecognizedCommandException {
 		return myParser.getSymbol(s);
+	}
+
+	public CommandInterface translateInput(Input commandInput) throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, UnrecognizedCommandException {
+		CommandInterface command = commandLib.getCommand(commandInput.getParameter());
+		return command;
 	}
 
 }

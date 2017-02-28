@@ -2,6 +2,7 @@ package back_end;
 
 public class Input {
 	private String myParameter;
+	// Types that follow the naming in Syntax.properties
 	private String myType;
 	public Input(){
 		

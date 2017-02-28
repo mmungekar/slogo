@@ -10,14 +10,14 @@ public class Controller {
 	public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
 	private View view;
 	private Model model;
-	private StringInterpreter stringInterpreter;
-	
+
+	private Interpreter stringInterpreter;
 
 	public void start(Stage s) {
 		model = new Model();
 		view = new View(s, model);
-		stringInterpreter = new StringInterpreter();
-		
+
+		stringInterpreter = new Interpreter();
 
 		view.setEnterListener((String string) -> {
 			System.out.println(model.toString());

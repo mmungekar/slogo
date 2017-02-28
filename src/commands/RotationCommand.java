@@ -27,16 +27,15 @@ public class RotationCommand implements CommandInterface {
 	 *            remainder of the user-entered command can be parsed here
 	 */
 	@Override
-	public void setParameters(String nextLine) {
-		Scanner scanner = new Scanner(nextLine);
-		((MovementParameters) myParameter).setMovementMagnitude(scale * scanner.nextInt());
-		scanner.close();
+	public void setParameters(double...ds) {
+		((MovementParameters) myParameter).setMovementMagnitude(scale * ds[0]);
 	}
 
 	@Override
-	public void Execute(Model model) {
+	public double Execute(Model state) {
 		// TODO turtle ID
-		model.setAngle(0, model.getAngle(0) + ((MovementParameters) myParameter).getMovementMagnitude());
+		state.setAngle(0, state.getAngle(0) + ((MovementParameters) myParameter).getMovementMagnitude());
+		return ((MovementParameters) myParameter).getMovementMagnitude();
 	}
 
 	@Override
