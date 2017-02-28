@@ -3,7 +3,8 @@ package back_end;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import commands.CommandInterface;
+
+import back_end.commands.CommandInterface;
 
 public class CommandLibrary {
 	private String language = "English";
