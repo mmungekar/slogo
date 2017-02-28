@@ -18,6 +18,7 @@ public class Turtle extends ImageView {
 		super(image);
 		this.setAngle(0);
 		calcHalfDems();
+		setAngle(90);
 		setPosition(initPos);
 		penDown = true;
 	}
