@@ -16,6 +16,7 @@ public class Turtle extends ImageView {
 
 	Turtle(Image image, Point2D initPos) {
 		super(image);
+		this.setAngle(90);
 		calcHalfDems();
 		setPosition(initPos);
 		penDown = true;
@@ -76,10 +77,14 @@ public class Turtle extends ImageView {
 
 	public void setAngle(double angle) {
 		this.angle = angle;
+		keepAngleWithin360();
+		this.setRotate(this.angle);
+	}
+
+	private void keepAngleWithin360() {
 		if (Math.abs(this.angle) >= 360){
 			this.angle -= Math.signum(this.angle) * 360;
 		}
-		this.setRotate(this.angle);
 	}
 
 	public void changeImage(Image newTurtleImage) {

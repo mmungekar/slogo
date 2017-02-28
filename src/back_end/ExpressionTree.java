@@ -158,6 +158,7 @@ public class ExpressionTree {
 		}
 	}
 
+	/*
 	public static void main(String[] args) {
 		ExpressionTree test = new ExpressionTree("english");
 		String s = "SUM GREATER? 6 3 AND 2 1";
@@ -174,5 +175,6 @@ public class ExpressionTree {
 		}
 
 	}
+	*/
 
 }
