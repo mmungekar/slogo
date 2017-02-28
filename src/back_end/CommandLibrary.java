@@ -3,12 +3,10 @@ package back_end;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import commands.CommandInterface;
-import commands.ForwardCommand;
-import commands.RotationCommand;
+
+import back_end.commands.CommandInterface;
 
 public class CommandLibrary {
-
 	private String language = "English";
 	private ResourceBundle resource;
 	private ResourceBundle presource;
@@ -33,26 +31,22 @@ public class CommandLibrary {
 		}
 	}
 
-	// public String getStandardCommandName(String command) {
-	// command = command.toLowerCase();
-	// for (String x : commandNames) {
-	// String[] possibleNames = resource.getString(x).split("[|]");
-	// for (String y : possibleNames) {
-	// if (y.equals(command))
-	// return x;
-	// }
-	// }
-	// throw new Error("Command not found");
-	// }
-	public CommandInterface getCommand(String command) throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, UnrecognizedCommandException {
-		// TODO: change into more robust way of instantiating the class
-		String official = mParser.getSymbol(command);
-		Class<?> clazz = Class.forName(COMMAND_PREFIX.concat((official)));
-		return (CommandInterface) clazz.newInstance();
+	public CommandInterface getCommand(String command) throws UnrecognizedCommandException {
+		try {
+			String official = mParser.getSymbol(command);
+			Class<?> clazz = Class.forName(COMMAND_PREFIX.concat((official)));
+			return (CommandInterface) clazz.newInstance();
+		} catch (ClassNotFoundException ex) {
+			throw new UnrecognizedCommandException("Cannot find command: " + command);
+		} catch (InstantiationException ex) {
+			throw new UnrecognizedCommandException("Cannot initialize command: " + command);
+		} catch (IllegalAccessException ex) {
+			throw new UnrecognizedCommandException("Cannot initialize command: " + command);
+		}
 	}
 
 	public int getNumParam(String command) throws UnrecognizedCommandException {
+
 		String official = mParser.getSymbol(command);
 		return Integer.parseInt(presource.getString(official));
 	}

@@ -76,6 +76,9 @@ public class Turtle extends ImageView {
 
 	public void setAngle(double angle) {
 		this.angle = angle;
+		if (Math.abs(this.angle) >= 360){
+			this.angle -= Math.signum(this.angle) * 360;
+		}
 		this.setRotate(this.angle);
 	}
 

@@ -1,23 +1,37 @@
 package back_end;
+<<<<<<< HEAD
 import java.lang.reflect.InvocationTargetException;
+=======
+	
+>>>>>>> branch 'master' of git@coursework.cs.duke.edu:CompSci308_2017Spring/slogo_team16.git
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
+<<<<<<< HEAD
 import commands.CommandInterface;
+=======
+
+import back_end.commands.CommandInterface;
+import back_end.constant.Constant;
+
+>>>>>>> branch 'master' of git@coursework.cs.duke.edu:CompSci308_2017Spring/slogo_team16.git
 /**
  * Constructs the nodes of the expression tree, which will contain either
- * commands, operators, or integer values
+ * commands, operators, or integer values (hence, type Object)
  */
 public class ExpressionTreeNode {
-	private CommandLibrary commandLib = new CommandLibrary();
-	private CommandInterface myCommand;
-	private Input myInput;
-	private double myValue;
+	private CommandLibrary mCommandLib;
+	// Contents
+	private Input mInput;
+	private CommandInterface mCommand;
+	private double mValue;
 	private ExpressionTreeNode myParent;
 	private List<ExpressionTreeNode> myChildren;
+<<<<<<< HEAD
 	private int requiredChildNumber;
 	private boolean isExecuted;
 	/**
@@ -60,6 +74,10 @@ public class ExpressionTreeNode {
 			UnrecognizedCommandException, LibraryLookUpException {
 		this(x, null);
 	}
+=======
+	private boolean mExecuted;
+
+>>>>>>> branch 'master' of git@coursework.cs.duke.edu:CompSci308_2017Spring/slogo_team16.git
 	/**
 	 * If the parent node is specified, it is included in the constructor
 	 * 
@@ -67,29 +85,35 @@ public class ExpressionTreeNode {
 	 *            specifies the contents of the node; parent specifies the
 	 *            parent node which operates upon the current node
 	 * @throws ClassNotFoundException
-	 * @throws InvocationTargetException
-	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
-	 * @throws SecurityException
-	 * @throws NoSuchMethodException
 	 * @throws InstantiationException
-	 * @throws LibraryLookUpException
-	 * @throws UnrecognizedCommandException
+	 * @throws UnrecognizedCommandException 
 	 */
-	public ExpressionTreeNode(Input x, ExpressionTreeNode parent) throws ClassNotFoundException, NoSuchMethodException,
-			SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
-			InstantiationException, UnrecognizedCommandException, LibraryLookUpException {
-		requiredChildNumber = -1;
-		myInput = x;
-		checkContents(x);
-		myParent = parent;
-		parent.addChild(this);
+	public ExpressionTreeNode(Input x, ExpressionTreeNode parent)
+			throws UnrecognizedCommandException {
 		myChildren = new ArrayList<ExpressionTreeNode>();
-		myCommand = null;
-		isExecuted = false;
+		mCommandLib = new CommandLibrary();
+		mCommand = null;
+		mExecuted = false;
 		myParent = parent;
+		mInput = x;
+		switch (x.getType()) {
+		case Constant.ROOT_TYPE:
+			break;
+		case Constant.CONSTANT_TYPE:
+			mValue = Double.parseDouble(x.getParameter());
+			break;
+		case Constant.COMMAND_TYPE:
+			mCommand = mCommandLib.getCommand(x.getParameter());
+			break;
+		}
 	}
+<<<<<<< HEAD
 	private void addChild(ExpressionTreeNode child) {
+=======
+
+	public void addChild(ExpressionTreeNode child) {
+>>>>>>> branch 'master' of git@coursework.cs.duke.edu:CompSci308_2017Spring/slogo_team16.git
 		if (this != null) {
 			this.myChildren.add(child);
 		}
@@ -102,14 +126,35 @@ public class ExpressionTreeNode {
 	public ExpressionTreeNode getParent() {
 		return this.myParent;
 	}
+<<<<<<< HEAD
 	/**
 	 * Returns the content of the current node
 	 * 
 	 * @return the double/string/command the node is storing
 	 */
-	public Input getInput() {
-		return this.myInput;
+=======
+	
+	public void setParent(ExpressionTreeNode parent){
+		myParent = parent;
 	}
+
+	public Collection<ExpressionTreeNode> getChildren() {
+		return myChildren;
+	}
+	
+	public void setValue(double value){
+		mValue = value;
+	}
+	
+	public double getValue(){
+		return mValue;
+	}
+
+>>>>>>> branch 'master' of git@coursework.cs.duke.edu:CompSci308_2017Spring/slogo_team16.git
+	public Input getInput() {
+		return mInput;
+	}
+<<<<<<< HEAD
 	/**
 	 * Returns the children of the current node
 	 * 
@@ -172,5 +217,10 @@ public class ExpressionTreeNode {
 	}
 	public void setSatisfied() {
 		isExecuted = true;
+=======
+
+	public void setExecuted() {
+		mExecuted = true;
+>>>>>>> branch 'master' of git@coursework.cs.duke.edu:CompSci308_2017Spring/slogo_team16.git
 	}
 }

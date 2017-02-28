@@ -1,5 +1,6 @@
 package front_end;
 
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -17,7 +18,7 @@ public class Canvas implements Observer {
 	private Rectangle Frame;
 	private Group myRoot;
 	private Model observedModel = null;
-
+	private HashMap<Integer, Turtle> turtleContainer = new HashMap<>();
 
 	public Canvas(Model model, Group root, Point2D home) {
 		this.observedModel = model;
