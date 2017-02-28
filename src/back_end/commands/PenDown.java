@@ -2,7 +2,6 @@ package back_end.commands;
 
 import back_end.Model;
 import back_end.NotEnoughParameterException;
-import commands.CommandInterface;
 
 public class PenDown implements CommandInterface{
 

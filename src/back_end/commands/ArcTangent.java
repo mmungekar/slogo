@@ -3,7 +3,6 @@ package back_end.commands;
 import back_end.Input;
 import back_end.Model;
 import back_end.constant.Constant;
-import commands.CommandInterface;
 
 public class ArcTangent implements CommandInterface, Constant{
     private double mAtan;

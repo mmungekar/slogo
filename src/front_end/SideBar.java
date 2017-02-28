@@ -24,6 +24,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -154,8 +155,10 @@ public class SideBar {
 		}
 	}
 
-	private VBox createTurtleSpecficCommands(Stage s) {
-		VBox turtleSpecificControls = new VBox();
+	private Pane createTurtleSpecficCommands(Stage s) {
+		HBox turtleSpecificControls = new HBox();
+		
+		VBox turtleOptions = new VBox();
 
 		createTurtleIDSelector();
 
@@ -163,12 +166,14 @@ public class SideBar {
 		Button sendHome = createSendHomeButton();
 		VBox penControls = createPenToggle();
 		
-		
+		turtleOptions.getChildren().addAll(imageChoose, sendHome, penControls);
+		turtleOptions.setSpacing(myView.getDefaultSpacing() / 3);
 
-		turtleSpecificControls.getChildren().addAll(turtleIDs, imageChoose, sendHome, penControls);
+		turtleSpecificControls.getChildren().addAll(turtleIDs, turtleOptions);
 
 		turtleSpecificControls.setLayoutX(myView.getCanvasDimensions()[0] + 3 * myView.getDefaultSpacing());
 		turtleSpecificControls.setLayoutY(3 * myView.getDefaultSpacing());
+		turtleSpecificControls.setSpacing(myView.getDefaultSpacing());
 		return turtleSpecificControls;
 	}
 
@@ -179,6 +184,7 @@ public class SideBar {
 		ComboBox<String> penColorSelectionTool = createPenColorSelectionTool();
 		
 		penControls.getChildren().addAll(penColorSelectionTool, penSwitch);
+		penControls.setSpacing(myView.getDefaultSpacing() / 3);
 
 		return penControls;
 	}

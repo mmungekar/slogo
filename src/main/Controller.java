@@ -19,15 +19,17 @@ public class Controller {
 		mInterpreter = new Interpreter(language);
 
 		String output = "";
-		view.setEnterListener((String command) -> {
+		view.setEnterListener((String rawUserInput) -> {
 			System.out.println(model.toString());
-			try {
-				mInterpreter.execute(model, command);
-			} catch (NotEnoughParameterException e) {
-				
-			} catch (UnrecognizedCommandException e) {
-				
-			}
+			
+				// This line should stay the same, all changes should happen in the backend
+				try {
+					mInterpreter.execute(model, rawUserInput);
+				} catch (UnrecognizedCommandException | NotEnoughParameterException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
 			
 			System.out.println(model.toString());
 		});

@@ -54,6 +54,7 @@ public class View implements ViewInterface {
 
 		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND_COLOR);
 
+		s.setTitle("SLogo Team 16");
 		s.setScene(scene);
 		s.show();
 	}

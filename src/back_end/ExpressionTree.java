@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
+import back_end.commands.CommandInterface;
 import back_end.constant.Constant;
-import commands.CommandInterface;
 
 /**
  * Main language parsing structure, construct all commands and constants in a
@@ -163,6 +163,7 @@ public class ExpressionTree {
 		mRootNode = new ExpressionTreeNode(rootInput, null);
 	}
 
+	/*
 	public static void main(String[] args) {
 		ExpressionTree test = new ExpressionTree("english");
 		String s = "SUM GREATER? 6 3 AND 2 1";
@@ -179,5 +180,6 @@ public class ExpressionTree {
 		}
 
 	}
+	*/
 
 }

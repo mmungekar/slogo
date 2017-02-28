@@ -2,7 +2,6 @@ package back_end.commands;
 
 import back_end.Model;
 import back_end.constant.Constant;
-import commands.CommandInterface;
 
 public class Or implements CommandInterface, Constant{
     private int mOr;

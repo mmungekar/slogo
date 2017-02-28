@@ -2,9 +2,8 @@ package back_end.commands;
 
 import back_end.Model;
 import back_end.constant.Constant;
-import commands.CommandInterface;
 
-public class Reminder implements CommandInterface, Constant{
+public class Remainder implements CommandInterface, Constant{
     private int mRemind;
 	@Override
 	public void setParameters(double...ds) {
