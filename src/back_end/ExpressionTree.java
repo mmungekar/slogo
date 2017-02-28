@@ -86,6 +86,7 @@ public class ExpressionTree {
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		ExpressionTreeNode inputNode = new ExpressionTreeNode(input, null);
 		if (!isChildrenFull(currNode)) {
+			inputNode.setParent(currNode);
 			currNode.getChildren().add(inputNode);
 			currNode = inputNode;
 			return currNode;
@@ -94,8 +95,9 @@ public class ExpressionTree {
 			if (currNode == mRootNode)
 				return mRootNode;
 			currNode = currNode.getParent();
-			System.out.println("Parent Node: "+ currNode.getInput().getParameter());
+			//System.out.println("Parent Node: "+ currNode.getInput().getParameter());
 		}
+		inputNode.setParent(currNode);
 		currNode.getChildren().add(inputNode);
 		currNode = inputNode;
 		return currNode;
@@ -163,7 +165,7 @@ public class ExpressionTree {
 		try {
 			ExpressionTreeNode root = test.constructTree(s);
 			int layer = 0;
-			System.out.println("First layer: " + root.getChildren().size());
+			System.out.println("Tesing: " + root.getChildren().size());
 			for (ExpressionTreeNode node : root.getChildren()) {
 				System.out.println("Type: " + node.getInput().getType());
 				System.out.println("Param: " + node.getInput().getParameter());

@@ -88,6 +88,10 @@ public class ExpressionTreeNode {
 	public ExpressionTreeNode getParent() {
 		return this.myParent;
 	}
+	
+	public void setParent(ExpressionTreeNode parent){
+		myParent = parent;
+	}
 
 	public Collection<ExpressionTreeNode> getChildren() {
 		return myChildren;
