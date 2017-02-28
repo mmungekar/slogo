@@ -16,7 +16,7 @@ import commands.CommandInterface;
  * commands, operators, or integer values (hence, type Object)
  */
 public class ExpressionTreeNode {
-	private Interpreter mInterpreter;
+	private CommandLibrary mCommandLib;
 	// Contents
 	private Input mInput;
 	private CommandInterface mCommand;
@@ -37,9 +37,9 @@ public class ExpressionTreeNode {
 	 * @throws UnrecognizedCommandException 
 	 */
 	public ExpressionTreeNode(Input x, ExpressionTreeNode parent)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnrecognizedCommandException {
-		mInterpreter = new Interpreter();
+			throws UnrecognizedCommandException {
 		myChildren = new ArrayList<ExpressionTreeNode>();
+		mCommandLib = new CommandLibrary();
 		mCommand = null;
 		mExecuted = false;
 		myParent = parent;
@@ -51,7 +51,7 @@ public class ExpressionTreeNode {
 			mValue = Double.parseDouble(x.getParameter());
 			break;
 		case Constant.COMMAND_TYPE:
-			mCommand = mInterpreter.translateInput(x);
+			mCommand = mCommandLib.getCommand(x.getParameter());
 			break;
 		}
 	}
