@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import commands.CommandInterface;
+
+import back_end.commands.CommandInterface;
 
 /**
  * The StringInterpreter class receives Inputs, and parses through them to
