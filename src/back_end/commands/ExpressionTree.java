@@ -221,7 +221,7 @@ public class ExpressionTree {
 			throws CommandException {
 		int paramNum = mCommandLib.getNumParam(node.getInput().getParameter());
 		if (paramNum != node.getChildren().size()){
-			throw new NotEnoughParameterException(currInput.getParameter(), paramNum, node.getChildren().size());
+			throw new NotEnoughParameterException(node.getInput().getParameter(), paramNum, node.getChildren().size());
 		}
 		CommandInterface command = mCommandLib.getCommand(node.getInput().getParameter());
 		double[] params = new double[paramNum]; 
