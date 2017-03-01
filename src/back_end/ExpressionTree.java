@@ -25,7 +25,11 @@ public class ExpressionTree {
 	private ExpressionTreeNode mRootNode;
 	private ProgramParser mParser;
 	private CommandLibrary mCommandLib;
-
+/**
+ * The two constructors for the tree require an input for language in order to initialize the command library
+ * The latter constructor can be used to extract subtrees from the larger tree (i.e., by taking out a node and its children)
+ * @param lang (String that defines which language is being used)
+ */
 	public ExpressionTree(String lang) {
 		initTree(lang);
 	}
@@ -35,7 +39,7 @@ public class ExpressionTree {
 		mRootNode = node;
 	}
 	
-	public void initTree(String language) {
+	private void initTree(String language) {
 		mInputs = new ArrayList<>();
 		mRootNode = null;
 		mParser = new ProgramParser();
@@ -43,7 +47,10 @@ public class ExpressionTree {
 		mCommandLib = new CommandLibrary();
 		mCommandLib.buildLib(language);
 	}
-
+/**
+ * Construct tree from user-entered text
+ * @param commandString
+ */
 	public ExpressionTreeNode constructTree(String commandString) throws UnrecognizedCommandException {
 		Scanner cScanner = new Scanner(commandString);
 		// Parse string into inputs, getting rid of Comment type
@@ -61,7 +68,10 @@ public class ExpressionTree {
 		return constructBranch(mInputs);
 	}
 
-	// Turn a full list of commands into a sub tree
+	/**
+	 * For every word the user inputs, a node is created and added to the tree
+	 * @param inputs is a list of inputs returned by the parser
+	 */
 	private ExpressionTreeNode constructBranch(List<Input> inputs) throws UnrecognizedCommandException {
 		if (inputs.size() == 0){
 			return null;
@@ -81,34 +91,45 @@ public class ExpressionTree {
 	private ExpressionTreeNode initNode(Input input, ExpressionTreeNode currNode)
 			throws UnrecognizedCommandException {
 		ExpressionTreeNode inputNode = new ExpressionTreeNode(input, null);
-		currNode = findAvailableParent(currNode,inputNode);
-		inputNode.setParent(currNode);
-		currNode.getChildren().add(inputNode);
-		currNode = inputNode;
+		currNode = setAvailableParent(currNode,inputNode);
 		return currNode;
 	}
-
-	private ExpressionTreeNode findAvailableParent(ExpressionTreeNode currNode, ExpressionTreeNode inputNode) throws UnrecognizedCommandException {
-		if (!isChildrenFull(currNode)) {
-			inputNode.setParent(currNode);
-			currNode.getChildren().add(inputNode);
-			currNode = inputNode;
-			return currNode;
-		}
+/**
+ * This method checks to see which parent nodes have available space for children and which parent nodes
+ * (commands) already have a maximum number of parameters
+ * @param currNode (the to-be parent node)
+ * @param inputNode
+ */
+	private ExpressionTreeNode setAvailableParent(ExpressionTreeNode currNode, ExpressionTreeNode inputNode) throws UnrecognizedCommandException {
 		while (isChildrenFull(currNode)) {
-			if (currNode == mRootNode)
+			if (currNode == mRootNode){
 				return mRootNode;
+			}
 			currNode = currNode.getParent();
-		
 		}
+		currNode = checkFinishedList(currNode, inputNode);
 		return currNode;
 	}
 
 	private boolean isChildrenFull(ExpressionTreeNode node) throws UnrecognizedCommandException {
 		return node != mRootNode && (isConstant(node.getInput())
-				|| mCommandLib.getNumParam(node.getInput().getParameter()) == node.getChildren().size());
+				|| (isCommand(node.getInput())&&mCommandLib.getNumParam(node.getInput().getParameter()) == node.getChildren().size()));
 	}
-
+	
+	private ExpressionTreeNode checkFinishedList(ExpressionTreeNode currNode, ExpressionTreeNode inputNode){
+		if(isListEnd(inputNode.getInput())){
+			currNode = currNode.getParent();
+			return currNode;
+		}
+		inputNode.setParent(currNode);
+		currNode.getChildren().add(inputNode);
+		currNode = inputNode;
+		return currNode;
+	}
+/**
+ * Returns the type of an input 
+ * @param i refers to an input
+ */
 	private boolean isCommand(Input i) {
 		return i.getType().equals(Constant.COMMAND_TYPE);
 	}
@@ -116,7 +137,13 @@ public class ExpressionTree {
 	private boolean isConstant(Input i) {
 		return i.getType().equals(Constant.CONSTANT_TYPE);
 	}
-	
+	private boolean isListStart(Input i) {
+		return i.getType().equals(Constant.LISTSTART_TYPE);
+	}
+	private boolean isListEnd(Input i) {
+		return i.getType().equals(Constant.LISTEND_TYPE);
+	}
+
 
 	/**
 	 * Given an already-built ExpressionTree, we traverse it using depth first
@@ -145,17 +172,36 @@ public class ExpressionTree {
 		if (node == null)
 			return;
 		Input currInput = node.getInput();
+		checkListStart(currInput, state, node);
 		if (isConstant(currInput)) {
 			node.setExecuted();
-			return;
-		} else if (isCommand(currInput)) {
+			return;} 
+		else if (isCommand(currInput)) {
 			execCommand(node, state, currInput);
 		}
 	}
-
+	
+	/**
+	 * Checks to see if the child is the start of the list-- if so, execute everything in the list
+	 */
+	private void checkListStart(Input currInput, Model state, ExpressionTreeNode node) throws NotEnoughParameterException, UnrecognizedCommandException{
+		if(isListStart(currInput)){
+			for (ExpressionTreeNode kid : node.getChildren()) {
+				traverseChild(kid, state);
+			}
+		}
+	}
+	
+/**
+ * Instantiates commands (if the current node stores a command), adds the value of the children nodes as 
+ * parameters, and executes 
+ * @param node
+ * @param state
+ * @param currInput
+ */
 	private void execCommand(ExpressionTreeNode node, Model state, Input currInput)
 			throws NotEnoughParameterException, UnrecognizedCommandException {
-		checkIfStatement(node, state, currInput);
+		//checkIfStatement(node, state, currInput);
 		for (ExpressionTreeNode kid : node.getChildren()) {
 			traverseChild(kid, state);
 		}
@@ -180,7 +226,9 @@ public class ExpressionTree {
 		command.setParameters(params);
 		return command;
 	}
-
+/**
+ * TO BE MOVED TO THE IF-STATEMENT CLASS 
+ */
 	private void checkIfStatement(ExpressionTreeNode node,Model state, Input myInput) throws NotEnoughParameterException, UnrecognizedCommandException{
 		if(myInput.getParameter()==Constant.IF_COMMAND_TYPE){
 			Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
@@ -193,6 +241,7 @@ public class ExpressionTree {
 				iter.next();
 				traverseChild(iter.next(),state);
 			}
+			node.setExecuted();
 		}
 	}
 	

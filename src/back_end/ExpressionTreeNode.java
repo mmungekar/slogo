@@ -44,19 +44,27 @@ public class ExpressionTreeNode {
 		mExecuted = false;
 		myParent = parent;
 		mInput = x;
-		switch (x.getType()) {
-		case Constant.ROOT_TYPE:
-			break;
-		case Constant.CONSTANT_TYPE:
-			mValue = Double.parseDouble(x.getParameter());
-			break;
-		case Constant.COMMAND_TYPE:
-			mCommand = mCommandLib.getCommand(x.getParameter());
-			break;
-		}
+		checkConstant(x);
+		checkCommand(x);
 	}
 
-	public void addChild(ExpressionTreeNode child) {
+	private void checkConstant(Input x){
+		if(x.getType() == Constant.CONSTANT_TYPE){
+			mValue = Double.parseDouble(x.getParameter());
+		}
+	}
+	
+	private void checkCommand(Input x) throws UnrecognizedCommandException{
+	if(x.getType() == Constant.COMMAND_TYPE){	
+		mCommand = mCommandLib.getCommand(x.getParameter());
+		}
+	}
+	
+	/**
+	 * Adds a child node to the current node
+	 * @param child
+	 */
+		public void addChild(ExpressionTreeNode child) {
 		if (this != null) {
 			this.myChildren.add(child);
 		}
@@ -64,33 +72,48 @@ public class ExpressionTreeNode {
 
 	/**
 	 * Returns the parent of the current node
-	 * 
 	 * @return the ExpressionTreeNode which is parent to the current one
 	 */
 	public ExpressionTreeNode getParent() {
 		return this.myParent;
 	}
-	
+	/**
+	 * Sets a parent node for the current node
+	 * @param parent
+	 */
 	public void setParent(ExpressionTreeNode parent){
 		myParent = parent;
 	}
-
+	/**
+	 * Returns the children of the current node
+	 * @return myChildren
+	 */
 	public Collection<ExpressionTreeNode> getChildren() {
 		return myChildren;
 	}
-	
+	/**
+	 * Sets the value of node once it has been executed (nodes holding constants are unchanged)
+	 * @param parent
+	 */
 	public void setValue(double value){
 		mValue = value;
 	}
 	
+	/**
+	 * Gets the value stored in the node
+	 */
 	public double getValue(){
 		return mValue;
 	}
-
+	/**
+	 * Gets the input object stored in the node
+	 */
 	public Input getInput() {
 		return mInput;
 	}
-
+	/**
+	 * Sets the status of the node to reflect whether it has been called by a command
+	 */
 	public void setExecuted() {
 		mExecuted = true;
 	}
