@@ -21,6 +21,7 @@ public class ExpressionTreeNode {
 	private ExpressionTreeNode myParent;
 	private List<ExpressionTreeNode> myChildren;
 	private boolean mExecuted;
+	private String myLanguage;
 
 	/**
 	 * If the parent node is specified, it is included in the constructor
@@ -66,6 +67,20 @@ public class ExpressionTreeNode {
 			this.myChildren.add(child);
 		}
 	}
+		/**
+		 * Creates a copy of the input node and all its children
+		 * @param node takes in an input node
+		 * @throws UnrecognizedCommandException 
+		 */
+		public void makeCopy(ExpressionTreeNode node) throws CommandException{
+			if(node==null){
+				return;
+			}
+			ExpressionTreeNode newNode = new ExpressionTreeNode(myLanguage, node.getInput(),node.getParent());
+			for(ExpressionTreeNode child:node.getChildren()){
+				makeCopy(child);
+			}
+		}
 
 	/**
 	 * Returns the parent of the current node
