@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import commands.CommandInterface;
-import commands.ParameterException;
 
 /**
  * The StringInterpreter class receives Inputs, and parses through them to
@@ -14,11 +13,8 @@ import commands.ParameterException;
  *
  */
 public class Interpreter {
-	private final String FILEPATH = "resources/languages/Syntax";
-	private ProgramParser myParser;
-	private CommandLibrary commandLib;
-	private List<Input> myInputs;
-	Scanner scanner;
+	private ExpressionTree mTree;
+	private String language;
 
 	/**
 	 * The StringInterpreter constructor initiates a command library, a parser
@@ -26,53 +22,14 @@ public class Interpreter {
 	 * the user-entered input along with its type (i.e., variable, integer,
 	 * command, etc...)
 	 */
-	public Interpreter() {
-		commandLib = new CommandLibrary();
-		myParser = new ProgramParser();
-		myParser.addPatterns(FILEPATH);
-		myInputs = new ArrayList<Input>();
+	public Interpreter(String lang) {
+		language = lang;
+		mTree = new ExpressionTree(language);
 	}
 
-	/**
-	 * Added the following two methods to store every input parameter as well as
-	 * its type
-	 * 
-	 * @param String
-	 *            commandLine and commandString refer to the user-input
-	 *            commands. Everything bounded by whitespace characters is
-	 *            parsed, stored as an input object, and put into a list.
-	 * @throws UnrecognizedCommandException
-	 */
-	private void storeInput(String commandString) throws UnrecognizedCommandException {
-		Scanner inputScanner = new Scanner(commandString);
-		while (inputScanner.hasNextLine()) {
-			parseLine(inputScanner.nextLine());
-		}
-		inputScanner.close();
-	}
-
-	private void parseLine(String commandLine) throws UnrecognizedCommandException {
-		Scanner lineScanner = new Scanner(commandLine);
-		Input newInput = new Input(lineScanner.next().trim().toLowerCase(), myParser.getSymbol(lineScanner.next()));
-		myInputs.add(newInput);
-		lineScanner.close();
-	}
-
-	/**
-	 * TODO: Currently not able to match comment type
-	 * 
-	 * @param s
-	 * @return
-	 * @throws UnrecognizedCommandException
-	 */
-	public String getType(String s) throws UnrecognizedCommandException {
-		return myParser.getSymbol(s);
-	}
-
-	public CommandInterface translateInput(Input commandInput) throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, UnrecognizedCommandException {
-		CommandInterface command = commandLib.getCommand(commandInput.getParameter());
-		return command;
+	public void execute(Model model, String command) throws UnrecognizedCommandException, NotEnoughParameterException {
+		mTree.constructTree(command);
+		mTree.traverse(model);
 	}
 
 }

@@ -2,7 +2,6 @@ package main;
 
 import front_end.View;
 import back_end.*;
-import commands.ParameterException;
 import javafx.stage.Stage;
 
 public class Controller {
@@ -10,35 +9,25 @@ public class Controller {
 	public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
 	private View view;
 	private Model model;
-
-	private Interpreter stringInterpreter;
+	private Interpreter mInterpreter;
+	private String language = "English";
 
 	public void start(Stage s) {
 		model = new Model();
 		view = new View(s, model);
 
-		stringInterpreter = new Interpreter();
+		mInterpreter = new Interpreter(language);
 
-		view.setEnterListener((String string) -> {
+		view.setEnterListener((String command) -> {
 			System.out.println(model.toString());
-			
-			// TODO waiting on stringInterpreter command to execute and catch all errors
-			/*
 			try {
-				stringInterpreter.parseLine(string).Execute(model);
-			} catch (UnrecognizedCommandException | LibraryLookUpException | ParameterException e) {
-				view.printToOutput(e);
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				mInterpreter.execute(model, command);
+			} catch (NotEnoughParameterException e) {
+				
+			} catch (UnrecognizedCommandException e) {
+				
 			}
-			*/
+			
 			System.out.println(model.toString());
 		});
 	}

@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
-
 import back_end.constant.Constant;
 import commands.CommandInterface;
 
@@ -21,10 +20,10 @@ import commands.CommandInterface;
  * the returned value up to the parent on the fly.
  */
 public class ExpressionTree {
+	private static final String SYNTAX = "resources/languages/Syntax";
 	private List<Input> mInputs;
 	private ExpressionTreeNode mRootNode;
 	private ProgramParser mParser;
-	private Interpreter mInterpreter;
 	private CommandLibrary mCommandLib;
 
 	public ExpressionTree(String lang) {
@@ -35,17 +34,17 @@ public class ExpressionTree {
 		mInputs = new ArrayList<>();
 		mRootNode = null;
 		mParser = new ProgramParser();
-		mInterpreter = new Interpreter();
+		mParser.addPatterns(SYNTAX);
 		mCommandLib = new CommandLibrary();
 		mCommandLib.buildLib(language);
 	}
 
-	public ExpressionTreeNode constructTree(String commandString) throws Exception {
+	public ExpressionTreeNode constructTree(String commandString) throws UnrecognizedCommandException {
 		Scanner cScanner = new Scanner(commandString);
 		// Parse string into inputs, getting rid of Comment type
 		while (cScanner.hasNext()) {
 			String in = cScanner.next().trim().toLowerCase();
-			String type = mInterpreter.getType(in);
+			String type = mParser.getSymbol(in);
 			if (type.equals(Constant.COMMENT_TYPE)) {
 				cScanner.nextLine();
 				continue;
@@ -65,10 +64,11 @@ public class ExpressionTree {
 			Input rootInput = new Input(null, Constant.ROOT_TYPE);
 			mRootNode = new ExpressionTreeNode(rootInput, null);
 			ExpressionTreeNode currentNode = mRootNode;
-			for(Input input : inputs){
+			for (Input input : inputs) {
 				System.out.println("Input: " + input.getParameter());
-				System.out.println("CurrNode: " + currentNode.getInput().getParameter());
 				currentNode = buildBranch(input, currentNode);
+				System.out.println("Parent: " + currentNode.getParent().getInput().getParameter());
+				System.out.println();
 			}
 			return mRootNode;
 		} catch (Exception e) {
@@ -79,7 +79,7 @@ public class ExpressionTree {
 	}
 
 	private ExpressionTreeNode buildBranch(Input input, ExpressionTreeNode currNode)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnrecognizedCommandException {
+			throws UnrecognizedCommandException {
 		ExpressionTreeNode inputNode = new ExpressionTreeNode(input, null);
 		if (!isChildrenFull(currNode)) {
 			inputNode.setParent(currNode);
@@ -91,7 +91,8 @@ public class ExpressionTree {
 			if (currNode == mRootNode)
 				return mRootNode;
 			currNode = currNode.getParent();
-			//System.out.println("Parent Node: "+ currNode.getInput().getParameter());
+			// System.out.println("Parent Node: "+
+			// currNode.getInput().getParameter());
 		}
 		inputNode.setParent(currNode);
 		currNode.getChildren().add(inputNode);
@@ -100,8 +101,7 @@ public class ExpressionTree {
 	}
 
 	private boolean isChildrenFull(ExpressionTreeNode node) throws UnrecognizedCommandException {
-		return node != mRootNode
-				&& (isConstant(node.getInput())
+		return node != mRootNode && (isConstant(node.getInput())
 				|| mCommandLib.getNumParam(node.getInput().getParameter()) == node.getChildren().size());
 	}
 
@@ -119,16 +119,19 @@ public class ExpressionTree {
 	 * 
 	 * @param ModelState
 	 *            (Should be the static state from the canvas)
+	 * @throws UnrecognizedCommandException
+	 * @throws NotEnoughParameterException
 	 * @throws Exception
 	 */
-	public void traverse(Model ms) throws Exception {
+	public void traverse(Model ms) throws NotEnoughParameterException, UnrecognizedCommandException {
 		// Execute each commands in order
-		for(ExpressionTreeNode childrenNode : mRootNode.getChildren()){
+		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
 			traverseKid(childrenNode, ms);
-		}	
+		}
 	}
 
-	private void traverseKid(ExpressionTreeNode node, Model state) throws Exception {
+	private void traverseKid(ExpressionTreeNode node, Model state)
+			throws NotEnoughParameterException, UnrecognizedCommandException {
 		if (node == null)
 			return;
 		Input currInput = node.getInput();
@@ -142,7 +145,7 @@ public class ExpressionTree {
 			int paramNum = mCommandLib.getNumParam(currInput.getParameter());
 			CommandInterface command = mCommandLib.getCommand(currInput.getParameter());
 			if (paramNum != node.getChildren().size())
-				throw new Exception("Children size doesn't match Parameter's.");
+				throw new NotEnoughParameterException(currInput.getParameter());
 			double[] params = new double[paramNum];
 			Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
 			for (int i = 0; i < params.length; i++) {
@@ -157,34 +160,19 @@ public class ExpressionTree {
 
 	public static void main(String[] args) {
 		ExpressionTree test = new ExpressionTree("english");
-		String s = "GREATER? 3 6";
+		String s = "SUM GREATER? 6 3 AND 2 1";
 		try {
 			ExpressionTreeNode root = test.constructTree(s);
-			int layer = 0;
-			System.out.println("Tesing: " + root.getChildren().size());
+			test.traverse(null);
 			for (ExpressionTreeNode node : root.getChildren()) {
-				System.out.println("Type: " + node.getInput().getType());
-				System.out.println("Param: " + node.getInput().getParameter());
+				System.out.println("Greater? " + node.getValue());
 			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
-
-	/*
-	 * private void traverseTree() throws NoSuchMethodException,
-	 * SecurityException { Stack<ExpressionTreeNode> processor = new
-	 * Stack<ExpressionTreeNode>(); processor.push(root); ExpressionTreeNode
-	 * temp = root; while(temp.getChildren().size>0)){ for(ExpressionTreeNode
-	 * node:temp.getChildren()){ if(node.getContents() instanceof
-	 * CommandInterface ){ java.lang.reflect.Method method = ((Class<?>)
-	 * node.getContents()).getMethod("setParameters",null); //call method.invoke
-	 * //call method.execute and get a return value (let's say it's stored as
-	 * the value "g") // Input newInput = new Input(g.toString, "Double");
-	 * //ExpressionTreeNode replacementNode = new ExpressionTreeNode(newInput);
-	 * //replacementNode.replace(node); } } } }
-	 */
 
 }

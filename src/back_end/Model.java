@@ -17,6 +17,7 @@ public class Model extends Observable {
 	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
 	private Color backgroundColor;
 	private Point2D home;
+	private boolean clear;
 
 	public Model() {
 		setBackgroundColor(Color.WHITE);
@@ -45,6 +46,18 @@ public class Model extends Observable {
 	public void setPenUp(int ID){
 		turtleContainer.get(ID).setPenUp();
 		//setChangedAndNotifyObservers();
+	}
+	
+	public void setVisible(int ID){
+		turtleContainer.get(ID).setVisible(true);
+	}
+	
+	public void setInVisible(int ID){
+		turtleContainer.get(ID).setVisible(false);
+	}
+	
+	public boolean isVisible(int ID){
+		return turtleContainer.get(ID).isVisible();
 	}
 
 	public void setBackgroundColor(Color backgroundColor) {
@@ -77,6 +90,14 @@ public class Model extends Observable {
 		// create first turtle once home is set
 		turtleContainer.put(0, new Turtle(getDefaultTurtleImage(), home));
 		setChangedAndNotifyObservers();
+	}
+	
+	public void setClear(boolean clear){
+		this.clear = clear;
+	}
+	
+	public boolean isClear(){
+		return this.clear;
 	}
 
 	public double getX(int ID) {

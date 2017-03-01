@@ -18,10 +18,6 @@ public class Canvas implements Observer {
 	private Rectangle Frame;
 	private Group myRoot;
 	private Model observedModel = null;
-
-
-	// This is the key ModelState object that all commands execute upon
-	private Model observedState = null;
 	private HashMap<Integer, Turtle> turtleContainer = new HashMap<>();
 
 	public Canvas(Model model, Group root, Point2D home) {

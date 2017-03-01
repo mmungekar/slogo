@@ -4,8 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import commands.CommandInterface;
-import commands.ForwardCommand;
-import commands.RotationCommand;
 
 public class CommandLibrary {
 	private String language = "English";
@@ -32,12 +30,18 @@ public class CommandLibrary {
 		}
 	}
 
-	public CommandInterface getCommand(String command) throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, UnrecognizedCommandException {
-		// TODO: change into more robust way of instantiating the class
-		String official = mParser.getSymbol(command);
-		Class<?> clazz = Class.forName(COMMAND_PREFIX.concat((official)));
-		return (CommandInterface) clazz.newInstance();
+	public CommandInterface getCommand(String command) throws UnrecognizedCommandException {
+		try {
+			String official = mParser.getSymbol(command);
+			Class<?> clazz = Class.forName(COMMAND_PREFIX.concat((official)));
+			return (CommandInterface) clazz.newInstance();
+		} catch (ClassNotFoundException ex) {
+			throw new UnrecognizedCommandException("Cannot find command: " + command);
+		} catch (InstantiationException ex) {
+			throw new UnrecognizedCommandException("Cannot initialize command: " + command);
+		} catch (IllegalAccessException ex) {
+			throw new UnrecognizedCommandException("Cannot initialize command: " + command);
+		}
 	}
 
 	public int getNumParam(String command) throws UnrecognizedCommandException {
