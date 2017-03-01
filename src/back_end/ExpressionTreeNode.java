@@ -49,13 +49,13 @@ public class ExpressionTreeNode {
 	}
 
 	private void checkConstant(Input x){
-		if(x.getType() == Constant.CONSTANT_TYPE){
+		if(x.getType().equals(Constant.CONSTANT_TYPE)){
 			mValue = Double.parseDouble(x.getParameter());
 		}
 	}
 	
 	private void checkCommand(Input x) throws UnrecognizedCommandException{
-	if(x.getType() == Constant.COMMAND_TYPE){	
+	if(x.getType().equals(Constant.COMMAND_TYPE)){	
 		mCommand = mCommandLib.getCommand(x.getParameter());
 		}
 	}
