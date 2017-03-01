@@ -1,12 +1,9 @@
 package back_end;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Stack;
 
 import back_end.commands.CommandInterface;
 import back_end.constant.Constant;
@@ -25,27 +22,32 @@ public class ExpressionTree {
 	private ExpressionTreeNode mRootNode;
 	private ProgramParser mParser;
 	private CommandLibrary mCommandLib;
-/**
- * The two constructors for the tree require an input for language in order to initialize the command library
- * The latter constructor can be used to extract subtrees from the larger tree (i.e., by taking out a node and its children)
- * @param lang (String that defines which language is being used)
- */
+	private String currentLanguage;
+
+	/**
+	 * The two constructors for the tree require an input for language in order to initialize the command library
+	 * The latter constructor can be used to extract subtrees from the larger tree (i.e., by taking out a node and its children)
+	 * @param lang (String that defines which language is being used)
+	 */
+		
 	public ExpressionTree(String lang) {
-		initTree(lang);
+		this.currentLanguage = lang;
+		initTree();
 	}
+
 
 	public ExpressionTree(ExpressionTreeNode node, String lang){
 		super();
 		mRootNode = node;
 	}
 	
-	private void initTree(String language) {
+
+	private void initTree() {
 		mInputs = new ArrayList<>();
 		mRootNode = null;
 		mParser = new ProgramParser();
 		mParser.addPatterns(SYNTAX);
-		mCommandLib = new CommandLibrary();
-		mCommandLib.buildLib(language);
+		mCommandLib = new CommandLibrary(this.currentLanguage);
 	}
 /**
  * Construct tree from user-entered text
@@ -77,20 +79,20 @@ public class ExpressionTree {
 			return null;
 		}
 			Input rootInput = new Input(null, Constant.ROOT_TYPE);
-			mRootNode = new ExpressionTreeNode(rootInput, null);
+			mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
 			ExpressionTreeNode currentNode = mRootNode;
 			for (Input input : inputs) {
 				System.out.println("Input: " + input.getParameter());
 				currentNode = initNode(input, currentNode);
 				System.out.println("Parent: " + currentNode.getParent().getInput().getParameter());
-				System.out.println();
 			}
 			return mRootNode;
 	}
 
 	private ExpressionTreeNode initNode(Input input, ExpressionTreeNode currNode)
 			throws UnrecognizedCommandException {
-		ExpressionTreeNode inputNode = new ExpressionTreeNode(input, null);
+
+		ExpressionTreeNode inputNode = new ExpressionTreeNode(this.currentLanguage, input, null);
 		currNode = setAvailableParent(currNode,inputNode);
 		return currNode;
 	}
@@ -222,6 +224,7 @@ public class ExpressionTree {
 		Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
 		for (int i = 0; i < params.length; i++) {
 			params[i] = iter.next().getValue();
+		//	System.out.println(params[i]);
 		}
 		command.setParameters(params);
 		return command;
@@ -247,7 +250,7 @@ public class ExpressionTree {
 	
 	public void clean() throws UnrecognizedCommandException{
 		Input rootInput = new Input(null, Constant.ROOT_TYPE);
-		mRootNode = new ExpressionTreeNode(rootInput, null);
+		mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
 	}
 
 	/*
