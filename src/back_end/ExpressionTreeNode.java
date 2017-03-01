@@ -2,11 +2,7 @@ package back_end;
 	
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
 
 import back_end.commands.CommandInterface;
 import back_end.constant.Constant;
@@ -36,10 +32,10 @@ public class ExpressionTreeNode {
 	 * @throws InstantiationException
 	 * @throws UnrecognizedCommandException 
 	 */
-	public ExpressionTreeNode(Input x, ExpressionTreeNode parent)
+	public ExpressionTreeNode(String language, Input x, ExpressionTreeNode parent)
 			throws UnrecognizedCommandException {
 		myChildren = new ArrayList<ExpressionTreeNode>();
-		mCommandLib = new CommandLibrary();
+		mCommandLib = new CommandLibrary(language);
 		mCommand = null;
 		mExecuted = false;
 		myParent = parent;

@@ -1,12 +1,9 @@
 package back_end;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Stack;
 
 import back_end.commands.CommandInterface;
 import back_end.constant.Constant;
@@ -25,18 +22,19 @@ public class ExpressionTree {
 	private ExpressionTreeNode mRootNode;
 	private ProgramParser mParser;
 	private CommandLibrary mCommandLib;
+	private String currentLanguage;
 
 	public ExpressionTree(String lang) {
-		initTree(lang);
+		this.currentLanguage = lang;
+		initTree();
 	}
 
-	public void initTree(String language) {
+	public void initTree() {
 		mInputs = new ArrayList<>();
 		mRootNode = null;
 		mParser = new ProgramParser();
 		mParser.addPatterns(SYNTAX);
-		mCommandLib = new CommandLibrary();
-		mCommandLib.buildLib(language);
+		mCommandLib = new CommandLibrary(this.currentLanguage);
 	}
 
 	public ExpressionTreeNode constructTree(String commandString) throws UnrecognizedCommandException {
@@ -62,7 +60,7 @@ public class ExpressionTree {
 			return null;
 		try {
 			Input rootInput = new Input(null, Constant.ROOT_TYPE);
-			mRootNode = new ExpressionTreeNode(rootInput, null);
+			mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
 			ExpressionTreeNode currentNode = mRootNode;
 			for (Input input : inputs) {
 				System.out.println("Input: " + input.getParameter());
@@ -80,7 +78,7 @@ public class ExpressionTree {
 
 	private ExpressionTreeNode buildBranch(Input input, ExpressionTreeNode currNode)
 			throws UnrecognizedCommandException {
-		ExpressionTreeNode inputNode = new ExpressionTreeNode(input, null);
+		ExpressionTreeNode inputNode = new ExpressionTreeNode(this.currentLanguage, input, null);
 		if (!isChildrenFull(currNode)) {
 			inputNode.setParent(currNode);
 			currNode.getChildren().add(inputNode);
@@ -165,7 +163,7 @@ public class ExpressionTree {
 	
 	public void clean() throws UnrecognizedCommandException{
 		Input rootInput = new Input(null, Constant.ROOT_TYPE);
-		mRootNode = new ExpressionTreeNode(rootInput, null);
+		mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
 	}
 
 	/*

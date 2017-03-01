@@ -1,13 +1,11 @@
 package back_end;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import back_end.commands.CommandInterface;
 
 public class CommandLibrary {
-	private String language = "English";
 	private ResourceBundle resource;
 	private ResourceBundle presource;
 	private ArrayList<String> commandNames;
@@ -15,17 +13,21 @@ public class CommandLibrary {
 	public static final String PARAMETER_DIRECTORY = "resources/parameters/";
 	public static final String COMMAND_PREFIX = "back_end.commands.";
 	private ProgramParser mParser;
+	
+	private String currentLanguage;	
+	
 
-	public CommandLibrary() {
-		buildLib(this.language);
+	public CommandLibrary(String language) {
+		this.currentLanguage = language;
+		this.buildLib();
 	}
 
-	public void buildLib(String language) {
+	public void buildLib() {
 		commandNames = new ArrayList<String>();
-		resource = ResourceBundle.getBundle(LANGUAGE_DIRECTORY + language);
+		resource = ResourceBundle.getBundle(LANGUAGE_DIRECTORY + this.currentLanguage);
 		presource = ResourceBundle.getBundle(PARAMETER_DIRECTORY + "Parameter");
 		mParser = new ProgramParser();
-		mParser.addPatterns(LANGUAGE_DIRECTORY + language);
+		mParser.addPatterns(LANGUAGE_DIRECTORY + this.currentLanguage);
 		for (String x : resource.keySet()) {
 			commandNames.add(x);
 		}

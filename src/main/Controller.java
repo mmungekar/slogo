@@ -10,23 +10,21 @@ public class Controller {
 	private View view;
 	private Model model;
 	private Interpreter mInterpreter;
-	private String language = "English";
 
 	public void start(Stage s) {
 		model = new Model();
 		view = new View(s, model);
 
-		mInterpreter = new Interpreter(language);
+		mInterpreter = new Interpreter();
 
 		view.setEnterListener((String rawUserInput) -> {
 			System.out.println(model.toString());
 			
 				// This line should stay the same, all changes should happen in the backend
 				try {
-					view.setOutputText(mInterpreter.execute(model, rawUserInput));
+					view.setOutput(mInterpreter.execute(model, rawUserInput));
 				} catch (UnrecognizedCommandException | NotEnoughParameterException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					view.printError(e);
 				}
 			
 			
