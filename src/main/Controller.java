@@ -18,6 +18,7 @@ public class Controller {
 
 		mInterpreter = new Interpreter(language);
 
+		String output = "";
 		view.setEnterListener((String command) -> {
 			System.out.println(model.toString());
 			try {
@@ -29,7 +30,7 @@ public class Controller {
 			}
 			
 			System.out.println(model.toString());
-			// hey
 		});
+		view.setOutputText(output);
 	}
 }

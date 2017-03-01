@@ -17,6 +17,7 @@ public class Turtle extends ImageView {
 	Turtle(Image image, Point2D initPos) {
 		super(image);
 		calcHalfDems();
+		setAngle(90);
 		setPosition(initPos);
 		penDown = true;
 	}
