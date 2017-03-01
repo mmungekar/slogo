@@ -7,6 +7,7 @@ package front_end;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
+import front_end.customJavaFxNodes.ActionButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -74,8 +75,7 @@ public class Terminal extends VBox {
 
 		initializeInput();
 
-		submit = new Button();
-		submit.setOnAction(event -> submitInput());
+		submit = new ActionButton(event -> submitInput());
 		submit.setPrefHeight(inputConsole.getPrefHeight());
 
 		inputComponents.getChildren().addAll(inputConsole, submit);
@@ -88,8 +88,7 @@ public class Terminal extends VBox {
 
 		setupHistoryView();
 
-		clear = new Button();
-		clear.setOnAction(event -> clearHistory());
+		clear = new ActionButton(event -> clearHistory());
 		clear.setPrefHeight(historyView.getPrefHeight());
 
 		historyComponents.getChildren().addAll(historyView, clear);
@@ -185,16 +184,16 @@ public class Terminal extends VBox {
 		}
 	}
 
-	public void setEnterListener(final Consumer<String> action) {
+	void setEnterListener(final Consumer<String> action) {
 		this.onMessageReceivedHandler = action;
 
 	}
 
-	public void setText(String in) {
+	void setText(String in) {
 		inputConsole.setText(in);
 	}
 
-	public String getText() {
+	String getText() {
 		return inputConsole.getText();
 	}
 
@@ -207,7 +206,7 @@ public class Terminal extends VBox {
 		outputConsole.setText(e.getMessage());
 	}
 
-	public void refreshGUITitles(ResourceBundle resource) {
+	void refreshGUITitles(ResourceBundle resource) {
 		this.clearHistory();
 		historyHolder.setText(resource.getString("History"));
 		outputHolder.setText(resource.getString("Output"));
