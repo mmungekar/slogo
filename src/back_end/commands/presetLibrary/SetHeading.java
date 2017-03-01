@@ -1,21 +1,13 @@
 package back_end.commands.presetLibrary;
 
 import back_end.Model;
-import back_end.exceptions.NotEnoughParameterException;
+import back_end.commands.abstracts.SingleParameterCommand;
 
-public class SetHeading implements CommandInterface{
-    private double angle;
-	@Override
-	public void setParameters(double... ds) throws NotEnoughParameterException {
-		// TODO Auto-generated method stub
-		angle = ds[0];
-	}
-
+public class SetHeading extends SingleParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model model) {
-		// TODO Auto-generated method stub
-	    model.setAngle(0, angle);
-	    return angle;
+	    model.setAngle(0, this.getParameterValue());
+	    return this.getParameterValue();
 	}
 
 }

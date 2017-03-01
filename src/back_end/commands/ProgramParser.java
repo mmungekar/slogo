@@ -39,7 +39,7 @@ public class ProgramParser {
                 return e.getKey();
             }
         }
-        throw new UnrecognizedCommandException("Cannot find the right symbol for: " + text);
+        throw new UnrecognizedCommandException(text);
     }
     // returns true if the given text matches the given regular expression pattern
     private boolean match (String text, Pattern regex) {

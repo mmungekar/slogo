@@ -14,7 +14,6 @@ public class Random implements CommandInterface, Constant{
 
 	@Override
 	public double Execute(Model state) {
-		// TODO Auto-generated method stub
 		return new java.util.Random().nextDouble() * mMax;
 	}
 

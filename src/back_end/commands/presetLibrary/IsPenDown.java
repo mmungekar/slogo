@@ -1,14 +1,9 @@
 package back_end.commands.presetLibrary;
 
 import back_end.Model;
-import back_end.exceptions.NotEnoughParameterException;
+import back_end.commands.abstracts.NoParameterCommand;
 
-public class IsPenDown implements CommandInterface{
-
-	@Override
-	public void setParameters(double... ds) throws NotEnoughParameterException {
-		
-	}
+public class IsPenDown extends NoParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model model) {

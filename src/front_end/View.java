@@ -125,8 +125,8 @@ public class View implements ViewInterface {
 		canvas.setFill(newColor);
 	}
 
-	public void setOutput(String output) {
-		terminal.setOutputText(output);
+	public void setOutput(String message) {
+		terminal.setOutputText(message);
 	}
 	
 	double[] getCanvasDimensions(){
@@ -135,12 +135,6 @@ public class View implements ViewInterface {
 	
 	double getDefaultSpacing(){
 		return DEFAULT_SPACING;
-	}
-	
-
-	public void printError(Exception e) {
-		terminal.printToOutput(e);
-		
 	}
 
 	public void submitInput(String item) {

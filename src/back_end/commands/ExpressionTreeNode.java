@@ -53,8 +53,8 @@ public class ExpressionTreeNode {
 	}
 	
 	private void checkCommand(Input x) throws CommandException{
-	if(x.getType().equals(Constant.COMMAND_TYPE)){	
-		mCommand = mCommandLib.getCommand(x.getParameter());
+		if(x.getType().equals(Constant.COMMAND_TYPE)){	
+			mCommand = mCommandLib.getCommand(x.getParameter());
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class ExpressionTreeNode {
 	 * Adds a child node to the current node
 	 * @param child
 	 */
-		public void addChild(ExpressionTreeNode child) {
+	public void addChild(ExpressionTreeNode child) {
 		if (this != null) {
 			this.myChildren.add(child);
 		}
