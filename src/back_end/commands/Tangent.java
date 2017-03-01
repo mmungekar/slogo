@@ -8,7 +8,7 @@ public class Tangent implements CommandInterface, Constant{
 	@Override
 	public void setParameters(double...ds) {
 		double a = ds[0];
-		mTan = Math.tan(a);
+		mTan = Math.tan(Math.toRadians(a));
 		
 	}
 

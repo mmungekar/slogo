@@ -2,6 +2,7 @@ package back_end.commands;
 
 import back_end.Model;
 import back_end.NotEnoughParameterException;
+import javafx.geometry.Point2D;
 
 public class SetPosition implements CommandInterface{
     private double x;
@@ -19,7 +20,8 @@ public class SetPosition implements CommandInterface{
 		double ox = model.getX(0);
 		double oy = model.getY(0);
 		double distance = Math.pow((Math.pow((ox-x), 2) + Math.pow((oy-y), 2)) , 1/2d);
-		model.setPos(0, x, y);
+		
+		model.setPos(0, model.getHome().getX() + x, model.getHome().getY() - y);
 		return distance;
 	}
 

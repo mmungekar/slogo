@@ -2,6 +2,7 @@ package back_end.commands;
 
 import back_end.Model;
 import back_end.NotEnoughParameterException;
+import javafx.geometry.Point2D;
 
 public class SetTowards implements CommandInterface{
     private double angle;
@@ -16,13 +17,13 @@ public class SetTowards implements CommandInterface{
 
 	@Override
 	public double Execute(Model model) {
-		// TODO Auto-generated method stub
-	    double dx = ox - model.getX(0);
-	    double dy = oy - model.getY(0);
-	    double prevangle = model.getAngle(0);
-	    angle = Math.atan(dy / dx);
+	    double dx = (model.getHome().getX() + ox) - model.getX(0);
+	    double dy = (model.getHome().getY() - oy) - model.getY(0);
+	    
+	    double prevAngle = model.getAngle(0);
+	    angle = Math.toDegrees(Math.atan(dy / dx));
 	    model.setAngle(0, angle);
-	    return angle-prevangle;
+	    return angle-prevAngle;
 	}
 
 }

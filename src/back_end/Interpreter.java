@@ -28,10 +28,10 @@ public class Interpreter {
 		
 	}
 
-	public void execute(Model model, String command) throws UnrecognizedCommandException, NotEnoughParameterException {
+	public String execute(Model model, String command) throws UnrecognizedCommandException, NotEnoughParameterException {
 		mTree = new ExpressionTree(language);
 		mTree.constructTree(command);
-		mTree.traverse(model);
+		return mTree.traverse(model);
 	}
 
 }

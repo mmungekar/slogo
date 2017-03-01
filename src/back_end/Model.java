@@ -123,6 +123,10 @@ public class Model extends Observable {
 	public Map<Integer, Turtle> getTurtleContainer() {
 		return turtleContainer;
 	}
+	
+	public Point2D getHome(){
+		return this.home;
+	}
 
 	private Image getDefaultTurtleImage() {
 		String imageLocation = IMAGE_DIRECTORY + DEFAULT_TURTLE;
