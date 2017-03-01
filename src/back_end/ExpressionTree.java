@@ -30,6 +30,11 @@ public class ExpressionTree {
 		initTree(lang);
 	}
 
+	public ExpressionTree(ExpressionTreeNode node, String lang){
+		super();
+		mRootNode = node;
+	}
+	
 	public void initTree(String language) {
 		mInputs = new ArrayList<>();
 		mRootNode = null;
@@ -57,30 +62,33 @@ public class ExpressionTree {
 	}
 
 	// Turn a full list of commands into a sub tree
-	private ExpressionTreeNode constructBranch(List<Input> inputs) {
-		if (inputs.size() == 0)
+	private ExpressionTreeNode constructBranch(List<Input> inputs) throws UnrecognizedCommandException {
+		if (inputs.size() == 0){
 			return null;
-		try {
+		}
 			Input rootInput = new Input(null, Constant.ROOT_TYPE);
 			mRootNode = new ExpressionTreeNode(rootInput, null);
 			ExpressionTreeNode currentNode = mRootNode;
 			for (Input input : inputs) {
 				System.out.println("Input: " + input.getParameter());
-				currentNode = buildBranch(input, currentNode);
+				currentNode = initNode(input, currentNode);
 				System.out.println("Parent: " + currentNode.getParent().getInput().getParameter());
 				System.out.println();
 			}
 			return mRootNode;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-
 	}
 
-	private ExpressionTreeNode buildBranch(Input input, ExpressionTreeNode currNode)
+	private ExpressionTreeNode initNode(Input input, ExpressionTreeNode currNode)
 			throws UnrecognizedCommandException {
 		ExpressionTreeNode inputNode = new ExpressionTreeNode(input, null);
+		currNode = findAvailableParent(currNode,inputNode);
+		inputNode.setParent(currNode);
+		currNode.getChildren().add(inputNode);
+		currNode = inputNode;
+		return currNode;
+	}
+
+	private ExpressionTreeNode findAvailableParent(ExpressionTreeNode currNode, ExpressionTreeNode inputNode) throws UnrecognizedCommandException {
 		if (!isChildrenFull(currNode)) {
 			inputNode.setParent(currNode);
 			currNode.getChildren().add(inputNode);
@@ -91,12 +99,8 @@ public class ExpressionTree {
 			if (currNode == mRootNode)
 				return mRootNode;
 			currNode = currNode.getParent();
-			// System.out.println("Parent Node: "+
-			// currNode.getInput().getParameter());
+		
 		}
-		inputNode.setParent(currNode);
-		currNode.getChildren().add(inputNode);
-		currNode = inputNode;
 		return currNode;
 	}
 
@@ -112,6 +116,7 @@ public class ExpressionTree {
 	private boolean isConstant(Input i) {
 		return i.getType().equals(Constant.CONSTANT_TYPE);
 	}
+	
 
 	/**
 	 * Given an already-built ExpressionTree, we traverse it using depth first
@@ -126,7 +131,7 @@ public class ExpressionTree {
 	public String traverse(Model ms) throws NotEnoughParameterException, UnrecognizedCommandException {
 		// Execute each commands in order
 		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
-			traverseKid(childrenNode, ms);
+			traverseChild(childrenNode, ms);
 		}
 		String finalOutput = "";
 		for (ExpressionTreeNode child : mRootNode.getChildren()){
@@ -135,7 +140,7 @@ public class ExpressionTree {
 		return finalOutput;
 	}
 
-	private void traverseKid(ExpressionTreeNode node, Model state)
+	private void traverseChild(ExpressionTreeNode node, Model state)
 			throws NotEnoughParameterException, UnrecognizedCommandException {
 		if (node == null)
 			return;
@@ -144,22 +149,50 @@ public class ExpressionTree {
 			node.setExecuted();
 			return;
 		} else if (isCommand(currInput)) {
-			for (ExpressionTreeNode kid : node.getChildren()) {
-				traverseKid(kid, state);
-			}
-			int paramNum = mCommandLib.getNumParam(currInput.getParameter());
-			CommandInterface command = mCommandLib.getCommand(currInput.getParameter());
-			if (paramNum != node.getChildren().size())
-				throw new NotEnoughParameterException(currInput.getParameter());
-			double[] params = new double[paramNum];
+			execCommand(node, state, currInput);
+		}
+	}
+
+	private void execCommand(ExpressionTreeNode node, Model state, Input currInput)
+			throws NotEnoughParameterException, UnrecognizedCommandException {
+		checkIfStatement(node, state, currInput);
+		for (ExpressionTreeNode kid : node.getChildren()) {
+			traverseChild(kid, state);
+		}
+		CommandInterface command = setParams(node, currInput);
+		double value = command.Execute(state);
+		node.setExecuted();
+		node.setValue(value);
+	}
+
+	private CommandInterface setParams(ExpressionTreeNode node, Input currInput)
+			throws UnrecognizedCommandException, NotEnoughParameterException {
+		int paramNum = mCommandLib.getNumParam(currInput.getParameter());
+		if (paramNum != node.getChildren().size()){
+			throw new NotEnoughParameterException(currInput.getParameter());
+		}
+		CommandInterface command = mCommandLib.getCommand(currInput.getParameter());
+		double[] params = new double[paramNum]; 
+		Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
+		for (int i = 0; i < params.length; i++) {
+			params[i] = iter.next().getValue();
+		}
+		command.setParameters(params);
+		return command;
+	}
+
+	private void checkIfStatement(ExpressionTreeNode node,Model state, Input myInput) throws NotEnoughParameterException, UnrecognizedCommandException{
+		if(myInput.getParameter()==Constant.IF_COMMAND_TYPE){
 			Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
-			for (int i = 0; i < params.length; i++) {
-				params[i] = iter.next().getValue();
+			ExpressionTreeNode child = iter.next();
+			traverseChild(child,state);
+			if(child.getValue()!=0){
+				traverseChild(iter.next(),state);
 			}
-			command.setParameters(params);
-			double value = command.Execute(state);
-			node.setExecuted();
-			node.setValue(value);
+			else{
+				iter.next();
+				traverseChild(iter.next(),state);
+			}
 		}
 	}
 	
