@@ -83,7 +83,6 @@ public class ExpressionTree {
 				System.out.println("Input: " + input.getParameter());
 				currentNode = initNode(input, currentNode);
 				System.out.println("Parent: " + currentNode.getParent().getInput().getParameter());
-				System.out.println();
 			}
 			return mRootNode;
 	}
@@ -222,6 +221,7 @@ public class ExpressionTree {
 		Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
 		for (int i = 0; i < params.length; i++) {
 			params[i] = iter.next().getValue();
+		//	System.out.println(params[i]);
 		}
 		command.setParameters(params);
 		return command;
