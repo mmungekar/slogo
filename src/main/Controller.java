@@ -6,6 +6,8 @@ import back_end.exceptions.CommandException;
 import javafx.stage.Stage;
 
 public class Controller {
+	public static final String RETURN_PREFIX = "Returns: %s";
+	public static final String OUTPUT_STRING_FORMAT = "User Input: %1$s\n\n%2$s";
 	private View view;
 	private Model model;
 	private Interpreter mInterpreter;
@@ -17,11 +19,14 @@ public class Controller {
 
 		view.setEnterListener((String rawUserInput) -> {
 			//System.out.println(model.toString());
+			String message;
 			try {
-				view.setOutput(mInterpreter.execute(model, rawUserInput));
+				message = String.format(RETURN_PREFIX, mInterpreter.execute(model, rawUserInput));
+				
 			} catch (CommandException e) {
-				view.printError(e);
+				message = e.getMessage();
 			}
+			view.setOutput(String.format(OUTPUT_STRING_FORMAT, rawUserInput, message));
 			//System.out.println(model.toString());
 		});
 	}

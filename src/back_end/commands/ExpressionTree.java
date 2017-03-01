@@ -168,6 +168,11 @@ public class ExpressionTree {
 		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
 			traverseChild(childrenNode, ms);
 		}
+		return createFinalOutput();
+	}
+
+
+	private String createFinalOutput() {
 		String finalOutput = "";
 		for (ExpressionTreeNode child : mRootNode.getChildren()){
 			finalOutput = finalOutput + Double.toString(child.getValue()) + " ";
@@ -223,7 +228,7 @@ public class ExpressionTree {
 			throws CommandException {
 		int paramNum = mCommandLib.getNumParam(currInput.getParameter());
 		if (paramNum != node.getChildren().size()){
-			throw new NotEnoughParameterException(currInput.getParameter());
+			throw new NotEnoughParameterException(currInput.getParameter(), paramNum, node.getChildren().size());
 		}
 		CommandInterface command = mCommandLib.getCommand(currInput.getParameter());
 		double[] params = new double[paramNum]; 
