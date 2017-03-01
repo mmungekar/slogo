@@ -8,7 +8,7 @@ public class Sine implements CommandInterface, Constant{
 	@Override
 	public void setParameters(double...ds) {
 		double a = ds[0];
-		mSin = Math.sin(a);
+		mSin = Math.sin(Math.toRadians(a));
 		
 	}
 

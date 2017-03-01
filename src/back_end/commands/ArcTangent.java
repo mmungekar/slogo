@@ -9,7 +9,7 @@ public class ArcTangent implements CommandInterface, Constant{
 	@Override
 	public void setParameters(double...ds) {
 		double a = ds[0];
-		mAtan = Math.atan(a);
+		mAtan = Math.toDegrees(Math.atan(a));
 		
 	}
 

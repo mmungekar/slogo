@@ -18,7 +18,7 @@ public class Turtle extends ImageView {
 		super(image);
 		this.setAngle(0);
 		calcHalfDems();
-		setAngle(90);
+		setAngle(-90);
 		setPosition(initPos);
 		penDown = true;
 	}
@@ -73,11 +73,11 @@ public class Turtle extends ImageView {
 	}
 	
 	public double getAngle() {
-		return -1 * angle;
+		return angle;
 	}
 
 	public void setAngle(double angle) {
-		this.angle = -1 * angle;
+		this.angle = angle;
 		keepAngleWithin360();
 		this.setRotate(this.angle);
 	}

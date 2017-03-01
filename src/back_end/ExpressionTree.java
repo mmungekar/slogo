@@ -123,11 +123,16 @@ public class ExpressionTree {
 	 * @throws NotEnoughParameterException
 	 * @throws Exception
 	 */
-	public void traverse(Model ms) throws NotEnoughParameterException, UnrecognizedCommandException {
+	public String traverse(Model ms) throws NotEnoughParameterException, UnrecognizedCommandException {
 		// Execute each commands in order
 		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
 			traverseKid(childrenNode, ms);
 		}
+		String finalOutput = "";
+		for (ExpressionTreeNode child : mRootNode.getChildren()){
+			finalOutput = finalOutput + Double.toString(child.getValue()) + " ";
+		}
+		return finalOutput;
 	}
 
 	private void traverseKid(ExpressionTreeNode node, Model state)

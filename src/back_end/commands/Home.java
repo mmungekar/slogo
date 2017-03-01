@@ -12,10 +12,9 @@ public class Home implements CommandInterface{
 
 	@Override
 	public double Execute(Model model) {
-		// TODO Auto-generated method stub
-		double ox = model.getX(0);
-		double oy = model.getY(0);
-		double distance = Math.pow((Math.pow(ox, 2) + Math.pow(oy, 2)) , 1/2d);
+		double dx = model.getHome().getX() - model.getX(0);
+		double dy = model.getHome().getY() - model.getY(0);
+		double distance = Math.pow((Math.pow(dx, 2) + Math.pow(dy, 2)) , 1/2d);
 		model.sendTurtleHome(0);
 		return distance;
 	}
