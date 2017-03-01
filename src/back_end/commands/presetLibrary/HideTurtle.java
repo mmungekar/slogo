@@ -1,15 +1,10 @@
 package back_end.commands.presetLibrary;
 
 import back_end.Model;
-import back_end.exceptions.NotEnoughParameterException;
+import back_end.commands.abstracts.NoParameterCommand;
 
-public class HideTurtle implements CommandInterface{
-
-	@Override
-	public void setParameters(double... ds) throws NotEnoughParameterException {
-		
-	}
-
+public class HideTurtle extends NoParameterCommand implements CommandInterface{
+	
 	@Override
 	public double Execute(Model model) {
 		// TODO Auto-generated method stub
