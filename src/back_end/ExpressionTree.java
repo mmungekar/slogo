@@ -196,6 +196,12 @@ public class ExpressionTree {
 		}
 	}
 	
+	public void clean() throws UnrecognizedCommandException{
+		Input rootInput = new Input(null, Constant.ROOT_TYPE);
+		mRootNode = new ExpressionTreeNode(rootInput, null);
+	}
+
+	/*
 	public static void main(String[] args) {
 		ExpressionTree test = new ExpressionTree("english");
 		String s = "SUM GREATER? 6 3 AND 2 1";
@@ -212,5 +218,6 @@ public class ExpressionTree {
 		}
 
 	}
+	*/
 
 }

@@ -23,7 +23,7 @@ public class Controller {
 			
 				// This line should stay the same, all changes should happen in the backend
 				try {
-					mInterpreter.execute(model, rawUserInput);
+					view.setOutputText(mInterpreter.execute(model, rawUserInput));
 				} catch (UnrecognizedCommandException | NotEnoughParameterException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -32,5 +32,6 @@ public class Controller {
 			
 			System.out.println(model.toString());
 		});
+		
 	}
 }
