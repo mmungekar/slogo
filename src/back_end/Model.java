@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 
 public class Model extends Observable {
 	public static final String IMAGE_DIRECTORY = "resources/images/";
-	public static final String DEFAULT_TURTLE = "ball_given.gif";
+	public static final String DEFAULT_TURTLE = "turtle.gif";
 	public static final String DEFAULT_LANGUAGE = "English";
 
 	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
