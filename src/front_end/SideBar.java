@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 import back_end.Model;
@@ -34,7 +35,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-public class SideBar {
+public class SideBar extends VBox {
 	private static final String RESOURCES_MISC_HELP_HTML = "/resources/misc/help.html";
 	public static final String IMAGE_FILE_DIRECTORY = "src/resources/images/";
 	public static final String IMAGE_EXTENSION = ".gif";
@@ -43,26 +44,32 @@ public class SideBar {
 
 	private View myView;
 	private Model model;
-	
+
 	private ComboBox<Integer> turtleIDs;
+
+	// all objects that have titles
+	private Button helpButton;
+	private ComboBox<String> languageDropDown;
+	private ComboBox<String> backgroundColors;
+	private Button clearLines;
+	private Button turtleCreation;
+	private ComboBox<String> penColors;
+	private RadioButton penUp;
+	private RadioButton penDown;
+	private Button sendHome;
+	private Button fileChoose;
 
 	public SideBar(Stage s, Model model, Group root, View view) {
 		this.myView = view;
 		this.model = model;
-		VBox sideButtons = new VBox();
 
-		sideButtons.getChildren().addAll(createHelpButton(), createLanguageDropDown(), createBackgroundColorSelectionTool(),
+		this.getChildren().addAll(createHelpButton(), createLanguageDropDown(), createBackgroundColorSelectionTool(),
 				createClearLinesButton(root), addTurtleButton(), createTurtleSpecficCommands(s));
 
-		sideButtons.setLayoutX(myView.getCanvasDimensions()[0] + 3 * myView.getDefaultSpacing());
-		sideButtons.setLayoutY(myView.getDefaultSpacing());
-		sideButtons.setSpacing(myView.getDefaultSpacing() / 2);
-
-		root.getChildren().add(sideButtons);
 	}
 
 	private Node createHelpButton() {
-		Button helpButton = new Button("Help");
+		helpButton = new Button();
 		helpButton.setOnAction(event -> displayHelpScreen());
 		return helpButton;
 	}
@@ -84,13 +91,13 @@ public class SideBar {
 		// from stack overflow:
 		// http://stackoverflow.com/questions/22191954/javafx-casting-arraylist-to-observablelist
 		ObservableList<String> obsNames = FXCollections.observableArrayList(languages);
-		ComboBox<String> languageDropDown = new ComboBox<String>(obsNames);
+		languageDropDown = new ComboBox<String>(obsNames);
 		languageDropDown.setMaxWidth(200);
-		languageDropDown.setPromptText(myView.getCurrentResource().getString("SetLanguage"));
 		languageDropDown.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> ov, String oldParam, String newParam) {
 				myView.setLanguage(newParam);
+				model.setCurrentLanguage(newParam);
 			}
 		});
 		return languageDropDown;
@@ -103,10 +110,9 @@ public class SideBar {
 		ObservableList<String> data = FXCollections.observableArrayList("white", "chocolate", "salmon", "gold", "coral",
 				"darkorchid", "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue", "blueviolet", "brown");
 
-		ComboBox<String> backgroundColors = new ComboBox<String>();
+		backgroundColors = new ComboBox<String>();
 
 		backgroundColors.setItems(data);
-		backgroundColors.setPromptText(myView.getCurrentResource().getString("SelectBackground"));
 		backgroundColors.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 			@Override
 			public ListCell<String> call(ListView<String> list) {
@@ -125,7 +131,7 @@ public class SideBar {
 	}
 
 	private Node createClearLinesButton(Group root) {
-		Button clearLines = new Button("Clear All Lines");
+		clearLines = new Button();
 		clearLines.setOnAction(event -> clearLines(root));
 		return clearLines;
 	}
@@ -135,7 +141,7 @@ public class SideBar {
 	}
 
 	private Button addTurtleButton() {
-		Button turtleCreation = new Button(myView.getCurrentResource().getString("AddNewTurtle"));
+		turtleCreation = new Button();
 		turtleCreation.setOnAction(event -> {
 			createTurtle();
 			updateTurtleSelection();
@@ -148,8 +154,8 @@ public class SideBar {
 	}
 
 	private void updateTurtleSelection() {
-		for (Integer ID : model.getTurtleContainer().keySet()){
-			if(!turtleIDs.getItems().contains(ID)){
+		for (Integer ID : model.getTurtleContainer().keySet()) {
+			if (!turtleIDs.getItems().contains(ID)) {
 				turtleIDs.getItems().add(ID);
 			}
 		}
@@ -157,7 +163,7 @@ public class SideBar {
 
 	private Pane createTurtleSpecficCommands(Stage s) {
 		HBox turtleSpecificControls = new HBox();
-		
+
 		VBox turtleOptions = new VBox();
 
 		createTurtleIDSelector();
@@ -165,7 +171,7 @@ public class SideBar {
 		Button imageChoose = createTurtleImageChoose(s);
 		Button sendHome = createSendHomeButton();
 		VBox penControls = createPenToggle();
-		
+
 		turtleOptions.getChildren().addAll(imageChoose, sendHome, penControls);
 		turtleOptions.setSpacing(myView.getDefaultSpacing() / 3);
 
@@ -179,27 +185,26 @@ public class SideBar {
 
 	private VBox createPenToggle() {
 		VBox penControls = new VBox();
-		
+
 		HBox penSwitch = createPenSwitch();
 		ComboBox<String> penColorSelectionTool = createPenColorSelectionTool();
-		
+
 		penControls.getChildren().addAll(penColorSelectionTool, penSwitch);
 		penControls.setSpacing(myView.getDefaultSpacing() / 3);
 
 		return penControls;
 	}
-	
+
 	private ComboBox<String> createPenColorSelectionTool() {
 		// from
 		// http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
 
-		ObservableList<String> data = FXCollections.observableArrayList("black", "white" ,"chocolate", "salmon", "gold", "coral",
-				"darkorchid", "darkgoldenrod", "lightsalmon", "rosybrown", "blue", "blueviolet", "brown");
+		ObservableList<String> data = FXCollections.observableArrayList("black", "white", "chocolate", "salmon", "gold",
+				"coral", "darkorchid", "darkgoldenrod", "lightsalmon", "rosybrown", "blue", "blueviolet", "brown");
 
-		ComboBox<String> penColors = new ComboBox<String>();
+		penColors = new ComboBox<String>();
 
 		penColors.setItems(data);
-		penColors.setPromptText("Select Pen Color");
 		penColors.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
 			@Override
 			public ListCell<String> call(ListView<String> list) {
@@ -209,8 +214,9 @@ public class SideBar {
 
 		penColors.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
-				if (turtleIDs.getSelectionModel().getSelectedItem() != null){
-					model.getTurtleContainer().get(turtleIDs.getSelectionModel().getSelectedItem()).changePenColor(Color.web(new_val));
+				if (turtleIDs.getSelectionModel().getSelectedItem() != null) {
+					model.getTurtleContainer().get(turtleIDs.getSelectionModel().getSelectedItem())
+							.changePenColor(Color.web(new_val));
 				}
 			}
 		});
@@ -221,13 +227,14 @@ public class SideBar {
 	private HBox createPenSwitch() {
 		HBox penSwitch = new HBox();
 		ToggleGroup penSwitchGroup = new ToggleGroup();
-		RadioButton penDown = new RadioButton("Pen Down");
+		penDown = new RadioButton();
 		penDown.setToggleGroup(penSwitchGroup);
-		RadioButton penUp = new RadioButton("Pen Up");
+		penUp = new RadioButton();
 		penUp.setToggleGroup(penSwitchGroup);
 		penSwitchGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
 			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-				if (turtleIDs.getSelectionModel().getSelectedItem() != null && penSwitchGroup.getSelectedToggle() != null) {
+				if (turtleIDs.getSelectionModel().getSelectedItem() != null
+						&& penSwitchGroup.getSelectedToggle() != null) {
 					if (penSwitchGroup.getSelectedToggle().equals(penUp)) {
 						model.setPenUp(turtleIDs.getSelectionModel().getSelectedItem());
 					} else {
@@ -238,11 +245,11 @@ public class SideBar {
 				}
 			}
 		});
-		
+
 		penSwitch.getChildren().addAll(penDown, penUp);
 		turtleIDs.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
 			public void changed(ObservableValue<? extends Integer> ov, Integer old_val, Integer new_val) {
-				if (model.getTurtleContainer().get(new_val).isPenDown()){
+				if (model.getTurtleContainer().get(new_val).isPenDown()) {
 					penSwitchGroup.selectToggle(penDown);
 				} else {
 					penSwitchGroup.selectToggle(penUp);
@@ -253,7 +260,7 @@ public class SideBar {
 	}
 
 	private Button createSendHomeButton() {
-		Button sendHome = new Button("Send Home");
+		sendHome = new Button();
 		sendHome.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -268,7 +275,7 @@ public class SideBar {
 	}
 
 	private Button createTurtleImageChoose(Stage s) {
-		Button fileChoose = new Button(myView.getCurrentResource().getString("ChooseTurtleImage"));
+		fileChoose = new Button();
 		fileChoose.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -289,15 +296,12 @@ public class SideBar {
 
 	private void createTurtleIDSelector() {
 		turtleIDs = new ComboBox<Integer>();
-		turtleIDs.setPromptText(myView.getCurrentResource().getString("TurtleIDs"));
 		turtleIDs.getItems().addAll(model.getTurtleContainer().keySet());
 	}
 
-
-
 	private File chooseFile(Stage s) {
 		FileChooser gifChooser = new FileChooser();
-		gifChooser.setTitle(myView.getCurrentResource().getString("ChooseTurtleImage"));
+		gifChooser.setTitle("Choose Turtle Image");
 		gifChooser.setInitialDirectory(new File(IMAGE_FILE_DIRECTORY));
 		File file = gifChooser.showOpenDialog(s);
 		if (file != null) {
@@ -328,5 +332,19 @@ public class SideBar {
 		public boolean test(Object child) {
 			return (child instanceof Line);
 		}
+	}
+
+	public void refreshGUITitles(ResourceBundle resource) {
+		helpButton.setText("Help");
+		turtleIDs.setPromptText(resource.getString("TurtleIDs"));
+		fileChoose.setText(resource.getString("ChooseTurtleImage"));
+		backgroundColors.setPromptText(resource.getString("SelectBackground"));
+		penColors.setPromptText("Select Pen Color");
+		languageDropDown.setPromptText(resource.getString("SetLanguage"));
+		turtleCreation.setText(resource.getString("AddNewTurtle"));
+		penDown.setText("Pen Down");
+		penUp.setText("Pen Up");
+		clearLines.setText("Clear All Lines");
+		sendHome.setText("Send Home");
 	}
 }

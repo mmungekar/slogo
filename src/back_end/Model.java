@@ -13,8 +13,10 @@ import javafx.scene.paint.Color;
 public class Model extends Observable {
 	public static final String IMAGE_DIRECTORY = "resources/images/";
 	public static final String DEFAULT_TURTLE = "ball_given.gif";
+	public static final String DEFAULT_LANGUAGE = "English";
 
 	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
+	private String currentLanguage = DEFAULT_LANGUAGE;
 	private Color backgroundColor;
 	private Point2D home;
 	private boolean clear;
@@ -137,6 +139,15 @@ public class Model extends Observable {
 	@Override
 	public String toString(){
 		return ("X: " + (this.getX(0) - home.getX()) + " Y: " + -1 * (this.getY(0) - home.getY()) + " Angle: " + this.getAngle(0)); 
+	}
+
+	public String getCurrentLanguage() {
+		return currentLanguage;
+	}
+
+	public void setCurrentLanguage(String currentLanguage) {
+		this.currentLanguage = currentLanguage;
+		setChangedAndNotifyObservers();
 	}
 
 }
