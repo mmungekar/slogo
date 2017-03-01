@@ -4,10 +4,16 @@ import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 import back_end.Model;
+import back_end.Turtle;
+import front_end.customJavaFxNodes.ActionButton;
+import front_end.customJavaFxNodes.ColorComboBox;
+import front_end.customJavaFxNodes.PopUpHTML;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -35,12 +41,16 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-public class SideBar extends VBox {
-	private static final String RESOURCES_MISC_HELP_HTML = "/resources/misc/help.html";
+public class SideBar extends VBox implements Observer{
+	public static final String PLEASE_SELECT_PROPER_IMG_FILE = "Please select a %s file for the image of the Turtle";
+	public static final String PLEASE_SELECT_A_TURTLE = "Please Select a Turtle";
+	public static final String RESOURCES_MISC_HELP_HTML = "/resources/misc/help.html";
 	public static final String IMAGE_FILE_DIRECTORY = "src/resources/images/";
 	public static final String IMAGE_EXTENSION = ".gif";
-	private List<String> languages = Arrays.asList(
-			new String[] { "Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish" });
+	private ObservableList<String> languages = FXCollections.observableArrayList("Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish");
+	
+	private ObservableList<String> colors = FXCollections.observableArrayList("white", "black", "chocolate", "salmon", "gold", "coral",
+			"darkorchid", "darkgoldenrod", "lightsalmon", "rosybrown", "blue", "blueviolet", "brown");
 
 	private View myView;
 	private Model model;
@@ -62,6 +72,7 @@ public class SideBar extends VBox {
 	public SideBar(Stage s, Model model, Group root, View view) {
 		this.myView = view;
 		this.model = model;
+		model.addObserver(this);
 
 		this.getChildren().addAll(createHelpButton(), createLanguageDropDown(), createBackgroundColorSelectionTool(),
 				createClearLinesButton(root), addTurtleButton(), createTurtleSpecficCommands(s));
@@ -69,29 +80,21 @@ public class SideBar extends VBox {
 	}
 
 	private Node createHelpButton() {
-		helpButton = new Button();
-		helpButton.setOnAction(event -> displayHelpScreen());
+		helpButton = new ActionButton(event -> displayHelpScreen());
 		return helpButton;
 	}
 
 	private void displayHelpScreen() {
-		Group root = new Group();
-		WebView browser = new WebView();
-		Scene helpScene = new Scene(root);
-		root.getChildren().add(browser);
-		Stage helpStage = new Stage();
-		helpStage.setTitle("Help Page");
-		helpStage.setScene(helpScene);
-		URL url = getClass().getResource(RESOURCES_MISC_HELP_HTML);
-		browser.getEngine().load(url.toExternalForm());
-		helpStage.show();
+		PopUpHTML popUpHTML = new PopUpHTML(RESOURCES_MISC_HELP_HTML);
+		popUpHTML.setTitle("Help Page");
+		popUpHTML.show();
+		
 	}
 
 	private ComboBox<String> createLanguageDropDown() {
 		// from stack overflow:
 		// http://stackoverflow.com/questions/22191954/javafx-casting-arraylist-to-observablelist
-		ObservableList<String> obsNames = FXCollections.observableArrayList(languages);
-		languageDropDown = new ComboBox<String>(obsNames);
+		languageDropDown = new ComboBox<String>(languages);
 		languageDropDown.setMaxWidth(200);
 		languageDropDown.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -103,36 +106,8 @@ public class SideBar extends VBox {
 		return languageDropDown;
 	}
 
-	private ComboBox<String> createBackgroundColorSelectionTool() {
-		// from
-		// http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
-
-		ObservableList<String> data = FXCollections.observableArrayList("white", "chocolate", "salmon", "gold", "coral",
-				"darkorchid", "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue", "blueviolet", "brown");
-
-		backgroundColors = new ComboBox<String>();
-
-		backgroundColors.setItems(data);
-		backgroundColors.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-			@Override
-			public ListCell<String> call(ListView<String> list) {
-				return new ColorRectCell();
-			}
-		});
-
-		backgroundColors.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
-				myView.changeBackgroundColor(Color.web(new_val));
-				model.setBackgroundColor(Color.web(new_val));
-			}
-		});
-
-		return backgroundColors;
-	}
-
 	private Node createClearLinesButton(Group root) {
-		clearLines = new Button();
-		clearLines.setOnAction(event -> clearLines(root));
+		clearLines = new ActionButton(event -> clearLines(root));
 		return clearLines;
 	}
 
@@ -141,16 +116,11 @@ public class SideBar extends VBox {
 	}
 
 	private Button addTurtleButton() {
-		turtleCreation = new Button();
-		turtleCreation.setOnAction(event -> {
-			createTurtle();
+		turtleCreation = new ActionButton(event -> {
+			model.createTurtle();
 			updateTurtleSelection();
 		});
 		return turtleCreation;
-	}
-
-	private void createTurtle() {
-		model.createTurtle();
 	}
 
 	private void updateTurtleSelection() {
@@ -196,21 +166,7 @@ public class SideBar extends VBox {
 	}
 
 	private ComboBox<String> createPenColorSelectionTool() {
-		// from
-		// http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
-
-		ObservableList<String> data = FXCollections.observableArrayList("black", "white", "chocolate", "salmon", "gold",
-				"coral", "darkorchid", "darkgoldenrod", "lightsalmon", "rosybrown", "blue", "blueviolet", "brown");
-
-		penColors = new ComboBox<String>();
-
-		penColors.setItems(data);
-		penColors.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-			@Override
-			public ListCell<String> call(ListView<String> list) {
-				return new ColorRectCell();
-			}
-		});
+		penColors = new ColorComboBox(colors);
 
 		penColors.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
@@ -222,6 +178,19 @@ public class SideBar extends VBox {
 		});
 
 		return penColors;
+	}
+	
+	private ComboBox<String> createBackgroundColorSelectionTool() {
+		backgroundColors = new ColorComboBox(colors);
+
+		backgroundColors.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
+				myView.changeBackgroundColor(Color.web(new_val));
+				model.setBackgroundColor(Color.web(new_val));
+			}
+		});
+
+		return backgroundColors;
 	}
 
 	private HBox createPenSwitch() {
@@ -241,7 +210,7 @@ public class SideBar extends VBox {
 						model.setPenDown(turtleIDs.getSelectionModel().getSelectedItem());
 					}
 				} else {
-					// no turtle ID selected
+					askForSelection();
 				}
 			}
 		});
@@ -260,23 +229,26 @@ public class SideBar extends VBox {
 	}
 
 	private Button createSendHomeButton() {
-		sendHome = new Button();
-		sendHome.setOnAction(new EventHandler<ActionEvent>() {
+		sendHome = new ActionButton(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				if (turtleIDs.getSelectionModel().getSelectedItem() != null) {
 					model.sendTurtleHome(turtleIDs.getSelectionModel().getSelectedItem());
 				} else {
-					// no turtle ID selected
+					askForSelection();
 				}
 			}
 		});
 		return sendHome;
 	}
 
+	protected void askForSelection() {
+		myView.setOutput(PLEASE_SELECT_A_TURTLE);
+		
+	}
+
 	private Button createTurtleImageChoose(Stage s) {
-		fileChoose = new Button();
-		fileChoose.setOnAction(new EventHandler<ActionEvent>() {
+		fileChoose = new ActionButton(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				if (turtleIDs.getSelectionModel().getSelectedItem() != null) {
@@ -284,10 +256,10 @@ public class SideBar extends VBox {
 					if (newImageFile != null) {
 						model.changeTurtleImage(turtleIDs.getSelectionModel().getSelectedItem(), newImageFile);
 					} else {
-						// wrong file
+						myView.setOutput(String.format(PLEASE_SELECT_PROPER_IMG_FILE, IMAGE_EXTENSION));
 					}
 				} else {
-					// no turtle ID selected
+					askForSelection();
 				}
 			}
 		});
@@ -315,18 +287,6 @@ public class SideBar extends VBox {
 		return null;
 	}
 
-	private static class ColorRectCell extends ListCell<String> {
-		@Override
-		public void updateItem(String item, boolean empty) {
-			super.updateItem(item, empty);
-			Rectangle rect = new Rectangle(100, 20);
-			if (item != null) {
-				rect.setFill(Color.web(item));
-				setGraphic(rect);
-			}
-		}
-	}
-
 	private class LinePredicate implements Predicate {
 		@Override
 		public boolean test(Object child) {
@@ -334,7 +294,7 @@ public class SideBar extends VBox {
 		}
 	}
 
-	public void refreshGUITitles(ResourceBundle resource) {
+	void refreshGUITitles(ResourceBundle resource) {
 		helpButton.setText("Help");
 		turtleIDs.setPromptText(resource.getString("TurtleIDs"));
 		fileChoose.setText(resource.getString("ChooseTurtleImage"));
@@ -346,5 +306,12 @@ public class SideBar extends VBox {
 		penUp.setText("Pen Up");
 		clearLines.setText("Clear All Lines");
 		sendHome.setText("Send Home");
+	}
+
+	@Override
+	public void update(Observable obs, Object obj) {
+		if (obs == model) {
+			updateTurtleSelection();
+		}
 	}
 }

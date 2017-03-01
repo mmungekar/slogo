@@ -22,7 +22,6 @@ public class Canvas extends Rectangle implements Observer {
 		this.myRoot = root;
 		formatBorder();
 		model.addObserver(this);
-		//this.turtleContainer = observedState.getTurtleContainer();
 	}
 
 	private void formatBorder() {
@@ -34,7 +33,6 @@ public class Canvas extends Rectangle implements Observer {
 
 	@Override
 	public void update(Observable obs, Object obj) {
-		// System.out.println("(from Canvas/Observer end) Observers Notified ");
 		if (obs == observedModel) {
 			// update all parts of modelstate that canvas has
 			for (Turtle turtle : observedModel.getTurtleContainer().values()){
@@ -53,7 +51,7 @@ public class Canvas extends Rectangle implements Observer {
 		this.setFill(observedModel.getBackgroundColor());
 	}
 
-	public void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {
+	private void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {
 		Line line = new Line();
 		line.setStartX(startPos.getX());
 		line.setStartY(startPos.getY());
@@ -69,5 +67,6 @@ public class Canvas extends Rectangle implements Observer {
 				myRoot.getChildren().add(turtle);
 			}
 		}
+		
 	}
 }
