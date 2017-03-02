@@ -3,8 +3,8 @@ package front_end;
 import java.util.Observable;
 import java.util.Observer;
 
-import back_end.Model;
-import back_end.Turtle;
+import back_end.model.Model;
+import back_end.model.Turtle;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;

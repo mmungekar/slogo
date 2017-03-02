@@ -1,4 +1,4 @@
-package back_end.commands;
+package back_end.model;
 
 public class Input {
 	private String myParameter;
@@ -18,5 +18,9 @@ public class Input {
 	
 	public String getType(){
 		return this.myType;
+	}
+	
+	public void setType(String type){
+		this.myType = type;
 	}
 }

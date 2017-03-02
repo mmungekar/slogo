@@ -1,20 +1,17 @@
 package back_end.commands.presetLibrary;
 
-import back_end.Model;
+import back_end.commands.abstracts.PresetCommand;
 import back_end.commands.constant.Constant;
+import back_end.interfaces.CommandInterface;
+import back_end.model.Model;
+import back_end.model.Oxygen;
 
-public class Random implements CommandInterface, Constant{
-    private double mMax;
-	@Override
-	public void setParameters(double...ds) {
-		double a = ds[0];
-		mMax = a;
-		
-	}
+public class Random extends PresetCommand implements CommandInterface<Oxygen<Double>>, Constant{
 
 	@Override
 	public double Execute(Model state) {
-		return new java.util.Random().nextDouble() * mMax;
+		double a = this.getParameterValue()[0];
+		return new java.util.Random().nextDouble() * a;
 	}
 
 }

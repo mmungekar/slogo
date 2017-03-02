@@ -1,21 +1,18 @@
 package back_end.commands.presetLibrary;
 
-import back_end.Model;
+import back_end.commands.abstracts.PresetCommand;
 import back_end.commands.constant.Constant;
+import back_end.interfaces.CommandInterface;
+import back_end.model.Model;
+import back_end.model.Oxygen;
 
-public class Sine implements CommandInterface, Constant{
-    private double mSin;
-	@Override
-	public void setParameters(double...ds) {
-		double a = ds[0];
-		mSin = Math.sin(Math.toRadians(a));
-		
-	}
+public class Sine extends PresetCommand implements CommandInterface<Oxygen<Double>>, Constant{
+
 
 	@Override
 	public double Execute(Model state) {
-		// TODO Auto-generated method stub
-		return mSin;
+		double a = this.getParameterValue()[0];
+		return Math.sin(Math.toRadians(a));
 	}
 
 }

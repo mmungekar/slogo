@@ -1,22 +1,17 @@
 package back_end.commands.presetLibrary;
 
-import back_end.Model;
-import back_end.exceptions.NotEnoughParameterException;
-import javafx.geometry.Point2D;
+import back_end.commands.abstracts.PresetCommand;
+import back_end.interfaces.CommandInterface;
+import back_end.model.Model;
+import back_end.model.Oxygen;
 
-public class SetPosition implements CommandInterface{
-    private double x;
-    private double y;
-	@Override
-	public void setParameters(double... ds) throws NotEnoughParameterException {
-		// TODO Auto-generated method stub
-		x = ds[0];
-		y = ds[1];
-	}
+public class SetPosition extends PresetCommand implements CommandInterface<Oxygen<Double>>{
+
 
 	@Override
 	public double Execute(Model model) {
-		// TODO Auto-generated method stub
+		double x = this.getParameterValue()[0];
+		double y = this.getParameterValue()[1];
 		double ox = model.getX(0);
 		double oy = model.getY(0);
 		double distance = Math.pow((Math.pow((ox-x), 2) + Math.pow((oy-y), 2)) , 1/2d);
