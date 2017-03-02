@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import back_end.model.Input;
 import back_end.model.ProgramParser;
@@ -149,11 +150,8 @@ public class ExpressionTree {
 
 
 	private String createFinalOutput() {
-		String finalOutput = "";
-		for (ExpressionTreeNode child : mRootNode.getChildren()){
-			finalOutput = finalOutput + child.getOxygen().getContent() + " ";
-		}
-		return finalOutput;
+		return mRootNode.getChildren().stream().map(n -> n.getOxygen().getContent().toString())
+				.collect(Collectors.joining(" "));
 	}
 
 	private void traverseKid(ExpressionTreeNode node, Model state)
