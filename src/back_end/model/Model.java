@@ -6,16 +6,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
-import back_end.library.VariableLibrary;
+import back_end.libraries.VariableLibrary;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Model extends Observable {
 	public static final String IMAGE_DIRECTORY = "resources/images/";
-	public static final String DEFAULT_TURTLE = "ball_given.gif";
+	public static final String DEFAULT_TURTLE = "turtle.gif";
+	public static final String DEFAULT_LANGUAGE = "English";
 
 	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
+	private String currentLanguage = DEFAULT_LANGUAGE;
 	private Color backgroundColor;
 	private Point2D home;
 	private boolean clear;
@@ -126,6 +128,10 @@ public class Model extends Observable {
 	public Map<Integer, Turtle> getTurtleContainer() {
 		return turtleContainer;
 	}
+	
+	public Point2D getHome(){
+		return this.home;
+	}
 
 	private Image getDefaultTurtleImage() {
 		String imageLocation = IMAGE_DIRECTORY + DEFAULT_TURTLE;
@@ -136,6 +142,15 @@ public class Model extends Observable {
 	@Override
 	public String toString(){
 		return ("X: " + (this.getX(0) - home.getX()) + " Y: " + -1 * (this.getY(0) - home.getY()) + " Angle: " + this.getAngle(0)); 
+	}
+
+	public String getCurrentLanguage() {
+		return currentLanguage;
+	}
+
+	public void setCurrentLanguage(String currentLanguage) {
+		this.currentLanguage = currentLanguage;
+		setChangedAndNotifyObservers();
 	}
 
 }

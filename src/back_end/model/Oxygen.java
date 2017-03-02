@@ -1,9 +1,10 @@
 package back_end.model;
 
-import back_end.Interface.CommandInterface;
-import back_end.Interface.NodeIntermediateInteface;
-import back_end.library.CommandLibrary;
-import back_end.library.UnrecognizedCommandException;
+import back_end.interfaces.CommandInterface;
+import back_end.interfaces.NodeIntermediateInteface;
+import back_end.libraries.CommandLibrary;
+import back_end.exceptions.CommandException;
+import back_end.exceptions.UnrecognizedCommandException;
 
 /**
  * Oxygen holds the content of a tree node as well as the type
@@ -20,12 +21,12 @@ public class Oxygen<T> implements NodeIntermediateInteface<T>{
     
 	private T mContent;
 	
-    public Oxygen(String type){
+    public Oxygen(String language, String type){
     	mType = type;
-    	mCommandLib = new CommandLibrary();
+    	mCommandLib = new CommandLibrary(language);
     }
     
-    public void convertLight(String light) throws UnrecognizedCommandException{
+    public void convertLight(String light) throws CommandException{
     	switch (mType) {
     	case ROOT_TYPE:
     		break;

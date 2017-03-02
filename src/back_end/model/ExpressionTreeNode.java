@@ -8,11 +8,12 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
-import back_end.Input;
-import back_end.Interface.CommandInterface;
-import back_end.constant.Constant;
-import back_end.library.CommandLibrary;
-import back_end.library.UnrecognizedCommandException;
+import back_end.model.Input;
+import back_end.commands.constant.Constant;
+import back_end.interfaces.CommandInterface;
+import back_end.libraries.CommandLibrary;
+import back_end.exceptions.CommandException;
+import back_end.exceptions.UnrecognizedCommandException;
 
 /**
  * Constructs the nodes of the expression tree, which will contain either
@@ -25,24 +26,27 @@ public class ExpressionTreeNode {
 	private ExpressionTreeNode myParent;
 	private List<ExpressionTreeNode> myChildren;
 	private boolean mExecuted;
-
+	private String language;
+	
 	/**
 	 * If the parent node is specified, it is included in the constructor
+	 * @param string 
 	 * 
 	 * @param x
 	 *            specifies the contents of the node; parent specifies the
 	 *            parent node which operates upon the current node
+	 * @throws CommandException 
 	 * @throws ClassNotFoundException
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
-	 * @throws UnrecognizedCommandException
 	 */
-	public ExpressionTreeNode(Input x, ExpressionTreeNode parent) throws UnrecognizedCommandException {
+	public ExpressionTreeNode(String language, Input x, ExpressionTreeNode parent) throws CommandException {
 		myChildren = new ArrayList<ExpressionTreeNode>();
 		mExecuted = false;
 		myParent = parent;
 		mInput = x;
-		mOxygen = new Oxygen<>(mInput.getType());
+		this.language = language;
+		mOxygen = new Oxygen<>(language, mInput.getType());
 		mOxygen.convertLight(x.getParameter());
 	}
 
@@ -84,5 +88,20 @@ public class ExpressionTreeNode {
 	
 	public void setExecuted() {
 		mExecuted = true;
+	}
+	
+	/**
+	 * Creates a copy of the input node and all its children
+	 * @param node takes in an input node
+	 * @throws UnrecognizedCommandException 
+	 */
+	public void makeCopy(ExpressionTreeNode node) throws CommandException{
+		if(node==null){
+			return;
+		}
+		ExpressionTreeNode newNode = new ExpressionTreeNode(language, node.getInput(),node.getParent());
+		for(ExpressionTreeNode child:node.getChildren()){
+			makeCopy(child);
+		}
 	}
 }

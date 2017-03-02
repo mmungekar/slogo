@@ -1,21 +1,19 @@
 package back_end.model;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Stack;
 
-import back_end.Input;
-import back_end.ProgramParser;
-import back_end.Interface.CommandInterface;
-import back_end.constant.Constant;
-import back_end.constant.NotEnoughParameterException;
-import back_end.library.CommandLibrary;
-import back_end.library.UnrecognizedCommandException;
-import back_end.library.VariableNotFoundException;
+import back_end.model.Input;
+import back_end.model.ProgramParser;
+import back_end.commands.constant.Constant;
+import back_end.exceptions.CommandException;
+import back_end.exceptions.NotEnoughParameterException;
+import back_end.exceptions.VariableNotFoundException;
+import back_end.interfaces.CommandInterface;
+import back_end.libraries.CommandLibrary;
+import back_end.exceptions.UnrecognizedCommandException;
 
 /**
  * Main language parsing structure, construct all commands and constants in a
@@ -31,18 +29,19 @@ public class ExpressionTree {
 	private ExpressionTreeNode mRootNode;
 	private ProgramParser mParser;
 	private CommandLibrary mCommandLib;
+	private String currentLanguage;
 
 	public ExpressionTree(String lang) {
-		initTree(lang);
+		this.currentLanguage = lang;
+		this.initTree();
 	}
 
-	public void initTree(String language) {
+	public void initTree() {
 		mInputs = new ArrayList<>();
 		mRootNode = null;
 		mParser = new ProgramParser();
 		mParser.addPatterns(SYNTAX);
-		mCommandLib = new CommandLibrary();
-		mCommandLib.buildLib(language);
+		mCommandLib = new CommandLibrary(this.currentLanguage);
 	}
 
 	public ExpressionTreeNode constructTree(String commandString) throws UnrecognizedCommandException {
@@ -69,7 +68,7 @@ public class ExpressionTree {
 			return null;
 		try {
 			Input rootInput = new Input(null, Constant.ROOT_TYPE);
-			mRootNode = new ExpressionTreeNode(rootInput, null);
+			mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
 			ExpressionTreeNode currentNode = mRootNode;
 			for (Input input : inputs) {
 				System.out.println("Input: " + input.getParameter());
@@ -86,8 +85,8 @@ public class ExpressionTree {
 	}
 
 	private ExpressionTreeNode buildBranch(Input input, ExpressionTreeNode currNode)
-			throws UnrecognizedCommandException {
-		ExpressionTreeNode inputNode = new ExpressionTreeNode(input, null);
+			throws CommandException {
+		ExpressionTreeNode inputNode = new ExpressionTreeNode(this.currentLanguage, input, null);
 		if (!isChildrenFull(currNode)) {
 			inputNode.setParent(currNode);
 			currNode.getChildren().add(inputNode);
@@ -107,6 +106,7 @@ public class ExpressionTree {
 		return currNode;
 	}
 
+	
 	private boolean isChildrenFull(ExpressionTreeNode node) throws UnrecognizedCommandException {
 		return node != mRootNode && (isConstant(node.getInput()) || (isVariable(node.getInput()))
 				|| mCommandLib.getNumParam(node.getInput().getParameter()) == node.getChildren().size());
@@ -134,20 +134,30 @@ public class ExpressionTree {
 	 * 
 	 * @param ModelState
 	 *            (Should be the static state from the canvas)
-	 * @throws UnrecognizedCommandException
-	 * @throws NotEnoughParameterException
+	 * @return 
 	 * @throws VariableNotFoundException 
+	 * @throws CommandException 
 	 * @throws Exception
 	 */
-	public void traverse(Model ms) throws NotEnoughParameterException, UnrecognizedCommandException, VariableNotFoundException {
+	public String traverse(Model ms) throws VariableNotFoundException, CommandException {
 		// Execute each commands in order
 		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
 			traverseKid(childrenNode, ms);
 		}
+		return createFinalOutput();
+	}
+
+
+	private String createFinalOutput() {
+		String finalOutput = "";
+		for (ExpressionTreeNode child : mRootNode.getChildren()){
+			finalOutput = finalOutput + child.getOxygen().getContent() + " ";
+		}
+		return finalOutput;
 	}
 
 	private void traverseKid(ExpressionTreeNode node, Model state)
-			throws NotEnoughParameterException, UnrecognizedCommandException, VariableNotFoundException {
+			throws VariableNotFoundException, CommandException {
 		if (node == null)
 			return;
 		Input currInput = node.getInput();
@@ -158,7 +168,7 @@ public class ExpressionTree {
 		} else if (isVariable(currInput)) { 
 			if (isVariableStored(currInput, state)) { // Turn a variable into a constant                                      // directly
 				Double value = state.mVariableLibrary.retrieveVariable(nodeName);
-				Oxygen<Double> constantOxy = new Oxygen<>(Constant.CONSTANT_TYPE);
+				Oxygen<Double> constantOxy = new Oxygen<>(this.currentLanguage, Constant.CONSTANT_TYPE);
 				constantOxy.convertLight(value.toString());
 				node.setOxygen(constantOxy);
 			}
@@ -170,7 +180,7 @@ public class ExpressionTree {
 			}
 			int paramNum = mCommandLib.getNumParam(nodeName);
 			if (paramNum != node.getChildren().size())
-				throw new NotEnoughParameterException(currInput.getParameter());
+				throw new NotEnoughParameterException(currInput.getParameter(), paramNum, node.getChildren().size());
 
 			// Input the correct type of inputs to the command in the TreeNode
 			CommandInterface command = mCommandLib.getCommand(nodeName);
@@ -182,20 +192,21 @@ public class ExpressionTree {
 			}
 			command.setParameters(params);
 			Double value = command.Execute(state);	
-			Oxygen<Double> valueOxy = new Oxygen<Double>(Constant.CONSTANT_TYPE);
+			Oxygen<Double> valueOxy = new Oxygen<Double>(this.currentLanguage, Constant.CONSTANT_TYPE);
 			valueOxy.convertLight(value.toString());
 			node.setOxygen(valueOxy);
 			node.setExecuted();
 		}
 	}
 	
-	public void clean() throws UnrecognizedCommandException {
+	public void clean() throws CommandException {
 		Input rootInput = new Input(null, Constant.ROOT_TYPE);
-		mRootNode = new ExpressionTreeNode(rootInput, null);
+		mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
 	}
 
+	
 	public static void main(String[] args) {
-		ExpressionTree test = new ExpressionTree("english");
+		ExpressionTree test = new ExpressionTree("English");
 		String s = "MAKE :X 3";
 		String d = "FD :X";
 		try {
