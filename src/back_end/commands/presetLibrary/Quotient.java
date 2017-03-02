@@ -1,5 +1,7 @@
 package back_end.commands.presetLibrary;
 
+import java.util.List;
+
 import back_end.commands.abstracts.SimpleParameterCommand;
 import back_end.commands.constant.Constant;
 import back_end.interfaces.CommandInterface;
@@ -10,9 +12,12 @@ public class Quotient extends SimpleParameterCommand implements CommandInterface
 
 	@Override
 	public double Execute(Model state) {
-		double a = this.getParameterValue().get(0);
-		double b = this.getParameterValue().get(1);
-		return a / b;
+		List<Double> parameters = this.getParameterValue();
+		double quotient = 0;
+		for(Double a : parameters){
+			quotient /= a;
+		}
+		return quotient;
 	}
 
 }
