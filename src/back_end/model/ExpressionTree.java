@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 import back_end.model.Input;
 import back_end.model.ProgramParser;
-import back_end.commands.CustomCommand;
 import back_end.commands.constant.Constant;
+import back_end.commands.custom.CustomCommand;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.NotEnoughParameterException;
 import back_end.exceptions.VariableNotFoundException;

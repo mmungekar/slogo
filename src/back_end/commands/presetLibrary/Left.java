@@ -8,7 +8,7 @@ import back_end.model.Oxygen;
 public class Left extends LeftRight implements CommandInterface<Oxygen<Double>>{
 	@Override
 	public double Execute(Model model) {
-		double a = this.getParameterValue()[0];
+		double a = this.getParameterValue().get(0);
 		this.rotate(model, 0, -1 * a);
 	    return a;
 	}

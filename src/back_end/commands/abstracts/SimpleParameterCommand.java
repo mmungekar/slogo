@@ -1,10 +1,13 @@
 package back_end.commands.abstracts;
 
+import java.util.Arrays;
+import java.util.List;
+
 import back_end.exceptions.NotEnoughParameterException;
 import back_end.interfaces.CommandInterface;
 import back_end.model.Oxygen;
 
-public abstract class PresetCommand implements CommandInterface<Oxygen<Double>>{
+public abstract class SimpleParameterCommand implements CommandInterface<Oxygen<Double>>{
 	private Double[] parameters;
 	
 	public void setParameters(Oxygen<Double>... ds) throws NotEnoughParameterException {
@@ -14,7 +17,7 @@ public abstract class PresetCommand implements CommandInterface<Oxygen<Double>>{
 		}
 	}
 	
-	protected Double[] getParameterValue() {
-		return parameters;
+	protected List<Double> getParameterValue() {
+		return Arrays.asList(parameters);
 	}
 }

@@ -1,18 +1,22 @@
 package back_end.commands.presetLibrary;
 
-import back_end.commands.abstracts.PresetCommand;
+import java.util.List;
+
+import back_end.commands.abstracts.SimpleParameterCommand;
 import back_end.commands.constant.Constant;
 import back_end.interfaces.CommandInterface;
 import back_end.model.Model;
 import back_end.model.Oxygen;
 
-public class Sum extends PresetCommand implements CommandInterface<Oxygen<Double>>, Constant{
+public class Sum extends SimpleParameterCommand implements CommandInterface<Oxygen<Double>>, Constant{
 
 	@Override
 	public double Execute(Model state) {
-		double a = this.getParameterValue()[0];
-		double b = this.getParameterValue()[1];
-		return a + b;
+		List<Double> parameters = this.getParameterValue();
+		double sum = 0;
+		for(Double a : parameters){
+			sum += a;
+		}
+		return sum;
 	}
-
 }
