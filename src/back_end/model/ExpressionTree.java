@@ -43,10 +43,7 @@ public class ExpressionTree {
 		super();
 		mRootNode = node;
 	}
-	public String getLanguage()
-	{
-		return currentLanguage;
-	}
+
 	public double traverse(Model ms) throws CommandException, VariableNotFoundException {
 		// Execute each commands in order
 		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
@@ -234,9 +231,9 @@ public class ExpressionTree {
 		}
 
 	}
-	public ExpressionTreeNode getRootNode() {
-		// TODO Auto-generated method stub
-		return null;
+	public ExpressionTreeNode getRootNode()
+	{
+		return mRootNode;
 	}
 
 }

@@ -32,7 +32,7 @@ public class To implements CommandInterface<Oxygen<ExpressionTree>>
 		try
 		{
 			model.addCustomCommand(mainTree.getRootNode().getInput().getParameter(),
-					new CustomCommand(variableNames, new ExpressionTree(iterator.next(), mainTree.getLanguage())));
+					new CustomCommand(variableNames, new ExpressionTree(iterator.next(), model.getCurrentLanguage())));
 		}
 		catch (Exception e)
 		{
