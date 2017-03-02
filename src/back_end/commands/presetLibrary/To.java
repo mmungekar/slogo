@@ -1,36 +1,40 @@
 package back_end.commands.presetLibrary;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 
+import back_end.Model;
 import back_end.commands.CustomCommand;
 import back_end.commands.ExpressionTree;
 import back_end.commands.ExpressionTreeNode;
 
-public class To
+public class To implements CommandInterface
 {	
-	private ArrayList<String> variableNames;
-	private ExpressionTree commandTree;
-	private double successVal = 0;
+	private ExpressionTree mainTree;
 	
-	public To ()
+	public void setParameters(ExpressionTree mainTree)
 	{
-		variableNames = new ArrayList<String>();
+		this.mainTree = mainTree;
 	}
-	public void setParameters(String name, ExpressionTree[] trees, HashMap<String, CustomCommand> map)
+	
+	public double Execute(Model model)
 	{
-		for (ExpressionTreeNode x : trees[0].getRootNode().getChildren())
+		Iterator<ExpressionTreeNode> iterator = mainTree.getRootNode().getChildren().iterator();
+		ArrayList<String> variableNames = new ArrayList<String>();
+		
+		for (ExpressionTreeNode x : iterator.next().getChildren())
 		{
 			variableNames.add(x.getInput().getParameter());
 		}
-		commandTree = trees[1];
-		
-		map.put(name, new CustomCommand(variableNames, commandTree));
-		successVal = 1;
-	}
-	
-	public double Execute()
-	{
-		return successVal;
+		try
+		{
+			mainTree.getCustomCommandContainer().put(mainTree.getRootNode().getInput().getParameter(),
+			new CustomCommand(variableNames,new ExpressionTree(iterator.next(), mainTree.getLanguage())));
+		}
+		catch (Exception e)
+		{
+			return 0;
+		}
+		return 1;
 	}
 }
