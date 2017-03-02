@@ -7,29 +7,30 @@ import back_end.exceptions.CommandException;
 import back_end.exceptions.UnrecognizedCommandException;
 
 /**
- * Oxygen holds the content of a tree node as well as the type
- * It acts as an intermediate product between tree nodes which can
- * execute the current command and pass information upwards in a 
- * flexible and packaged styles. 
+ * Oxygen holds the content of a tree node as well as the type It acts as an
+ * intermediate product between tree nodes which can execute the current command
+ * and pass information upwards in a flexible and packaged styles.
+ * 
  * @author Feng
  *
  * @param <T>
  */
-public class Oxygen<T> implements NodeIntermediateInteface<T>{
-    private String mType;
-    private CommandLibrary mCommandLib;
-    
+public class Oxygen<T> implements NodeIntermediateInteface<T> {
+	private String mType;
+	private CommandLibrary mCommandLib;
+
 	private T mContent;
-	
-    public Oxygen(String language, String type){
-    	mType = type;
-    	mCommandLib = new CommandLibrary(language);
-    }
-    
-    public void convertLight(String light) throws CommandException{
-    	switch (mType) {
-    	case ROOT_TYPE:
-    		break;
+	private String mSubContent;
+
+	public Oxygen(String language, String type) {
+		mType = type;
+		mCommandLib = new CommandLibrary(language);
+	}
+
+	public void convertLight(String light) throws CommandException {
+		switch (mType) {
+		case ROOT_TYPE:
+			break;
 		case CONSTANT_TYPE:
 			Double d = Double.parseDouble(light);
 			putContent((T) d);
@@ -43,18 +44,25 @@ public class Oxygen<T> implements NodeIntermediateInteface<T>{
 			putContent((T) ci);
 			break;
 		}
-    }
-    
-    @Override
-    public void putContent(T content){
-    	mContent = content;
-    }
-    
-	
+	}
+
+	@Override
+	public void putContent(T content) {
+		mContent = content;
+	}
+
 	@Override
 	public T getContent() {
 		return mContent;
-		
+
 	}
-	
+
+	public void putSubContent(String content) {
+		mSubContent = content;
+	}
+
+	public String getSubContent() {
+		return mSubContent;
+	}
+
 }
