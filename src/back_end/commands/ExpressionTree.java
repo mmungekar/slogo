@@ -154,7 +154,7 @@ public class ExpressionTree {
 	 * @throws CommandException 
 	 * @throws Exception
 	 */
-	public String traverse(Model ms) throws CommandException {
+	public double traverse(Model ms) throws CommandException {
 		// Execute each commands in order
 		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
 			traverseChild(childrenNode, ms);
@@ -163,12 +163,12 @@ public class ExpressionTree {
 	}
 
 
-	private String createFinalOutput() {
-		String finalOutput = "";
+	private double createFinalOutput() {
+		double output = -1;
 		for (ExpressionTreeNode child : mRootNode.getChildren()){
-			finalOutput = finalOutput + Double.toString(child.getValue()) + " ";
+			output = child.getValue();
 		}
-		return finalOutput;
+		return output;
 	}
 
 	private void traverseChild(ExpressionTreeNode node, Model state)
@@ -217,13 +217,15 @@ public class ExpressionTree {
 		node.setValue(value);
 	}
 
-	private CommandInterface setParams(ExpressionTreeNode node)
-			throws CommandException {
+	private CommandInterface setParams(ExpressionTreeNode node) throws CommandException
+	{
 		int paramNum = mCommandLib.getNumParam(node.getInput().getParameter());
 		if (paramNum != node.getChildren().size()){
 			throw new NotEnoughParameterException(node.getInput().getParameter(), paramNum, node.getChildren().size());
 		}
+		
 		CommandInterface command = mCommandLib.getCommand(node.getInput().getParameter());
+		
 		double[] params = new double[paramNum]; 
 		Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
 		for (int i = 0; i < params.length; i++) {
@@ -256,6 +258,11 @@ public class ExpressionTree {
 	public void clean() throws CommandException{
 		Input rootInput = new Input(null, Constant.ROOT_TYPE);
 		mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
+	}
+
+	public ExpressionTreeNode getRootNode() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*

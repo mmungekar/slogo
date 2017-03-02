@@ -14,7 +14,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class View implements ViewInterface {
-	public static final int WINDOW_HEIGHT = 800;
+	public static final int WINDOW_HEIGHT = 700;
 	public static final int WINDOW_WIDTH = 1000;
 	public static final int CANVAS_HEIGHT = 400;
 	public static final int CANVAS_WIDTH = 600;
