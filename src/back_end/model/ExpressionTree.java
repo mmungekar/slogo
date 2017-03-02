@@ -164,10 +164,11 @@ public class ExpressionTree {
 			node.setExecuted();
 			return;
 		} else if (isVariable(currInput)) { 
-			if (isVariableStored(currInput, state)) { // Turn a variable into a constant                                      // directly
+			if (isVariableStored(currInput, state)) { // Turn a variable into a constant directly
 				Double value = state.mVariableLibrary.retrieveVariable(nodeName);
 				Oxygen<Double> constantOxy = new Oxygen<>(this.currentLanguage, Constant.CONSTANT_TYPE);
 				constantOxy.convertLight(value.toString());
+				constantOxy.putSubContent(nodeName); // In case we are redefining the same variable again
 				node.setOxygen(constantOxy);
 			}
 			node.setExecuted();
@@ -196,12 +197,6 @@ public class ExpressionTree {
 			node.setExecuted();
 		}
 	}
-	
-	public void clean() throws CommandException {
-		Input rootInput = new Input(null, Constant.ROOT_TYPE);
-		mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
-	}
-
 	
 	public static void main(String[] args) {
 		ExpressionTree test = new ExpressionTree("English");
