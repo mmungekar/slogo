@@ -3,16 +3,21 @@ package back_end.commands;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import back_end.Model;
-import back_end.commands.presetLibrary.CommandInterface;
+import back_end.model.ExpressionTree;
+import back_end.model.ExpressionTreeNode;
+import back_end.model.Model;
+import back_end.model.Oxygen;
+import back_end.interfaces.CommandInterface;
 import back_end.exceptions.CommandException;
+import back_end.exceptions.UnrecognizedCommandException;
+import back_end.exceptions.VariableNotFoundException;
 
-public class CustomCommand implements CommandInterface
+public class CustomCommand implements CommandInterface<Oxygen<Double>>
 {
 	private ArrayList<String> variableNames;
 	private HashMap<String, Double> variableValues;
 	private ExpressionTree commandTree;
-	private double[] parameters;
+	private Double[] parameters;
 	
 	
 	public CustomCommand(ArrayList<String> variableList, ExpressionTree commandTree)
@@ -22,12 +27,15 @@ public class CustomCommand implements CommandInterface
 		this.commandTree = commandTree;
 	}
 	
-	public void setParameters(double...ds)
+	public void setParameters(Oxygen<Double>...ds)
 	{
-		parameters = ds;
+		parameters = new Double[ds.length];
+		for(int i = 0; i < ds.length ; i++){
+			parameters[i] = ds[i].getContent();
+		}
 	}
 
-	public double Execute(Model model)
+	public double Execute(Model model) throws CommandException, VariableNotFoundException
 	{
 		for (int i = 0; i < parameters.length; i++)
 		{
@@ -35,14 +43,9 @@ public class CustomCommand implements CommandInterface
 		}
 		
 		replaceVariables(commandTree.getRootNode());
-		try {
-			return commandTree.traverse(model);
-		} catch (CommandException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		};
 		
-		return 0;
+		return commandTree.traverse(model);
+	
 	}
 
 	private void replaceVariables(ExpressionTreeNode node)
@@ -52,7 +55,9 @@ public class CustomCommand implements CommandInterface
 		}
 		if (variableValues.containsKey(node.getInput().getParameter()))
 		{
-			node.setValue(variableValues.get(node.getInput().getParameter()));
+			Oxygen<Double> test = (Oxygen<Double>) node.getOxygen();
+			test.putContent(variableValues.get(node.getInput().getParameter()));
+			node.setOxygen(test);
 		}
 		for(ExpressionTreeNode x: node.getChildren()){
 			replaceVariables(x);

@@ -9,8 +9,9 @@ import java.util.Observer;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
-import back_end.Model;
-import back_end.Turtle;
+
+import back_end.model.Model;
+import back_end.model.Turtle;
 import front_end.customJavaFxNodes.ActionButton;
 import front_end.customJavaFxNodes.ColorComboBox;
 import front_end.customJavaFxNodes.PopUpHTML;

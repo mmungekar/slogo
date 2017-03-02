@@ -3,18 +3,21 @@ package back_end.commands.presetLibrary;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import back_end.Model;
+import back_end.model.Model;
+import back_end.model.Oxygen;
 import back_end.commands.CustomCommand;
-import back_end.commands.ExpressionTree;
-import back_end.commands.ExpressionTreeNode;
+import back_end.exceptions.NotEnoughParameterException;
+import back_end.interfaces.CommandInterface;
+import back_end.model.ExpressionTree;
+import back_end.model.ExpressionTreeNode;
 
-public class To implements CommandInterface
+public class To implements CommandInterface<Oxygen<ExpressionTree>>
 {	
 	private ExpressionTree mainTree;
 	
-	public void setParameters(ExpressionTree mainTree)
+	public void setParameters(Oxygen<ExpressionTree>... mainTree) throws NotEnoughParameterException
 	{
-		this.mainTree = mainTree;
+		this.mainTree = mainTree[0].getContent();
 	}
 	
 	public double Execute(Model model)
@@ -29,7 +32,7 @@ public class To implements CommandInterface
 		try
 		{
 			mainTree.getCustomCommandContainer().put(mainTree.getRootNode().getInput().getParameter(),
-			new CustomCommand(variableNames,new ExpressionTree(iterator.next(), mainTree.getLanguage())));
+					new CustomCommand(variableNames, new ExpressionTree(iterator.next(), mainTree.getLanguage())));
 		}
 		catch (Exception e)
 		{

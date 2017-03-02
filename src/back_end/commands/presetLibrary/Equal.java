@@ -1,21 +1,18 @@
 package back_end.commands.presetLibrary;
 
-import back_end.Model;
+import back_end.commands.abstracts.PresetCommand;
 import back_end.commands.constant.Constant;
+import back_end.interfaces.CommandInterface;
+import back_end.model.Model;
+import back_end.model.Oxygen;
 
-public class Equal implements CommandInterface, Constant{
-    private int mEqual;
-	@Override
-	public void setParameters(double...ds) {
-		double a = ds[0];
-		double b = ds[1];
-		mEqual = a == b ? 1 : 0;
-		
-	}
+public class Equal extends PresetCommand implements CommandInterface<Oxygen<Double>>, Constant{
 
 	@Override
 	public double Execute(Model state) { 
-		return mEqual;
+		double a = this.getParameterValue()[0];
+		double b = this.getParameterValue()[1];
+		return a == b ? 1 : 0;
 	}
 
 }
