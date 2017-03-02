@@ -4,10 +4,10 @@ import back_end.Interface.CommandInterface;
 import back_end.constant.Constant;
 import back_end.model.Model;
 
-public class Product implements CommandInterface, Constant{
+public class Product implements CommandInterface<Double>, Constant{
     private double mProd;
 	@Override
-	public void setParameters(double...ds) {
+	public void setParameters(Double...ds) {
 		double a = ds[0];
 		double b = ds[1];
 		mProd = a * b;

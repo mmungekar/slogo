@@ -4,12 +4,12 @@ import back_end.Interface.CommandInterface;
 import back_end.constant.NotEnoughParameterException;
 import back_end.model.Model;
 
-public class SetTowards implements CommandInterface{
+public class SetTowards implements CommandInterface<Double>{
     private double angle;
     private double ox;
     private double oy;
 	@Override
-	public void setParameters(double... ds) throws NotEnoughParameterException {
+	public void setParameters(Double... ds) throws NotEnoughParameterException {
 		// TODO Auto-generated method stub
 		ox = ds[0];
 		oy = ds[1];

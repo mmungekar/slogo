@@ -4,10 +4,10 @@ import back_end.Interface.CommandInterface;
 import back_end.constant.NotEnoughParameterException;
 import back_end.model.Model;
 
-public class PenUp implements CommandInterface{
+public class PenUp implements CommandInterface<Double>{
 
 	@Override
-	public void setParameters(double... ds) throws NotEnoughParameterException {
+	public void setParameters(Double... ds) throws NotEnoughParameterException {
 		
 	}
 

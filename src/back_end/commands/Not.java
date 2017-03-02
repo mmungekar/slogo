@@ -4,10 +4,10 @@ import back_end.Interface.CommandInterface;
 import back_end.constant.Constant;
 import back_end.model.Model;
 
-public class Not implements CommandInterface, Constant{
+public class Not implements CommandInterface<Double>, Constant{
     private int mNot;
 	@Override
-	public void setParameters(double...ds) {
+	public void setParameters(Double...ds) {
 		double a = ds[0];
 		mNot = a == 0 ? 1 : 0;
 		

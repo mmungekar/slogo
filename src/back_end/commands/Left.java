@@ -4,10 +4,10 @@ import back_end.Interface.CommandInterface;
 import back_end.constant.NotEnoughParameterException;
 import back_end.model.Model;
 
-public class Left implements CommandInterface{
+public class Left implements CommandInterface<Double>{
     private double angle;
 	@Override
-	public void setParameters(double... ds) throws NotEnoughParameterException {
+	public void setParameters(Double... ds) throws NotEnoughParameterException {
 		// TODO Auto-generated method stub
 		angle = ds[0];
 	}

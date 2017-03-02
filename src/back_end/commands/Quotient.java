@@ -4,10 +4,10 @@ import back_end.Interface.CommandInterface;
 import back_end.constant.Constant;
 import back_end.model.Model;
 
-public class Quotient implements CommandInterface, Constant{
+public class Quotient implements CommandInterface<Double>, Constant{
     private double mQuo;
 	@Override
-	public void setParameters(double...ds) {
+	public void setParameters(Double...ds) {
 		double a = ds[0];
 		double b = ds[1];
 		mQuo = a / b;
