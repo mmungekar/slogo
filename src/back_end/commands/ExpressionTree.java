@@ -35,8 +35,7 @@ public class ExpressionTree {
 		initTree(lang);
 	}
 
-	public ExpressionTree(ExpressionTreeNode node, String lang){
-		super();
+	public ExpressionTree(ExpressionTreeNode node){
 		mRootNode = node;
 	}
 
@@ -221,7 +220,7 @@ public class ExpressionTree {
 			throws CommandException {
 		int paramNum = mCommandLib.getNumParam(node.getInput().getParameter());
 		if (paramNum != node.getChildren().size()){
-			throw new NotEnoughParameterException(currInput.getParameter(), paramNum, node.getChildren().size());
+			throw new NotEnoughParameterException(node.getInput().getParameter(), paramNum, node.getChildren().size());
 		}
 		CommandInterface command = mCommandLib.getCommand(node.getInput().getParameter());
 		double[] params = new double[paramNum]; 
@@ -237,7 +236,7 @@ public class ExpressionTree {
 	 * TO BE MOVED TO THE IF-STATEMENT CLASS 
 	 * @throws CommandException 
 	 */
-	private void checkIfStatement(ExpressionTreeNode node,Model state) throws CommandException{
+	private void checkIfElseStatement(ExpressionTreeNode node,Model state) throws CommandException{
 		if(node.getInput().getParameter().equals(Constant.IF_COMMAND_TYPE)){
 			Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
 			ExpressionTreeNode child = iter.next();
@@ -253,6 +252,26 @@ public class ExpressionTree {
 		}
 	}
 
+	private void checkIfStatement(ExpressionTreeNode node,Model state) throws CommandException{
+		Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
+		ExpressionTreeNode child = iter.next();
+		traverseChild(child,state);
+		if(child.getValue()!=0){
+			traverseChild(iter.next(),state);
+		}
+		node.setExecuted();
+	}
+	private void checkRepeatStatement(ExpressionTreeNode node,Model state) throws CommandException{
+		Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
+		ExpressionTreeNode child = iter.next();
+		traverseChild(child,state);
+		ExpressionTreeNode nextChild = iter.next();
+		for(int i = 1; i<child.getValue();i++){
+			nextChild.makeCopy();
+		}
+		traverseChild(node, state);
+		}
+		
 	public void clean() throws CommandException{
 		Input rootInput = new Input(null, Constant.ROOT_TYPE);
 		mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);

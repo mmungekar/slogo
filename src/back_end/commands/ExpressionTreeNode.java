@@ -72,13 +72,13 @@ public class ExpressionTreeNode {
 		 * @param node takes in an input node
 		 * @throws UnrecognizedCommandException 
 		 */
-		public void makeCopy(ExpressionTreeNode node) throws CommandException{
-			if(node==null){
+		public void makeCopy() throws CommandException{
+			if(this==null){
 				return;
 			}
-			ExpressionTreeNode newNode = new ExpressionTreeNode(myLanguage, node.getInput(),node.getParent());
-			for(ExpressionTreeNode child:node.getChildren()){
-				makeCopy(child);
+			ExpressionTreeNode newNode = new ExpressionTreeNode(myLanguage, this.getInput(),this.getParent());
+			for(ExpressionTreeNode child:this.getChildren()){
+				child.makeCopy();
 			}
 		}
 
