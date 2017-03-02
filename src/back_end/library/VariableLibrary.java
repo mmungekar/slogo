@@ -19,6 +19,13 @@ public class VariableLibrary {
 		mVariables.put(name, value);
 	}
 	
+	public void updateVariable(String name, Double value){
+		if(mVariables.containsKey(name)){
+			mVariables.remove(name);
+		}
+		insertVariable(name, value);
+	}
+	
 	public Double retrieveVariable(String name) throws VariableNotFoundException{
 		if(!mVariables.containsKey(name))
 			throw new VariableNotFoundException("No defined variable: " + name);

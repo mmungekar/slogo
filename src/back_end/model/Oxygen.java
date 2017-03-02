@@ -19,6 +19,7 @@ public class Oxygen<T> implements NodeIntermediateInteface<T>{
     private CommandLibrary mCommandLib;
     
 	private T mContent;
+	private String mSubContent;
 	
     public Oxygen(String type){
     	mType = type;
@@ -49,7 +50,15 @@ public class Oxygen<T> implements NodeIntermediateInteface<T>{
     	mContent = content;
     }
     
+    public void putSubContent(String content){
+    	mSubContent = content;
+    }
+    
 	
+    public String getSubContent(){
+    	return mSubContent;
+    }
+    
 	@Override
 	public T getContent() {
 		return mContent;

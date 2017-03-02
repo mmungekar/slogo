@@ -36,7 +36,7 @@ public class ExpressionTree {
 		initTree(lang);
 	}
 
-	public void initTree(String language) {
+	private void initTree(String language) {
 		mInputs = new ArrayList<>();
 		mRootNode = null;
 		mParser = new ProgramParser();
@@ -45,13 +45,20 @@ public class ExpressionTree {
 		mCommandLib.buildLib(language);
 	}
 
+	/**
+	 * Build a ExpressionTree out of the command string read from the terminal,
+	 * return the root node
+	 * @param commandString
+	 * @return root node
+	 * @throws UnrecognizedCommandException
+	 */
 	public ExpressionTreeNode constructTree(String commandString) throws UnrecognizedCommandException {
 		Scanner cScanner = new Scanner(commandString);
 		// Parse string into inputs, getting rid of Comment type
 		while (cScanner.hasNext()) {
 			String in = cScanner.next().trim().toLowerCase();
 			String type = mParser.getSymbol(in);
-			System.out.println("Type: " + type);
+			//System.out.println("Type: " + type);
 			if (type.equals(Constant.COMMENT_TYPE)) {
 				cScanner.nextLine();
 				continue;
@@ -71,12 +78,18 @@ public class ExpressionTree {
 			Input rootInput = new Input(null, Constant.ROOT_TYPE);
 			mRootNode = new ExpressionTreeNode(rootInput, null);
 			ExpressionTreeNode currentNode = mRootNode;
+			System.out.println("Start building the tree.");
+			System.out.println();
 			for (Input input : inputs) {
-				System.out.println("Input: " + input.getParameter());
+				System.out.println("New leaf added to the tree: ");
+				System.out.println("New Leaf: " + input.getParameter());
 				currentNode = buildBranch(input, currentNode);
 				System.out.println("Parent: " + currentNode.getParent().getInput().getParameter());
 				System.out.println();
 			}
+			System.out.println("Finish building the tree.");
+			System.out.println();
+			System.out.println();
 			return mRootNode;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,8 +111,6 @@ public class ExpressionTree {
 			if (currNode == mRootNode)
 				return mRootNode;
 			currNode = currNode.getParent();
-			// System.out.println("Parent Node: "+
-			// currNode.getInput().getParameter());
 		}
 		inputNode.setParent(currNode);
 		currNode.getChildren().add(inputNode);
@@ -123,10 +134,12 @@ public class ExpressionTree {
 	private boolean isVariable(Input i) {
 		return i.getType().equals(Constant.VARIABLE_TYPE);
 	}
+	
 
 	private boolean isVariableStored(Input i, Model m) {
 		return m.mVariableLibrary.hasVariable(i.getParameter());
 	}
+
 
 	/**
 	 * Given an already-built ExpressionTree, we traverse it using depth first
@@ -156,10 +169,11 @@ public class ExpressionTree {
 			node.setExecuted();
 			return;
 		} else if (isVariable(currInput)) { 
-			if (isVariableStored(currInput, state)) { // Turn a variable into a constant                                      // directly
+			if (isVariableStored(currInput, state)) { // Turn a variable into a constant                                     
 				Double value = state.mVariableLibrary.retrieveVariable(nodeName);
-				Oxygen<Double> constantOxy = new Oxygen<>(Constant.CONSTANT_TYPE);
+				Oxygen<String> constantOxy = new Oxygen<>(Constant.CONSTANT_TYPE);
 				constantOxy.convertLight(value.toString());
+				constantOxy.putSubContent(nodeName); // In case we are redefining the same variable again
 				node.setOxygen(constantOxy);
 			}
 			node.setExecuted();
@@ -178,7 +192,6 @@ public class ExpressionTree {
 			Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
 			for (int i = 0; i < params.length; i++) {
 				params[i] = iter.next().getOxygen();
-				System.out.println("Oxygen Content: " + params[i].getContent().toString());
 			}
 			command.setParameters(params);
 			Double value = command.Execute(state);	
@@ -187,11 +200,6 @@ public class ExpressionTree {
 			node.setOxygen(valueOxy);
 			node.setExecuted();
 		}
-	}
-	
-	public void clean() throws UnrecognizedCommandException {
-		Input rootInput = new Input(null, Constant.ROOT_TYPE);
-		mRootNode = new ExpressionTreeNode(rootInput, null);
 	}
 
 	public static void main(String[] args) {
@@ -202,15 +210,7 @@ public class ExpressionTree {
 			test.constructTree(s);
 			Model model = new Model();
 			test.traverse(model);
-			
-			System.out.println("Try Variable: ");
-			
-			test = new ExpressionTree("English");
-			test.constructTree(d);
-			test.traverse(model);
-
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
