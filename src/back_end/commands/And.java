@@ -13,6 +13,7 @@ public class And implements CommandInterface<Double>, Constant{
 		double b = ds[1];
 		mAnd = (a != 0 && b != 0) ? 1 : 0;
 		
+		
 	}
 
 	@Override
