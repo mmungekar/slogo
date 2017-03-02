@@ -1,21 +1,16 @@
 package back_end.commands.presetLibrary;
 
-import back_end.Model;
+import back_end.commands.abstracts.PresetCommand;
 import back_end.commands.constant.Constant;
+import back_end.interfaces.CommandInterface;
+import back_end.model.Model;
+import back_end.model.Oxygen;
 
-public class Cosine implements CommandInterface, Constant{
-    private double mCos;
-	@Override
-	public void setParameters(double...ds) {
-		double a = ds[0];
-		mCos = Math.cos(Math.toRadians(a));
-		
-	}
-
+public class Cosine extends PresetCommand implements CommandInterface<Oxygen<Double>>, Constant{
 	@Override
 	public double Execute(Model state) {
-		// TODO Auto-generated method stub
-		return mCos;
+		double a = this.getParameterValue()[0];
+		return Math.cos(Math.toRadians(a));
 	}
 
 }

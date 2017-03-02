@@ -1,8 +1,8 @@
 package back_end.commands.abstracts;
 
-import back_end.Model;
+import back_end.model.Model;
 
-public abstract class ForwardBackward extends SingleParameterCommand{
+public abstract class ForwardBackward extends PresetCommand{
 	protected void sendToNewPos(Model model, int TurtleID, double mag){
 		double angle = model.getAngle(0);
 		double dx = Math.cos(Math.toRadians(angle)) * mag;

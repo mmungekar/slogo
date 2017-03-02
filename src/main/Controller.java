@@ -2,7 +2,10 @@ package main;
 
 import front_end.View;
 import back_end.*;
+import back_end.model.Model;
+import back_end.overhead.Interpreter;
 import back_end.exceptions.CommandException;
+import back_end.exceptions.VariableNotFoundException;
 import javafx.stage.Stage;
 
 public class Controller {
@@ -22,8 +25,7 @@ public class Controller {
 			String message;
 			try {
 				message = String.format(RETURN_PREFIX, mInterpreter.execute(model, rawUserInput));
-				
-			} catch (CommandException e) {
+			} catch (VariableNotFoundException |CommandException e) {
 				message = e.getMessage();
 			}
 			view.setOutput(String.format(OUTPUT_STRING_FORMAT, rawUserInput, message));

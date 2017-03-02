@@ -1,15 +1,15 @@
 package back_end.commands.presetLibrary;
 
-import back_end.Model;
-import back_end.commands.abstracts.NoParameterCommand;
+import back_end.model.Model;
+import back_end.commands.abstracts.PresetCommand;
+import back_end.interfaces.CommandInterface;
+import back_end.model.Oxygen;
 
-public class IsShowing extends NoParameterCommand implements CommandInterface{
+public class IsShowing extends PresetCommand implements CommandInterface<Oxygen<Double>>{
 
 	@Override
 	public double Execute(Model model) {
-		// TODO Auto-generated method stub
-		double visible = model.isVisible(0) == true ? 1 : 0;
-		return visible;
+		return model.isVisible(0) == true ? 1 : 0;
 	}
 
 }
