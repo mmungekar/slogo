@@ -1,4 +1,4 @@
-package back_end;
+package back_end.constant;
 
 public class NotEnoughParameterException extends Exception {
 	

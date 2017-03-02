@@ -19,4 +19,8 @@ public class Input {
 	public String getType(){
 		return this.myType;
 	}
+	
+	public void setType(String type){
+		this.myType = type;
+	}
 }

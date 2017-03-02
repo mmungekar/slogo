@@ -2,6 +2,11 @@ package main;
 
 import front_end.View;
 import back_end.*;
+import back_end.constant.NotEnoughParameterException;
+import back_end.library.UnrecognizedCommandException;
+import back_end.library.VariableNotFoundException;
+import back_end.model.Model;
+import back_end.overhead.Interpreter;
 import javafx.stage.Stage;
 
 public class Controller {
@@ -26,6 +31,8 @@ public class Controller {
 			} catch (NotEnoughParameterException e) {
 				
 			} catch (UnrecognizedCommandException e) {
+				
+			} catch (VariableNotFoundException e) {
 				
 			}
 			

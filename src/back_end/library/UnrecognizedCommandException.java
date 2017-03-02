@@ -1,4 +1,4 @@
-package back_end;
+package back_end.library;
 
 public class UnrecognizedCommandException extends Exception {
 	

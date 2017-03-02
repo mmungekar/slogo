@@ -1,13 +1,13 @@
 package back_end.commands;
 
-import back_end.Model;
-import back_end.NotEnoughParameterException;
-import commands.CommandInterface;
+import back_end.Interface.CommandInterface;
+import back_end.constant.NotEnoughParameterException;
+import back_end.model.Model;
 
-public class ClearScreen implements CommandInterface{
+public class ClearScreen implements CommandInterface<Double>{
 
 	@Override
-	public void setParameters(double... ds) throws NotEnoughParameterException {
+	public void setParameters(Double... ds) throws NotEnoughParameterException {
 		
 	}
 

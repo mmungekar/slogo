@@ -1,5 +1,5 @@
-package back_end;
-	
+package back_end.model;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,19 +8,20 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
+import back_end.Input;
+import back_end.Interface.CommandInterface;
 import back_end.constant.Constant;
-import commands.CommandInterface;
+import back_end.library.CommandLibrary;
+import back_end.library.UnrecognizedCommandException;
 
 /**
  * Constructs the nodes of the expression tree, which will contain either
  * commands, operators, or integer values (hence, type Object)
  */
 public class ExpressionTreeNode {
-	private CommandLibrary mCommandLib;
 	// Contents
 	private Input mInput;
-	private CommandInterface mCommand;
-	private double mValue;
+	private Oxygen<?> mOxygen;
 	private ExpressionTreeNode myParent;
 	private List<ExpressionTreeNode> myChildren;
 	private boolean mExecuted;
@@ -34,26 +35,15 @@ public class ExpressionTreeNode {
 	 * @throws ClassNotFoundException
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
-	 * @throws UnrecognizedCommandException 
+	 * @throws UnrecognizedCommandException
 	 */
-	public ExpressionTreeNode(Input x, ExpressionTreeNode parent)
-			throws UnrecognizedCommandException {
+	public ExpressionTreeNode(Input x, ExpressionTreeNode parent) throws UnrecognizedCommandException {
 		myChildren = new ArrayList<ExpressionTreeNode>();
-		mCommandLib = new CommandLibrary();
-		mCommand = null;
 		mExecuted = false;
 		myParent = parent;
 		mInput = x;
-		switch (x.getType()) {
-		case Constant.ROOT_TYPE:
-			break;
-		case Constant.CONSTANT_TYPE:
-			mValue = Double.parseDouble(x.getParameter());
-			break;
-		case Constant.COMMAND_TYPE:
-			mCommand = mCommandLib.getCommand(x.getParameter());
-			break;
-		}
+		mOxygen = new Oxygen<>(mInput.getType());
+		mOxygen.convertLight(x.getParameter());
 	}
 
 	public void addChild(ExpressionTreeNode child) {
@@ -70,27 +60,28 @@ public class ExpressionTreeNode {
 	public ExpressionTreeNode getParent() {
 		return this.myParent;
 	}
-	
-	public void setParent(ExpressionTreeNode parent){
+
+	public void setParent(ExpressionTreeNode parent) {
 		myParent = parent;
 	}
 
 	public Collection<ExpressionTreeNode> getChildren() {
 		return myChildren;
 	}
-	
-	public void setValue(double value){
-		mValue = value;
-	}
-	
-	public double getValue(){
-		return mValue;
+
+	public void setOxygen(Oxygen<?> oxygen) {
+		mOxygen = oxygen;
 	}
 
-	public Input getInput() {
+	public Oxygen<?> getOxygen() {
+		return mOxygen;
+	}
+	
+	public Input getInput(){
 		return mInput;
 	}
 
+	
 	public void setExecuted() {
 		mExecuted = true;
 	}

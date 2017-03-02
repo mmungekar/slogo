@@ -1,4 +1,4 @@
-package back_end;
+package back_end.model;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -8,8 +8,14 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
 
+import back_end.Input;
+import back_end.ProgramParser;
+import back_end.Interface.CommandInterface;
 import back_end.constant.Constant;
-import commands.CommandInterface;
+import back_end.constant.NotEnoughParameterException;
+import back_end.library.CommandLibrary;
+import back_end.library.UnrecognizedCommandException;
+import back_end.library.VariableNotFoundException;
 
 /**
  * Main language parsing structure, construct all commands and constants in a
@@ -45,6 +51,7 @@ public class ExpressionTree {
 		while (cScanner.hasNext()) {
 			String in = cScanner.next().trim().toLowerCase();
 			String type = mParser.getSymbol(in);
+			System.out.println("Type: " + type);
 			if (type.equals(Constant.COMMENT_TYPE)) {
 				cScanner.nextLine();
 				continue;
@@ -101,7 +108,7 @@ public class ExpressionTree {
 	}
 
 	private boolean isChildrenFull(ExpressionTreeNode node) throws UnrecognizedCommandException {
-		return node != mRootNode && (isConstant(node.getInput())
+		return node != mRootNode && (isConstant(node.getInput()) || (isVariable(node.getInput()))
 				|| mCommandLib.getNumParam(node.getInput().getParameter()) == node.getChildren().size());
 	}
 
@@ -113,6 +120,14 @@ public class ExpressionTree {
 		return i.getType().equals(Constant.CONSTANT_TYPE);
 	}
 
+	private boolean isVariable(Input i) {
+		return i.getType().equals(Constant.VARIABLE_TYPE);
+	}
+
+	private boolean isVariableStored(Input i, Model m) {
+		return m.mVariableLibrary.hasVariable(i.getParameter());
+	}
+
 	/**
 	 * Given an already-built ExpressionTree, we traverse it using depth first
 	 * search and execute all the possible commands as we go.
@@ -121,9 +136,10 @@ public class ExpressionTree {
 	 *            (Should be the static state from the canvas)
 	 * @throws UnrecognizedCommandException
 	 * @throws NotEnoughParameterException
+	 * @throws VariableNotFoundException 
 	 * @throws Exception
 	 */
-	public void traverse(Model ms) throws NotEnoughParameterException, UnrecognizedCommandException {
+	public void traverse(Model ms) throws NotEnoughParameterException, UnrecognizedCommandException, VariableNotFoundException {
 		// Execute each commands in order
 		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
 			traverseKid(childrenNode, ms);
@@ -131,47 +147,67 @@ public class ExpressionTree {
 	}
 
 	private void traverseKid(ExpressionTreeNode node, Model state)
-			throws NotEnoughParameterException, UnrecognizedCommandException {
+			throws NotEnoughParameterException, UnrecognizedCommandException, VariableNotFoundException {
 		if (node == null)
 			return;
 		Input currInput = node.getInput();
+		String nodeName = currInput.getParameter();
 		if (isConstant(currInput)) {
+			node.setExecuted();
+			return;
+		} else if (isVariable(currInput)) { 
+			if (isVariableStored(currInput, state)) { // Turn a variable into a constant                                      // directly
+				Double value = state.mVariableLibrary.retrieveVariable(nodeName);
+				Oxygen<Double> constantOxy = new Oxygen<>(Constant.CONSTANT_TYPE);
+				constantOxy.convertLight(value.toString());
+				node.setOxygen(constantOxy);
+			}
 			node.setExecuted();
 			return;
 		} else if (isCommand(currInput)) {
 			for (ExpressionTreeNode kid : node.getChildren()) {
 				traverseKid(kid, state);
 			}
-			int paramNum = mCommandLib.getNumParam(currInput.getParameter());
-			CommandInterface command = mCommandLib.getCommand(currInput.getParameter());
+			int paramNum = mCommandLib.getNumParam(nodeName);
 			if (paramNum != node.getChildren().size())
 				throw new NotEnoughParameterException(currInput.getParameter());
-			double[] params = new double[paramNum];
+
+			// Input the correct type of inputs to the command in the TreeNode
+			CommandInterface command = mCommandLib.getCommand(nodeName);
+			Oxygen[] params = new Oxygen[paramNum];
 			Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
 			for (int i = 0; i < params.length; i++) {
-				params[i] = iter.next().getValue();
+				params[i] = iter.next().getOxygen();
+				System.out.println("Oxygen Content: " + params[i].getContent().toString());
 			}
 			command.setParameters(params);
-			double value = command.Execute(state);
+			Double value = command.Execute(state);	
+			Oxygen<Double> valueOxy = new Oxygen<Double>(Constant.CONSTANT_TYPE);
+			valueOxy.convertLight(value.toString());
+			node.setOxygen(valueOxy);
 			node.setExecuted();
-			node.setValue(value);
 		}
 	}
 	
-	public void clean() throws UnrecognizedCommandException{
+	public void clean() throws UnrecognizedCommandException {
 		Input rootInput = new Input(null, Constant.ROOT_TYPE);
 		mRootNode = new ExpressionTreeNode(rootInput, null);
 	}
 
 	public static void main(String[] args) {
 		ExpressionTree test = new ExpressionTree("english");
-		String s = "SUM GREATER? 6 3 AND 2 1";
+		String s = "MAKE :X 3";
+		String d = "FD :X";
 		try {
-			ExpressionTreeNode root = test.constructTree(s);
-			test.traverse(null);
-			for (ExpressionTreeNode node : root.getChildren()) {
-				System.out.println("Greater? " + node.getValue());
-			}
+			test.constructTree(s);
+			Model model = new Model();
+			test.traverse(model);
+			
+			System.out.println("Try Variable: ");
+			
+			test = new ExpressionTree("English");
+			test.constructTree(d);
+			test.traverse(model);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

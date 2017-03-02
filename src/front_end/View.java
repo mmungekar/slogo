@@ -3,8 +3,7 @@ package front_end;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-
-import back_end.Model;
+import back_end.model.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;

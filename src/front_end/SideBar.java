@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import back_end.Model;
+import back_end.model.Model;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;

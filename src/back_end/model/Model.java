@@ -1,4 +1,4 @@
-package back_end;
+package back_end.model;
 
 import java.io.File;
 import java.util.Collections;
@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
+import back_end.library.VariableLibrary;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -18,9 +19,11 @@ public class Model extends Observable {
 	private Color backgroundColor;
 	private Point2D home;
 	private boolean clear;
+	public VariableLibrary mVariableLibrary;
 
 	public Model() {
 		setBackgroundColor(Color.WHITE);
+		mVariableLibrary = new VariableLibrary();
 	}
 
 	private void setChangedAndNotifyObservers() {

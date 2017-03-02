@@ -1,14 +1,14 @@
 package back_end.commands;
 
 import back_end.Input;
-import back_end.Model;
+import back_end.Interface.CommandInterface;
 import back_end.constant.Constant;
-import commands.CommandInterface;
+import back_end.model.Model;
 
-public class ArcTangent implements CommandInterface, Constant{
+public class ArcTangent implements CommandInterface<Double>, Constant{
     private double mAtan;
 	@Override
-	public void setParameters(double...ds) {
+	public void setParameters(Double...ds) {
 		double a = ds[0];
 		mAtan = Math.atan(a);
 		

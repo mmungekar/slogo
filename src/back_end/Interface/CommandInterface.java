@@ -1,10 +1,10 @@
-package commands;
+package back_end.Interface;
 
-import back_end.Model;
-import back_end.NotEnoughParameterException;
+import back_end.constant.NotEnoughParameterException;
+import back_end.model.Model;
 
-public interface CommandInterface {
-	void setParameters(double... ds) throws NotEnoughParameterException;
+public interface CommandInterface<A> {
+	void setParameters(A... os) throws NotEnoughParameterException;
 
 	double Execute(Model model);
 }

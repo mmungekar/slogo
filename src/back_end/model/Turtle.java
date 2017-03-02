@@ -1,4 +1,4 @@
-package back_end;
+package back_end.model;
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;

@@ -1,8 +1,8 @@
 package back_end.commands;
 
-import back_end.Model;
+import back_end.Interface.CommandInterface;
 import back_end.constant.Constant;
-import commands.CommandInterface;
+import back_end.model.Model;
 
 public class Reminder implements CommandInterface, Constant{
     private int mRemind;

@@ -1,11 +1,17 @@
-package back_end;
+package back_end.overhead;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import commands.CommandInterface;
+
+import back_end.Interface.CommandInterface;
+import back_end.constant.NotEnoughParameterException;
+import back_end.library.UnrecognizedCommandException;
+import back_end.library.VariableNotFoundException;
+import back_end.model.ExpressionTree;
+import back_end.model.Model;
 
 /**
  * The StringInterpreter class receives Inputs, and parses through them to
@@ -24,10 +30,11 @@ public class Interpreter {
 	 */
 	public Interpreter(String lang) {
 		language = lang;
-		
+
 	}
 
-	public void execute(Model model, String command) throws UnrecognizedCommandException, NotEnoughParameterException {
+	public void execute(Model model, String command)
+			throws UnrecognizedCommandException, NotEnoughParameterException, VariableNotFoundException {
 		mTree = new ExpressionTree(language);
 		mTree.constructTree(command);
 		mTree.traverse(model);

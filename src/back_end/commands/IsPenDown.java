@@ -1,8 +1,8 @@
 package back_end.commands;
 
-import back_end.Model;
-import back_end.NotEnoughParameterException;
-import commands.CommandInterface;
+import back_end.Interface.CommandInterface;
+import back_end.constant.NotEnoughParameterException;
+import back_end.model.Model;
 
 public class IsPenDown implements CommandInterface{
 
