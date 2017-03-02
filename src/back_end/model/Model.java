@@ -1,9 +1,11 @@
 package back_end.model;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
@@ -26,9 +28,11 @@ public class Model extends Observable {
 	private Point2D home;
 	private boolean clear;
 	public VariableLibrary mVariableLibrary;
+	private List<Integer> activeTurtleIDs;
 
 	public Model()
 	{
+		activeTurtleIDs = new ArrayList<Integer>();
 		turtleContainer = new HashMap<Integer, Turtle>();
 		customCommands = new HashMap<String, CustomCommand>();
 		setBackgroundColor(Color.WHITE);
@@ -46,37 +50,36 @@ public class Model extends Observable {
 		setChangedAndNotifyObservers();
 	}
 
-	public void setPos(int ID, double inX, double inY){
-		turtleContainer.get(ID).setPosition(inX, inY);
+	public void setPos(double inX, double inY){
+		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setPosition(inX, inY));		
 		setChangedAndNotifyObservers();
 	}
 
-	public void setAngle(int ID, double inAngle) {
-		turtleContainer.get(ID).setAngle(inAngle);
+	public void setAngle(double inAngle) {
+		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setAngle(inAngle));	
+		
 		setChangedAndNotifyObservers();
 	}
 	
-	public void setPenDown(int ID){
-		turtleContainer.get(ID).setPenDown();
+	public void setPenDown(){
+		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setPenDown());
 		//setChangedAndNotifyObservers();
 	}
 	
-	public void setPenUp(int ID){
-		turtleContainer.get(ID).setPenUp();
+	public void setPenUp(){
+		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setPenUp());
 		//setChangedAndNotifyObservers();
 	}
 	
-	public void setVisible(int ID){
-		turtleContainer.get(ID).setVisible(true);
+	public void setVisible(){
+		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setVisible(true));
 	}
 	
-	public void setInVisible(int ID){
-		turtleContainer.get(ID).setVisible(false);
+	public void setInVisible(){
+		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setVisible(false));
 	}
 	
-	public boolean isVisible(int ID){
-		return turtleContainer.get(ID).isVisible();
-	}
+	
 
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
@@ -90,9 +93,8 @@ public class Model extends Observable {
 		setChangedAndNotifyObservers();
 	}
 	
-	public void sendTurtleHome(int ID){
-		turtleContainer.get(ID).setPosition(home);
-		turtleContainer.get(ID).dontDrawLine();
+	public void sendTurtleHome(){
+		activeTurtleIDs.stream().forEach(id -> {turtleContainer.get(id).setPosition(home); turtleContainer.get(id).dontDrawLine();});
 		setChangedAndNotifyObservers();
 		
 	}
@@ -106,7 +108,8 @@ public class Model extends Observable {
 	public void setHome(Point2D home) {
 		this.home = home;
 		// create first turtle once home is set
-		turtleContainer.put(0, new Turtle(getDefaultTurtleImage(), home));
+		turtleContainer.put(1, new Turtle(getDefaultTurtleImage(), home));
+		activeTurtleIDs.add(1);
 		setChangedAndNotifyObservers();
 	}
 	
@@ -144,6 +147,10 @@ public class Model extends Observable {
 	
 	public Point2D getHome(){
 		return this.home;
+	}
+	
+	public boolean isVisible(int ID){
+		return turtleContainer.get(ID).isVisible();
 	}
 
 	private Image getDefaultTurtleImage() {

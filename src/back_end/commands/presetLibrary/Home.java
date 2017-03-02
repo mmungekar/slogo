@@ -9,10 +9,11 @@ public class Home extends SimpleParameterCommand implements CommandInterface<Oxy
 
 	@Override
 	public double Execute(Model model) {
-		double dx = model.getHome().getX() - model.getX(0);
-		double dy = model.getHome().getY() - model.getY(0);
+		// FIXME Turtle ID issue
+		double dx = model.getHome().getX() - model.getX(1);
+		double dy = model.getHome().getY() - model.getY(1);
 		double distance = Math.pow((Math.pow(dx, 2) + Math.pow(dy, 2)) , 1/2d);
-		model.sendTurtleHome(0);
+		model.sendTurtleHome();
 		return distance;
 	}
 	

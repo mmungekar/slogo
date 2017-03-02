@@ -9,7 +9,7 @@ public class HideTurtle extends SimpleParameterCommand implements CommandInterfa
 	
 	@Override
 	public double Execute(Model model) {
-		model.setInVisible(0);
+		model.setInVisible();
 		return 0;
 	}
 	

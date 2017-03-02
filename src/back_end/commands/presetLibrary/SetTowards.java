@@ -12,12 +12,13 @@ public class SetTowards extends SimpleParameterCommand implements CommandInterfa
 		double ox = this.getParameterValue().get(0);
 		double oy = this.getParameterValue().get(1);
 		
-	    double dx = (model.getHome().getX() + ox) - model.getX(0);
-	    double dy = (model.getHome().getY() - oy) - model.getY(0);
+		// FIXME turtle id issue
+	    double dx = (model.getHome().getX() + ox) - model.getX(1);
+	    double dy = (model.getHome().getY() - oy) - model.getY(1);
+	    double prevAngle = model.getAngle(1);
 	    
-	    double prevAngle = model.getAngle(0);
 	    double angle = Math.toDegrees(Math.atan(dy / dx));
-	    model.setAngle(0, angle);
+	    model.setAngle(angle);
 	    return angle-prevAngle;
 	}
 

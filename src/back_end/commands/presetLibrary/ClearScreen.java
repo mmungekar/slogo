@@ -12,7 +12,7 @@ public class ClearScreen extends SimpleParameterCommand implements CommandInterf
 		double ox = model.getX(0);
 		double oy = model.getY(0);
 		double distance = Math.pow((Math.pow(ox, 2) + Math.pow(oy, 2)) , 1/2d);
-		model.sendTurtleHome(0);
+		model.sendTurtleHome();
 		model.setClear(true);
 		return distance;
 	}

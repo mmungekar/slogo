@@ -9,7 +9,7 @@ public class SetHeading extends SimpleParameterCommand implements CommandInterfa
 	@Override
 	public double Execute(Model model) {
 		double a = this.getParameterValue().get(0);
-	    model.setAngle(0, a);
+	    model.setAngle(a);
 	    return a;
 	}
 

@@ -9,7 +9,7 @@ public class PenUp extends SimpleParameterCommand implements CommandInterface<Ox
 	
 	@Override
 	public double Execute(Model model) {
-		model.setPenUp(0);
+		model.setPenUp();
 		return 0;
 	}
 	

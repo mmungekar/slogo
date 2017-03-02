@@ -10,7 +10,7 @@ public class Right extends LeftRight implements CommandInterface<Oxygen<Double>>
 	@Override
 	public double Execute(Model model) {
 		double a = this.getParameterValue().get(0);
-		this.rotate(model, 0, a);
+		this.rotate(model, a);
 	    return a;
 	}
 

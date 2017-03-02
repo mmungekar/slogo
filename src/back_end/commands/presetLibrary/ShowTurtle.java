@@ -9,7 +9,7 @@ public class ShowTurtle extends SimpleParameterCommand implements CommandInterfa
 
 	@Override
 	public double Execute(Model model) {
-		model.setVisible(0);
+		model.setVisible();
 		return 1;
 	}
 	

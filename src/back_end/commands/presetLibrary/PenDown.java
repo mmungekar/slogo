@@ -9,7 +9,7 @@ public class PenDown extends SimpleParameterCommand implements CommandInterface<
 
 	@Override
 	public double Execute(Model model) {
-		model.setPenDown(0);
+		model.setPenDown();
 		return 1;
 	}
 	
