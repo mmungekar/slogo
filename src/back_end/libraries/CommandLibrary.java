@@ -1,10 +1,12 @@
 package back_end.libraries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import back_end.interfaces.CommandInterface;
 import back_end.model.ProgramParser;
+import back_end.commands.CustomCommand;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.InitializationException;
 import back_end.exceptions.UnrecognizedCommandException;
@@ -17,7 +19,6 @@ public class CommandLibrary {
 	public static final String PARAMETER_DIRECTORY = "resources/parameters/";
 	public static final String COMMAND_PREFIX = "back_end.commands.presetLibrary.";
 	private ProgramParser mParser;
-	
 	private String currentLanguage;	
 	
 
@@ -28,6 +29,7 @@ public class CommandLibrary {
 
 	public void buildLib() {
 		commandNames = new ArrayList<String>();
+
 		resource = ResourceBundle.getBundle(LANGUAGE_DIRECTORY + this.currentLanguage);
 		presource = ResourceBundle.getBundle(PARAMETER_DIRECTORY + "Parameter");
 		mParser = new ProgramParser();
@@ -43,12 +45,12 @@ public class CommandLibrary {
 			Class<?> clazz = Class.forName(COMMAND_PREFIX.concat(official));
 			return (CommandInterface) clazz.newInstance();
 		} catch (ClassNotFoundException ex) {
-			throw new UnrecognizedCommandException(command);
+			 throw new UnrecognizedCommandException(command);
 		} catch (InstantiationException | IllegalAccessException ex) {
 			throw new InitializationException(command);
 		}
 	}
-
+	
 	public int getNumParam(String command) throws UnrecognizedCommandException {
 
 		String official = mParser.getSymbol(command);

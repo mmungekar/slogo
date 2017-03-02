@@ -9,8 +9,8 @@ import back_end.model.Model;
 public class Interpreter {
 	private ExpressionTree mTree;	
 
+	public double execute(Model model, String command) throws CommandException, VariableNotFoundException {
 
-	public String execute(Model model, String command) throws CommandException, VariableNotFoundException {
 		mTree = new ExpressionTree(model.getCurrentLanguage());
 		mTree.constructTree(command);
 		return mTree.traverse(model);

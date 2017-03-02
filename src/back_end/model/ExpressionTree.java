@@ -1,6 +1,7 @@
 package back_end.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 
 import back_end.model.Input;
 import back_end.model.ProgramParser;
+import back_end.commands.CustomCommand;
 import back_end.commands.constant.Constant;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.NotEnoughParameterException;
@@ -35,6 +37,19 @@ public class ExpressionTree {
 	public ExpressionTree(String lang) {
 		this.currentLanguage = lang;
 		this.initTree();
+	}
+	public ExpressionTree(ExpressionTreeNode node, String lang)
+	{
+		super();
+		mRootNode = node;
+	}
+
+	public double traverse(Model ms) throws CommandException, VariableNotFoundException {
+		// Execute each commands in order
+		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
+			traverseKid(childrenNode, ms);
+		}
+		return createFinalOutput();
 	}
 
 	public void initTree() {
@@ -140,18 +155,15 @@ public class ExpressionTree {
 	 * @throws CommandException 
 	 * @throws Exception
 	 */
-	public String traverse(Model ms) throws VariableNotFoundException, CommandException {
-		// Execute each commands in order
-		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
-			traverseKid(childrenNode, ms);
+	
+
+
+	private double createFinalOutput() {
+		double output = -1;
+		for (ExpressionTreeNode child : mRootNode.getChildren()){
+			output = (double) child.getOxygen().getContent();
 		}
-		return createFinalOutput();
-	}
-
-
-	private String createFinalOutput() {
-		return mRootNode.getChildren().stream().map(n -> n.getOxygen().getContent().toString())
-				.collect(Collectors.joining(" "));
+		return output;
 	}
 
 	private void traverseKid(ExpressionTreeNode node, Model state)
@@ -218,6 +230,10 @@ public class ExpressionTree {
 			e.printStackTrace();
 		}
 
+	}
+	public ExpressionTreeNode getRootNode()
+	{
+		return mRootNode;
 	}
 
 }
