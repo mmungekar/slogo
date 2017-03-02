@@ -3,7 +3,9 @@ package front_end;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-import back_end.Model;
+import back_end.model.Model;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -14,7 +16,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class View implements ViewInterface {
-	public static final int WINDOW_HEIGHT = 800;
+	public static final int WINDOW_HEIGHT = 700;
 	public static final int WINDOW_WIDTH = 1000;
 	public static final int CANVAS_HEIGHT = 400;
 	public static final int CANVAS_WIDTH = 600;
