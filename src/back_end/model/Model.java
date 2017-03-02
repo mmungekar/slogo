@@ -9,6 +9,7 @@ import java.util.Observable;
 
 import back_end.commands.custom.CustomCommand;
 import back_end.commands.custom.CustomVariable;
+import back_end.exceptions.VariableNotFoundException;
 import back_end.libraries.VariableLibrary;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -25,7 +26,7 @@ public class Model extends Observable {
 	private Color backgroundColor;
 	private Point2D home;
 	private boolean clear;
-	public VariableLibrary mVariableLibrary;
+	private VariableLibrary mVariableLibrary;
 
 	public Model()
 	{
@@ -177,6 +178,14 @@ public class Model extends Observable {
 
 	public Collection<String> getUserDefinedCommands() {
 		return customCommands.keySet();
+	}
+
+	public boolean hasCustomVariable(String parameter) {
+		return mVariableLibrary.hasVariable(parameter);
+	}
+
+	public Double retrieveCustomVariable(String nodeName) throws VariableNotFoundException {
+		return mVariableLibrary.retrieveVariable(nodeName);
 	}
 
 }

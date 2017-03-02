@@ -141,7 +141,7 @@ public class ExpressionTree {
 	}
 
 	private boolean isVariableStored(Input i, Model m) {
-		return m.mVariableLibrary.hasVariable(i.getParameter());
+		return m.hasCustomVariable(i.getParameter());
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class ExpressionTree {
 		return output;
 	}
 
-	private void traverseKid(ExpressionTreeNode node, Model state)
+	private void traverseKid(ExpressionTreeNode node, Model model)
 			throws VariableNotFoundException, CommandException {
 		if (node == null)
 			return;
@@ -176,8 +176,8 @@ public class ExpressionTree {
 			node.setExecuted();
 			return;
 		} else if (isVariable(currInput)) { 
-			if (isVariableStored(currInput, state)) { // Turn a variable into a constant directly
-				Double value = state.mVariableLibrary.retrieveVariable(nodeName);
+			if (isVariableStored(currInput, model)) { // Turn a variable into a constant directly
+				Double value = model.retrieveCustomVariable(nodeName);
 				Oxygen<Double> constantOxy = new Oxygen<>(this.currentLanguage, Constant.CONSTANT_TYPE);
 				constantOxy.convertLight(value.toString());
 				constantOxy.putSubContent(nodeName); // In case we are redefining the same variable again
@@ -187,7 +187,7 @@ public class ExpressionTree {
 			return;
 		} else if (isCommand(currInput)) {
 			for (ExpressionTreeNode kid : node.getChildren()) {
-				traverseKid(kid, state);
+				traverseKid(kid, model);
 			}
 			int paramNum = mCommandLib.getNumParam(nodeName);
 			if (paramNum != node.getChildren().size())
@@ -202,7 +202,7 @@ public class ExpressionTree {
 				System.out.println("Oxygen Content: " + params[i].getContent().toString());
 			}
 			command.setParameters(params);
-			Double value = command.Execute(state);	
+			Double value = command.Execute(model);	
 			Oxygen<Double> valueOxy = new Oxygen<Double>(this.currentLanguage, Constant.CONSTANT_TYPE);
 			valueOxy.convertLight(value.toString());
 			node.setOxygen(valueOxy);
@@ -210,6 +210,7 @@ public class ExpressionTree {
 		}
 	}
 	
+	/*
 	public static void main(String[] args) {
 		ExpressionTree test = new ExpressionTree("English");
 		String s = "MAKE :X 3";
@@ -231,6 +232,7 @@ public class ExpressionTree {
 		}
 
 	}
+	*/
 	public ExpressionTreeNode getRootNode()
 	{
 		return mRootNode;
