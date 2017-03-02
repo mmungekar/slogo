@@ -20,7 +20,7 @@ public class MakeVariable implements CommandInterface<Oxygen>{
 
 	@Override
 	public double Execute(Model model) {
-		model.mVariableLibrary.updateVariable(name, value);
+		model.updateVariable(name, value);
 		System.out.println("New variable created: " + name + " : " + value);
 		return value;
 	}

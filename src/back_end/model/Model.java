@@ -1,12 +1,14 @@
 package back_end.model;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
 import back_end.commands.CustomCommand;
+import back_end.CustomVariable;
 import back_end.libraries.VariableLibrary;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -162,6 +164,20 @@ public class Model extends Observable {
 	public void setCurrentLanguage(String currentLanguage) {
 		this.currentLanguage = currentLanguage;
 		setChangedAndNotifyObservers();
+	}
+
+	public void updateVariable(String name, double value) {
+		mVariableLibrary.updateVariable(name, value);
+		setChangedAndNotifyObservers();
+	}
+	
+	public Collection<CustomVariable> getUserDefinedVariables(){
+		return mVariableLibrary.values();
+	}
+
+	public Collection<String> getUserDefinedCommands() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

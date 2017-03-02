@@ -2,36 +2,31 @@ package back_end.libraries;
 
 import java.util.HashMap;
 
+import back_end.CustomVariable;
 import back_end.exceptions.VariableNotFoundException;
 
-public class VariableLibrary {
-	private HashMap<String, Double> mVariables;
-	
-	public VariableLibrary(){
-		mVariables = new HashMap<>();
-	}
+public class VariableLibrary extends HashMap<String, CustomVariable>{	
 	
 	public boolean hasVariable(String name){
-	    return mVariables.containsKey(name);	
+	    return this.containsKey(name);	
 	}
 	
 	public void insertVariable(String name, Double value){
 		if(name.isEmpty())
 			return;
-		mVariables.put(name, value);
+		this.put(name, new CustomVariable(name, value));
 	}
 	
 	public void updateVariable(String name, Double value){
-		if(mVariables.containsKey(name)){
-			mVariables.remove(name);
+		if(this.containsKey(name)){
+			this.remove(name);
 		}
 		insertVariable(name, value);
 	}
 	
 	public Double retrieveVariable(String name) throws VariableNotFoundException{
-		if(!mVariables.containsKey(name))
+		if(!this.containsKey(name))
 			throw new VariableNotFoundException(name);
-		return mVariables.get(name);
+		return this.get(name).getValue();
 	}
-
 }
