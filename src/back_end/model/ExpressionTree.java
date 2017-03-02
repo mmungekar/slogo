@@ -54,10 +54,6 @@ public class ExpressionTree {
 		}
 		return createFinalOutput();
 	}
-	public HashMap<String, CustomCommand> getCustomCommandContainer()
-	{
-		return mCommandLib.getCustomCommandContainer();
-	}
 
 	public void initTree() {
 		mInputs = new ArrayList<>();

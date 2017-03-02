@@ -15,9 +15,9 @@ public class To implements CommandInterface<Oxygen<ExpressionTree>>
 {	
 	private ExpressionTree mainTree;
 	
-	public void setParameters(Oxygen<ExpressionTree>... mainTree) throws NotEnoughParameterException
+	public void setParameters(Oxygen<ExpressionTree>... data) throws NotEnoughParameterException
 	{
-		this.mainTree = mainTree[0].getContent();
+		mainTree = data[0].getContent();
 	}
 	
 	public double Execute(Model model)
@@ -31,7 +31,7 @@ public class To implements CommandInterface<Oxygen<ExpressionTree>>
 		}
 		try
 		{
-			mainTree.getCustomCommandContainer().put(mainTree.getRootNode().getInput().getParameter(),
+			model.addCustomCommand(mainTree.getRootNode().getInput().getParameter(),
 					new CustomCommand(variableNames, new ExpressionTree(iterator.next(), mainTree.getLanguage())));
 		}
 		catch (Exception e)

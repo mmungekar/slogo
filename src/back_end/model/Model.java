@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
+import back_end.commands.CustomCommand;
 import back_end.libraries.VariableLibrary;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -16,21 +17,31 @@ public class Model extends Observable {
 	public static final String DEFAULT_TURTLE = "turtle.gif";
 	public static final String DEFAULT_LANGUAGE = "English";
 
-	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
+	private Map<Integer, Turtle> turtleContainer;
+	private HashMap<String, CustomCommand> customCommands;
 	private String currentLanguage = DEFAULT_LANGUAGE;
 	private Color backgroundColor;
 	private Point2D home;
 	private boolean clear;
 	public VariableLibrary mVariableLibrary;
 
-	public Model() {
+	public Model()
+	{
+		turtleContainer = new HashMap<Integer, Turtle>();
+		customCommands = new HashMap<String, CustomCommand>();
 		setBackgroundColor(Color.WHITE);
 		mVariableLibrary = new VariableLibrary();
 	}
-
+	
 	private void setChangedAndNotifyObservers() {
 		setChanged();
 		notifyObservers();
+	}
+	
+	public void addCustomCommand(String name, CustomCommand command)
+	{
+		customCommands.put(name, command);
+		setChangedAndNotifyObservers();
 	}
 
 	public void setPos(int ID, double inX, double inY){
