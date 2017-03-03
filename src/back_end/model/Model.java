@@ -1,11 +1,9 @@
 package back_end.model;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Observable;
 
@@ -13,155 +11,60 @@ import back_end.commands.custom.CustomCommand;
 import back_end.commands.custom.CustomVariable;
 import back_end.libraries.VariableLibrary;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Model extends Observable {
-	public static final String IMAGE_DIRECTORY = "resources/images/";
-	public static final String DEFAULT_TURTLE = "turtle.gif";
 	public static final String DEFAULT_LANGUAGE = "English";
 
-	private Map<Integer, Turtle> turtleContainer;
 	private HashMap<String, CustomCommand> customCommands;
 	private String currentLanguage = DEFAULT_LANGUAGE;
 	private Color backgroundColor;
 	private Point2D home;
 	private boolean clear;
 	public VariableLibrary mVariableLibrary;
-	private List<Integer> activeTurtleIDs;
 
-	public Model()
-	{
-		activeTurtleIDs = new ArrayList<Integer>();
-		turtleContainer = new HashMap<Integer, Turtle>();
+	private TurtleMaster myTurtleMaster;
+
+	public Model() {
+		myTurtleMaster = new TurtleMaster();
 		customCommands = new HashMap<String, CustomCommand>();
 		setBackgroundColor(Color.WHITE);
 		mVariableLibrary = new VariableLibrary();
 	}
-	
+
 	private void setChangedAndNotifyObservers() {
 		setChanged();
 		notifyObservers();
 	}
-	
-	public void addCustomCommand(String name, CustomCommand command)
-	{
+
+	public void addCustomCommand(String name, CustomCommand command) {
 		customCommands.put(name, command);
 		setChangedAndNotifyObservers();
 	}
-
-	public void setPos(double inX, double inY){
-		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setPosition(inX, inY));		
-		setChangedAndNotifyObservers();
-	}
-
-	public void setAngle(double inAngle) {
-		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setAngle(inAngle));	
-		
-		setChangedAndNotifyObservers();
-	}
-	
-	public void setPenDown(){
-		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setPenDown());
-		//setChangedAndNotifyObservers();
-	}
-	
-	public void setPenUp(){
-		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setPenUp());
-		//setChangedAndNotifyObservers();
-	}
-	
-	public void setVisible(){
-		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setVisible(true));
-	}
-	
-	public void setInVisible(){
-		activeTurtleIDs.stream().forEach(id -> turtleContainer.get(id).setVisible(false));
-	}
-	
-	
 
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
 		setChangedAndNotifyObservers();
 	}
-	
-	public void changeTurtleImage(Integer ID, File newImageFile) {
-		Image newTurtleImage = new Image(
-				getClass().getClassLoader().getResourceAsStream(IMAGE_DIRECTORY + newImageFile.getName()));
-		turtleContainer.get(ID).changeImage(newTurtleImage);
-		setChangedAndNotifyObservers();
-	}
-	
-	public void sendTurtleHome(){
-		activeTurtleIDs.stream().forEach(id -> {turtleContainer.get(id).setPosition(home); turtleContainer.get(id).dontDrawLine();});
-		setChangedAndNotifyObservers();
-		
-	}
-
-	public void createTurtle() {
-		Integer nextID = Collections.max(turtleContainer.keySet()) + 1;
-		turtleContainer.put(nextID, new Turtle(getDefaultTurtleImage(), home));
-		setChangedAndNotifyObservers();
-	}
 
 	public void setHome(Point2D home) {
 		this.home = home;
-		// create first turtle once home is set
-		turtleContainer.put(1, new Turtle(getDefaultTurtleImage(), home));
-		activeTurtleIDs.add(1);
+		myTurtleMaster.setHome(home);
+		myTurtleMaster.breedTurtle(0);
+		myTurtleMaster.setActiveTurtles(Arrays.asList(0));
 		setChangedAndNotifyObservers();
 	}
-	
-	public void setClear(boolean clear){
+
+	public void setClear(boolean clear) {
 		this.clear = clear;
-	}
-	
-	public boolean isClear(){
-		return this.clear;
-	}
-
-	public double getX(int ID) {
-		return turtleContainer.get(ID).getCenterPosition().getX();
-	}
-
-	public double getY(int ID) {
-		return turtleContainer.get(ID).getCenterPosition().getY();
-	}
-
-	public double getAngle(int ID) {
-		return turtleContainer.get(ID).getAngle();
-	}
-	
-	public boolean isPenDown(int ID){
-		return turtleContainer.get(ID).isPenDown();
 	}
 
 	public Color getBackgroundColor() {
 		return backgroundColor;
 	}
 
-	public Map<Integer, Turtle> getTurtleContainer() {
-		return turtleContainer;
-	}
-	
-	public Point2D getHome(){
+	public Point2D getHome() {
 		return this.home;
-	}
-	
-	public boolean isVisible(int ID){
-		return turtleContainer.get(ID).isVisible();
-	}
-
-	private Image getDefaultTurtleImage() {
-		String imageLocation = IMAGE_DIRECTORY + DEFAULT_TURTLE;
-		Image imageTurtle = new Image(getClass().getClassLoader().getResourceAsStream(imageLocation));
-		return imageTurtle;
-	}
-	
-	@Override
-	public String toString(){
-		return ("X: " + (this.getX(0) - home.getX()) + " Y: " + -1 * (this.getY(0) - home.getY()) + " Angle: " + this.getAngle(0)); 
 	}
 
 	public String getCurrentLanguage() {
@@ -177,8 +80,8 @@ public class Model extends Observable {
 		mVariableLibrary.updateVariable(name, value);
 		setChangedAndNotifyObservers();
 	}
-	
-	public Collection<CustomVariable> getUserDefinedVariables(){
+
+	public Collection<CustomVariable> getUserDefinedVariables() {
 		return mVariableLibrary.values();
 	}
 
@@ -186,4 +89,86 @@ public class Model extends Observable {
 		return customCommands.keySet();
 	}
 
+	public double clearScreen() {
+		double a = myTurtleMaster.clearScreen();
+		setChangedAndNotifyObservers();
+		return a;
+	}
+
+	public void setInVisible() {
+		myTurtleMaster.setVisible(false);
+		setChangedAndNotifyObservers();
+		
+	}
+
+	public double sendTurtleHome() {
+		double a = myTurtleMaster.sendHome();
+		setChangedAndNotifyObservers();
+		return a;
+	}
+
+	public boolean isPenDown() {
+		return myTurtleMaster.isPenDown();
+	}
+
+	public void moveForward(double mag) {
+		myTurtleMaster.moveForward(mag);
+		setChangedAndNotifyObservers();
+	}
+
+	public void rotate(double angle) {
+		myTurtleMaster.rotate(angle);
+		setChangedAndNotifyObservers();		
+	}
+
+	public boolean isVisible() {
+		return myTurtleMaster.isVisible();
+	}
+
+	public void setPenDown() {
+		myTurtleMaster.setPenDown();
+	}
+
+	public void setPenUp() {
+		myTurtleMaster.setPenUp();
+	}
+
+	public void setAngle(double a) {
+		myTurtleMaster.setAngle(a);
+		setChangedAndNotifyObservers();
+	}
+
+	public double setPos(double d, double e) {
+		double a = myTurtleMaster.setPos(d, e);
+		setChangedAndNotifyObservers();
+		return a;
+	}
+
+	public double setTowards(double ox, double oy) {
+		double a = myTurtleMaster.setTowards(ox, oy);
+		setChangedAndNotifyObservers();
+		return a;
+	}
+
+	public void setVisible() {
+		myTurtleMaster.setVisible(true);
+		setChangedAndNotifyObservers();
+	}
+
+	public double getTurtleCount() {
+		return myTurtleMaster.getAllTurtleIDs().size();
+	}
+
+	public double getCoordinate(Integer coordinate) {
+		return myTurtleMaster.getCoordinate(coordinate);
+	}
+	
+	public Iterator<Turtle> getTurtleIterator(){
+		return myTurtleMaster.getTurtles().iterator();
+	}
+
+	public void createTurtle(int newID) {
+		myTurtleMaster.breedTurtle(newID);
+		setChangedAndNotifyObservers();
+	}
 }

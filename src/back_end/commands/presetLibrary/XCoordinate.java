@@ -9,7 +9,7 @@ public class XCoordinate extends SimpleParameterCommand implements CommandInterf
 
 	@Override
 	public double Execute(Model model) {
-		return model.getHome().getX() + model.getX(0);
+		return model.getCoordinate(0);
 	}
 
 }

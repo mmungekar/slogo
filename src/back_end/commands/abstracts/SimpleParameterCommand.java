@@ -1,6 +1,7 @@
 package back_end.commands.abstracts;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import back_end.exceptions.NotEnoughParameterException;
@@ -18,6 +19,6 @@ public abstract class SimpleParameterCommand implements CommandInterface<Oxygen<
 	}
 	
 	protected List<Double> getParameterValue() {
-		return Arrays.asList(parameters);
+		return Collections.unmodifiableList(Arrays.asList(parameters));
 	}
 }

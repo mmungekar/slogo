@@ -10,7 +10,7 @@ public class Forward extends ForwardBackward implements CommandInterface<Oxygen<
 	@Override
 	public double Execute(Model model) {
 		double a = this.getParameterValue().get(0);
-		this.sendToNewPos(model, a);
+		this.moveForward(model, a);
 		return a;
 	}
 

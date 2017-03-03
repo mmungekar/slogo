@@ -12,6 +12,4 @@ public class HideTurtle extends SimpleParameterCommand implements CommandInterfa
 		model.setInVisible();
 		return 0;
 	}
-	
-
 }

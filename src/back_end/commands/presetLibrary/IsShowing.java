@@ -9,7 +9,7 @@ public class IsShowing extends SimpleParameterCommand implements CommandInterfac
 
 	@Override
 	public double Execute(Model model) {
-		return model.isVisible(0) == true ? 1 : 0;
+		return model.isVisible() == true ? 1 : 0;
 	}
 
 }

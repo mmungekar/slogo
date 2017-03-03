@@ -1,5 +1,6 @@
 package front_end;
 
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -35,13 +36,17 @@ public class Canvas extends Rectangle implements Observer {
 	public void update(Observable obs, Object obj) {
 		if (obs == observedModel) {
 			// update all parts of modelstate that canvas has
-			for (Turtle turtle : observedModel.getTurtleContainer().values()){
+			Iterator<Turtle> turtleIterator = observedModel.getTurtleIterator();
+			while(turtleIterator.hasNext()) {
+				Turtle turtle = turtleIterator.next();
 				if(turtle.hasMoved() && turtle.isPenDown()){
 					drawLine(turtle, turtle.getPrevCenterPosition(), turtle.getCenterPosition());
 					turtle.dontDrawLine();
 				}
+				if (!myRoot.getChildren().contains(turtle.getImageView())) {
+					myRoot.getChildren().add(turtle.getImageView());
+				}
 			}
-			addNewTurtles();
 			updateBackground();
 		}
 
@@ -61,12 +66,4 @@ public class Canvas extends Rectangle implements Observer {
 		myRoot.getChildren().add(line);
 	}
 
-	private void addNewTurtles() {
-		for (Turtle turtle : observedModel.getTurtleContainer().values()) {
-			if (!myRoot.getChildren().contains(turtle)) {
-				myRoot.getChildren().add(turtle);
-			}
-		}
-		
-	}
 }

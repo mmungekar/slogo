@@ -12,12 +12,14 @@ public class SetPosition extends SimpleParameterCommand implements CommandInterf
 	public double Execute(Model model) {
 		double x = this.getParameterValue().get(0);
 		double y = this.getParameterValue().get(1);
+		/*
 		double ox = model.getX(0);
 		double oy = model.getY(0);
 		double distance = Math.pow((Math.pow((ox-x), 2) + Math.pow((oy-y), 2)) , 1/2d);
 		
-		model.setPos(model.getHome().getX() + x, model.getHome().getY() - y);
-		return distance;
+		
+		*/
+		return model.setPos(model.getHome().getX() + x, model.getHome().getY() - y);
 	}
 
 }

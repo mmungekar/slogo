@@ -18,10 +18,10 @@ public class Controller {
 	public void start(Stage s) {
 		model = new Model();
 		view = new View(s, model);
+		
 		mInterpreter = new Interpreter();
-
+		
 		view.setEnterListener((String rawUserInput) -> {
-			//System.out.println(model.toString());
 			String message;
 			try {
 				message = String.format(RETURN_PREFIX, mInterpreter.execute(model, rawUserInput));
@@ -29,7 +29,8 @@ public class Controller {
 				message = e.getMessage();
 			}
 			view.setOutput(String.format(OUTPUT_STRING_FORMAT, rawUserInput, message));
-			//System.out.println(model.toString());
 		});
+		
+		
 	}
 }

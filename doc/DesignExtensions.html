@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"> 
+  <meta name="author" content="Robert C. Duvall" />
+  <meta name="robots" content="all" />
+ <link href="/courses/compsci308/spring17/theme/horizontal.css" type="text/css" rel="stylesheet" media="screen" />
+ <link href="/courses/compsci308/spring17/theme/common.css" type="text/css" rel="stylesheet" media="screen" />
+ <link href="/courses/compsci308/spring17/theme/compsci308.css" type="text/css" rel="stylesheet" media="screen" />
+ <link href="/courses/compsci308/spring17/theme/print.css" type="text/css" rel="stylesheet" media="print" />
+  <title>CompSci 308 : Spring 2017</title>
+</head>
+
+<body>
+<div class="contentPane">
+  <div class="header">
+    <table>
+      <tr>
+        <td class="left">CompSci 308<br>Spring 2017</td>
+        <td class="right">Software Design and Implementation</td>
+      </tr>
+    </table>
+  </div>
+	
+  <div class="nav">
+    <ul>
+      <li><a href="../../.">Home</a></li>
+      <li><a href="../../classwork">Calendar</a></li>
+      <li><a class="selected" href="../../assign">Projects</a></li>
+      <li><a href="../../resources">Resources</a></li>
+      <li><a href="http://piazza.com/duke/spring2017/compsci308/home" target="new">Discussion</a></li>
+      <li><a href="../../admin">Policies</a></li>
+    </ul>
+  </div>
+
+  <div class="mainBody">
+
+<h3><a href="index.php">SLogo</a>  : Design Extensions</h3>
+<P>The changes  below are intended to stretch your design further and challenge some of the assumptions made in your initial version. Focus on implementing these changes in such a way as to promote good design in  your program, not simply as   special cases added on without a clear plan. While creating your code for this project, we expect you to follow <a href="checklist.php">this design checklist</a> before pushing your code to Gitlab.</P>
+<p>Specifically the amount of credit you will receive for these features will be in proportion to how clearly it follows the goals of your design. <em>Contorting your main design to add in extra functionality or adding poor code that diminishes the rest of your refactoring efforts will not be rewarded</em>. Thus, a program with fewer features, but plenty of clear paths to easy expansion, is  worth more than a  program with lots of features but no closed classes and no good inheritance hierarchies. In short, to maximize your grade,  implement enough variety in your program to clearly demonstrate that your design supports further such extensions.</p>
+<h4>Basic Extensions</h4>
+<p>In the early days, Logo was run on small, slow machines and thus its
+  environments were given only limited capabilities. <a href="old.gif">There was only a
+  single turtle drawn as a triangle in only one display window to show the
+  turtle's actions</a>. In modern times, <a href="new.png">Logo has been used to run simulations with
+  thousands of turtles and also to make animations</a>. Your job in extending the
+  basic program is to bring your <a href="https://ccl.northwestern.edu/netlogo/">SLogo
+environment from the seventies into this millennium</a>.</p>
+<h5>Front end</h5>
+<p>In general, your environment should provide a variety of ways to interact with the turtle and its attributes and programs the user has written, such as entering text commands, reading commands/preferences from a file, using  buttons or more complex GUI components. Also, since there are so many possible views in this version, users should be able to open or close any view (except the main turtle display).</p>
+<p>Specifically, allow users</p>
+<ul>
+  <li>to see the state of the turtle (i.e., its position, heading, pen up/down, or other parameters affected
+  by the environment)</li>
+  <li>to  see  palettes of images/colors  with numbers (indexes) that can be referred to <a href="commands2_J2W.php">within new SLogo commands</a> (i.e., it should be clear which images/colors are associated with which numbers 
+  so the SLogo language can refer to them in code). At the start, there should be a small default  set of values assigned to numbers to choose from.</li>
+  <li>to set, save, and load workspace preferences (like default background, starting image list, starting number of turtles, starting file to load, command language, etc.)</li>
+  <li>to create multiple <em>workspaces</em> (perhaps as tabs or as separate windows). You can define exactly what a workspace contains but, at the very least, it should have separate turtle display areas, command histories, active variables, and preferences</li>
+  <li>to select active turtles graphically and toggle whether or not to graphically identify the  currently active turtles in a workspace's display window</li>
+  <li>to move the current turtle(s) graphically (at least FD, BK, LT, and RT). <br />
+  Thus there should be a number of different ways to move the turtle in your IDE: interactively entering commands, using  the GUI, and reading commands from a file.</li>
+  <li>to change the current pen's properties graphically (up/down, thickness,  etc.). <br />
+  Thus there should be a number of different ways to change the pen in your IDE: interactively entering commands, using  the GUI, and reading commands from a file.</li>
+</ul>
+<h5>Back end</h5>
+<p>Interpret an extended set of SLogo commands:</p>
+<ul>
+  <li><a href="commands2_J2W.php">recognize these additional commands</a>  (in multiple languages)</li>
+  <li>allow users to save (and later read) a file of valid SLogo functions/variables<br />
+  Thus the user can develop a library of work which, when loaded, are added to the set of valid SLogo commands that can be entered interactively.</li>
+</ul>
+<h4> Challenging Extensions</h4>
+<h5>Front end</h5>
+<ul>
+  <li>animation: animate the turtles' movement (i.e., so users can see the turtle moving forward as it executes FD). Users should be able to control how fast the turtle animates when it performs
+    its actions (at some point, it should be so fast that 
+  animation is not done)
+and  to start, pause, reset, and single step the turtles' performance of commands (even better, highlight commands as they are being run).</li>
+  <li>undo: allow the user to undo/redo the last action(s) done in a workspace (each workspace should have a separate set of commands)</li>
+  <li>debugger:  by stepping into/over commands, users can &quot;debug&quot; their programs (perhaps a small step if you have implemented the animation extension above).  Even better, allow users to change the values of variables while the they are running the program (or  even the code that is currently running!).<br />
+  </li>
+</ul>
+<h5>Back end</h5>
+<ul>
+  <LI>grouping: allow variable number of parameters to procedures where appropriate by using parentheses (e.g., <code>sum</code>, <code>difference</code>, <code>product</code>, <code>and</code>, <code>or</code>, etc.)</LI>
+  <LI>scope: allow dynamic variable scope and local variables</LI>
+  <LI>recursion: allow user defined commands to include recursive calls</LI>
+</ul>
+</div>
+
+<DIV class="footer">
+  <TABLE width="100%">
+    <TR>
+      <TD class="right">
+        <A href="http://creativecommons.org/licenses/by-nc-sa/1.0">
+          <img src="../../images/somerights.png" alt="Copyright 2009" />
+        </A>
+      </TD>
+      <TD>
+        Last modified 02 Mar 2017      </TD>
+      <TD class="left">
+        <A href="http://www.cs.duke.edu/csed/feedback/index.php?course=compsci308">
+          <img src="../../images/suggestion_box.png" alt="Feedback?" />
+        </A>
+      </TD>
+    </TR>
+  </TABLE>
+</DIV>
+
+</div>
+</body>
+</html>

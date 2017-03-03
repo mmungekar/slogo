@@ -10,7 +10,7 @@ public class YCoordinate extends SimpleParameterCommand implements CommandInterf
 
 	@Override
 	public double Execute(Model model) {
-		return model.getHome().getY() - model.getY(0);
+		return model.getCoordinate(1);
 	}
 
 }

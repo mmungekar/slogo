@@ -3,12 +3,8 @@ package back_end.commands.abstracts;
 import back_end.model.Model;
 
 public abstract class ForwardBackward extends SimpleParameterCommand{
-	protected void sendToNewPos(Model model,double mag){
-		double angle = model.getAngle(0);
-		double dx = Math.cos(Math.toRadians(angle)) * mag;
-		double dy = Math.sin(Math.toRadians(angle)) * mag;
-		double x = model.getX(0);
-		double y = model.getY(0);
-		model.setPos(x + dx, y + dy);
+	protected void moveForward(Model model,double mag){
+		model.moveForward(mag);
+		
 	}
 }
