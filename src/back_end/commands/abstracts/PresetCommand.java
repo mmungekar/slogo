@@ -32,7 +32,13 @@ public abstract class PresetCommand implements CommandInterface<ExpressionTree>{
 			throw new NotEnoughParameterException(myTree.getRootNode().getInput().getParameter(), 
 													paramNum, myTree.getRootNode().getChildren().size());
 	}
-	
+	/**
+	 * The method takes in a subtree of a command node and sets its parameters by traversing each child. Only
+	 * once every child has returned a double value will the parameters be set.
+	 * @params model changes the current Model every time a child is traversed
+	 * @params ExpressionTree... ds takes in an array of trees, extracts the first one, and traverses it to obtain
+	 * the necessary parameters
+	 */
 	public void setParameters(Model model, ExpressionTree...ds) throws VariableNotFoundException, CommandException{
 		ExpressionTree myTree = ds[0];
 		extractParams(myTree,model);
