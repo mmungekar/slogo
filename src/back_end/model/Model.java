@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 
+import back_end.commands.CustomCommand;
 import back_end.libraries.VariableLibrary;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -17,6 +18,7 @@ public class Model extends Observable {
 	public static final String DEFAULT_LANGUAGE = "English";
 
 	private Map<Integer, Turtle> turtleContainer = new HashMap<>();
+	private HashMap<String, CustomCommand> customCommands;
 	private String currentLanguage = DEFAULT_LANGUAGE;
 	private Color backgroundColor;
 	private Point2D home;
@@ -28,6 +30,10 @@ public class Model extends Observable {
 		mVariableLibrary = new VariableLibrary();
 	}
 
+	public HashMap<String,CustomCommand> getCustomCommands(){
+		return customCommands;
+	}
+	
 	private void setChangedAndNotifyObservers() {
 		setChanged();
 		notifyObservers();

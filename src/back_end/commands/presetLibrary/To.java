@@ -11,13 +11,15 @@ import back_end.interfaces.CommandInterface;
 import back_end.model.ExpressionTree;
 import back_end.model.ExpressionTreeNode;
 
-public class To implements CommandInterface<Oxygen<ExpressionTree>>
+public class To implements CommandInterface<ExpressionTree>
 {	
 	private ExpressionTree mainTree;
 	
-	public void setParameters(Oxygen<ExpressionTree>... mainTree) throws NotEnoughParameterException
+	public void setParameters(Model model, ExpressionTree... mainTree) throws NotEnoughParameterException
 	{
-		this.mainTree = mainTree[0].getContent();
+		Iterator<ExpressionTreeNode> iter = mainTree[0].getRootNode().getChildren().iterator();
+		ExpressionTree mySubtree = new ExpressionTree(iter.next(), mainTree[0].getLanguage());
+		this.mainTree = mySubtree;
 	}
 	
 	public double Execute(Model model)

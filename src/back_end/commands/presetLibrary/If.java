@@ -9,14 +9,18 @@ import back_end.interfaces.CommandInterface;
 import back_end.model.ExpressionTree;
 import back_end.model.ExpressionTreeNode;
 import back_end.model.Model;
-
+/**
+ * NOTE: THIS IS REALLY THE IMPLEMENTATION FOR IF-ELSE. SORRY.
+ * @author Mina
+ *
+ */
 public class If implements CommandInterface<ExpressionTree> {
 	private ExpressionTree myTree;
 	private Model myModel;
 	
 	@Override
-	public void setParameters(ExpressionTree... os) throws NotEnoughParameterException {
-			myTree = os[0];
+	public void setParameters(Model model, ExpressionTree... trees) throws NotEnoughParameterException {
+			myTree = trees[0];
 		
 	}
 
@@ -25,12 +29,12 @@ public class If implements CommandInterface<ExpressionTree> {
 		Iterator<ExpressionTreeNode> iter = myTree.getRootNode().getChildren().iterator();
 		ExpressionTreeNode firstChild = iter.next();
 		myTree.traverseKid(firstChild,model);
-		if((double)firstChild.getOxygen().getContent()==0){
+		if(firstChild.getOxygen().getReturnValue()==0){
 			iter.next();	
 		}
 		ExpressionTreeNode toBeExecuted = iter.next();
 		myTree.traverseKid(toBeExecuted,model);
-		return (double) (toBeExecuted.getOxygen().getContent());
+		return toBeExecuted.getOxygen().getReturnValue();
 		
 	}
 

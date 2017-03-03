@@ -9,7 +9,7 @@ public class MakeVariable implements CommandInterface<Oxygen>{
     private String name;
     private double value;
 	@Override
-	public void setParameters(Oxygen... os) throws NotEnoughParameterException {
+	public void setParameters(Model model, Oxygen... os) throws NotEnoughParameterException {
 		try {
 			name = (String) os[0].getContent();
 		} catch (ClassCastException ex) {

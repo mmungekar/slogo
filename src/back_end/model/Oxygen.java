@@ -21,6 +21,7 @@ public class Oxygen<T> implements NodeIntermediateInteface<T> {
 
 	private T mContent;
 	private String mSubContent;
+	private double retVal;
 
 	public Oxygen(String language, String type) {
 		mType = type;
@@ -34,6 +35,7 @@ public class Oxygen<T> implements NodeIntermediateInteface<T> {
 		case CONSTANT_TYPE:
 			Double d = Double.parseDouble(light);
 			putContent((T) d);
+			putReturnValue(d);
 			break;
 		case VARIABLE_TYPE:
 			String s = light;
@@ -63,6 +65,14 @@ public class Oxygen<T> implements NodeIntermediateInteface<T> {
 
 	public String getSubContent() {
 		return mSubContent;
+	}
+	
+	public void putReturnValue(Double value) {
+		retVal = value;
+	}
+
+	public Double getReturnValue() {
+		return retVal;
 	}
 
 }
