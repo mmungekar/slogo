@@ -16,5 +16,6 @@ public class PopUpHTML extends Stage{
 		this.setScene(helpScene);
 		URL url = getClass().getResource(htmlFilePath);
 		browser.getEngine().load(url.toExternalForm());
+		System.out.println("hey");
 	}
 }
