@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"> 
+  <meta name="author" content="Robert C. Duvall" />
+  <meta name="robots" content="all" />
+ <link href="/courses/compsci308/spring17/theme/horizontal.css" type="text/css" rel="stylesheet" media="screen" />
+ <link href="/courses/compsci308/spring17/theme/common.css" type="text/css" rel="stylesheet" media="screen" />
+ <link href="/courses/compsci308/spring17/theme/compsci308.css" type="text/css" rel="stylesheet" media="screen" />
+ <link href="/courses/compsci308/spring17/theme/print.css" type="text/css" rel="stylesheet" media="print" />
+  <title>CompSci 308 : Spring 2017</title>
+</head>
+
+<body>
+<div class="contentPane">
+  <div class="header">
+    <table>
+      <tr>
+        <td class="left">CompSci 308<br>Spring 2017</td>
+        <td class="right">Software Design and Implementation</td>
+      </tr>
+    </table>
+  </div>
+	
+  <div class="nav">
+    <ul>
+      <li><a href="../../.">Home</a></li>
+      <li><a href="../../classwork">Calendar</a></li>
+      <li><a class="selected" href="../../assign">Projects</a></li>
+      <li><a href="../../resources">Resources</a></li>
+      <li><a href="http://piazza.com/duke/spring2017/compsci308/home" target="new">Discussion</a></li>
+      <li><a href="../../admin">Policies</a></li>
+    </ul>
+  </div>
+
+  <div class="mainBody">
+
+<h3><a href="index.php">SLogo</a> : Basic Implementation</h3>
+<p>This part of the project is intended to get a basic version of your API working using JavaFX and Gitlab to store your code. Each sub-team should implement their side of the project without regard to the internal workings of the other sub-team's code, using only the agreed upon API to communicate.</p>
+<h4>Specification</h4>
+<h5>Front end</h5>
+<p>Create an environment for  users to experiment with SLogo commands. At the very least, it should allow the user to: </p>
+<ul>
+  <li>enter commands to the turtle interactively by entering <a href="commands.php">text commands</a></li>
+  <li>see the results of the turtle executing commands displayed visually<br />
+    note, the turtle starts in the center of the
+    display which is considered (0, 0).</li>
+  <li>see errors that may result from entered commands in a user friendly way (i.e., not just printed to the console)</li>
+  <li>set a background color for the turtle's display area</li>
+  <li>set an image to use for the turtle<br />
+  </li>
+  <li>set a color to use for the pen</li>
+  <li>see  commands previously run   in the environment (even better, make them directly clickable to execute)</li>
+  <li>see variables currently   available in the environment  (even better, make their values directly clickable to edit)</li>
+  <li>see  user-defined commands currently available in the environment (even better, make them directly clickable to execute)</li>
+  <li>choose the language in which SLogo commands are understood (<a href="languages/">here are a few translations</a>)</li>
+  <li>access an HTML formatted help page<br />
+  it could just be a &quot;command reference&quot;, i.e., the <a href="commands.php">command descriptions given with the assignment</a>, or you could extend it to include features of the GUI</li>
+</ul>
+<h5>Back End</h5>
+<p>Interpret an initial set of  SLogo commands:</p>
+<ul>
+  <li><a href="commands.php">recognize these basic commands</a> (in multiple languages)</li>
+  <li>throw errors that  result from incorrectly entered commands<br />
+  </li>
+</ul>
+
+</div>
+
+<DIV class="footer">
+  <TABLE width="100%">
+    <TR>
+      <TD class="right">
+        <A href="http://creativecommons.org/licenses/by-nc-sa/1.0">
+          <img src="../../images/somerights.png" alt="Copyright 2009" />
+        </A>
+      </TD>
+      <TD>
+        Last modified 13 Feb 2017      </TD>
+      <TD class="left">
+        <A href="http://www.cs.duke.edu/csed/feedback/index.php?course=compsci308">
+          <img src="../../images/suggestion_box.png" alt="Feedback?" />
+        </A>
+      </TD>
+    </TR>
+  </TABLE>
+</DIV>
+
+</div>
+</body>
+</html>
