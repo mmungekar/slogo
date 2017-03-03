@@ -6,6 +6,7 @@ import back_end.model.Model;
 import back_end.overhead.Interpreter;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.VariableNotFoundException;
+import javafx.scene.control.Tab;
 import javafx.stage.Stage;
 
 public class Controller {
@@ -15,9 +16,9 @@ public class Controller {
 	private Model model;
 	private Interpreter mInterpreter;
 
-	public void start(Stage s) {
+	public void start(Tab tab) {
 		model = new Model();
-		view = new View(s, model);
+		view = new View(tab, model);
 		mInterpreter = new Interpreter();
 
 		view.setEnterListener((String rawUserInput) -> {

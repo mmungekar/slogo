@@ -24,12 +24,12 @@ public class If implements CommandInterface<ExpressionTree> {
 	public double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException {
 		Iterator<ExpressionTreeNode> iter = myTree.getRootNode().getChildren().iterator();
 		ExpressionTreeNode firstChild = iter.next();
-		myTree.traverseKid(firstChild,model);
+		//myTree.traverseKid(firstChild,model);
 		if((double)firstChild.getOxygen().getContent()==0){
 			iter.next();	
 		}
 		ExpressionTreeNode toBeExecuted = iter.next();
-		myTree.traverseKid(toBeExecuted,model);
+		//myTree.traverseKid(toBeExecuted,model);
 		return (double) (toBeExecuted.getOxygen().getContent());
 		
 	}

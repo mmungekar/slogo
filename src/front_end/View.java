@@ -7,6 +7,7 @@ import back_end.model.Model;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -36,31 +37,29 @@ public class View implements ViewInterface {
 	private Color canvasColor = Color.WHITE;
 	private String currentLanguage;
 
-	public View(Stage s, Model model) {
+	public View(Tab tab, Model model) {
 		Group root = new Group();
-		createViewComponents(s, model, root);
+		createViewComponents(model, root);
 		
 		this.setLanguage(model.getCurrentLanguage());
 
-		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND_COLOR);
+		//Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND_COLOR);
 
-		s.setTitle("SLogo Team 16");
-		s.setScene(scene);
-		s.show();
 		
+		tab.setContent(root);
 		model.setHome(HOME); // also creates first turtle
 	}
 
-	private void createViewComponents(Stage s, Model model, Group root) {
+	private void createViewComponents(Model model, Group root) {
 		createCanvas(model, root);
 		createTerminal(root);
 		createUserDefinedEntries(model, root);
-		createSideBar(s, model, root);
+		createSideBar(model, root);
 		
 	}
 
-	private void createSideBar(Stage s, Model model, Group root) {
-		sideBar = new SideBar(s, model, root, this);
+	private void createSideBar(Model model, Group root) {
+		sideBar = new SideBar(model, root, this);
 		sideBar.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
 		sideBar.setLayoutY(DEFAULT_SPACING);
 		sideBar.setSpacing(DEFAULT_SPACING / 2);

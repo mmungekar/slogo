@@ -70,13 +70,15 @@ public class SideBar extends VBox implements Observer{
 	private Button sendHome;
 	private Button fileChoose;
 
-	public SideBar(Stage s, Model model, Group root, View view) {
+	public SideBar(Model model, Group root, View view) {
 		this.myView = view;
 		this.model = model;
 		model.addObserver(this);
 
 		this.getChildren().addAll(createHelpButton(), createLanguageDropDown(), createBackgroundColorSelectionTool(),
-				createClearLinesButton(root), addTurtleButton(), createTurtleSpecficCommands(s));
+				createClearLinesButton(root), addTurtleButton()
+				//, createTurtleSpecficCommands(s)
+				);
 
 	}
 
@@ -297,22 +299,24 @@ public class SideBar extends VBox implements Observer{
 
 	void refreshGUITitles(ResourceBundle resource) {
 		helpButton.setText("Help");
-		turtleIDs.setPromptText(resource.getString("TurtleIDs"));
-		fileChoose.setText(resource.getString("ChooseTurtleImage"));
+		clearLines.setText("Clear All Lines");
 		backgroundColors.setPromptText(resource.getString("SelectBackground"));
-		penColors.setPromptText("Select Pen Color");
 		languageDropDown.setPromptText(resource.getString("SetLanguage"));
 		turtleCreation.setText(resource.getString("AddNewTurtle"));
+		/*
 		penDown.setText("Pen Down");
 		penUp.setText("Pen Up");
-		clearLines.setText("Clear All Lines");
+		penColors.setPromptText("Select Pen Color");
 		sendHome.setText("Send Home");
+		turtleIDs.setPromptText(resource.getString("TurtleIDs"));
+		fileChoose.setText(resource.getString("ChooseTurtleImage"));
+		*/
 	}
 
 	@Override
 	public void update(Observable obs, Object obj) {
 		if (obs == model) {
-			updateTurtleSelection();
+			//updateTurtleSelection();
 		}
 	}
 }
