@@ -25,7 +25,6 @@ public class ExpressionTreeNode {
 	private Oxygen<?> mOxygen;
 	private ExpressionTreeNode myParent;
 	private List<ExpressionTreeNode> myChildren;
-	private boolean mExecuted;
 	private String language;
 	
 	/**
@@ -42,7 +41,6 @@ public class ExpressionTreeNode {
 	 */
 	public ExpressionTreeNode(String language, Input x, ExpressionTreeNode parent) throws CommandException {
 		myChildren = new ArrayList<ExpressionTreeNode>();
-		mExecuted = false;
 		myParent = parent;
 		mInput = x;
 		this.language = language;
@@ -85,11 +83,6 @@ public class ExpressionTreeNode {
 		return mInput;
 	}
 
-	
-	public void setExecuted() {
-		mExecuted = true;
-	}
-	
 	/**
 	 * Creates a copy of the input node and all its children
 	 * @param node takes in an input node

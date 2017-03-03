@@ -1,11 +1,12 @@
 package back_end.commands.presetLibrary;
 
+import back_end.model.ExpressionTree;
 import back_end.model.Model;
 import back_end.model.Oxygen;
 import back_end.commands.abstracts.ForwardBackward;
 import back_end.interfaces.CommandInterface;
 
-public class Backward extends ForwardBackward implements CommandInterface<Oxygen<Double>> {
+public class Backward extends ForwardBackward implements CommandInterface<ExpressionTree> {
 
 	@Override
 	public double Execute(Model model) {

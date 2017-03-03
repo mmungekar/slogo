@@ -27,7 +27,7 @@ public class CustomCommand implements CommandInterface<Oxygen<Double>>
 		this.commandTree = commandTree;
 	}
 	
-	public void setParameters(Oxygen<Double>...ds)
+	public void setParameters(Model model, Oxygen<Double>...ds)
 	{
 		parameters = new Double[ds.length];
 		for(int i = 0; i < ds.length ; i++){

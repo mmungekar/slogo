@@ -1,6 +1,7 @@
 package back_end.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,8 +41,15 @@ public class ExpressionTree {
 	}
 	public ExpressionTree(ExpressionTreeNode node, String lang)
 	{
-		super();
+		this(lang);
 		mRootNode = node;
+	}
+	public String getLanguage()
+	{
+		return currentLanguage;
+	}
+	public ExpressionTreeNode getRootNode() {
+		return this.mRootNode;
 	}
 
 	public double traverse(Model ms) throws CommandException, VariableNotFoundException {
@@ -49,7 +57,12 @@ public class ExpressionTree {
 		for (ExpressionTreeNode childrenNode : mRootNode.getChildren()) {
 			traverseKid(childrenNode, ms);
 		}
-		return createFinalOutput();
+		return createFinalOutput(mRootNode);
+	}
+	
+	public HashMap<String, CustomCommand> getCustomCommandContainer()
+	{
+		return mCommandLib.getCustomCommandContainer();
 	}
 
 	public void initTree() {
@@ -90,7 +103,6 @@ public class ExpressionTree {
 				System.out.println("Input: " + input.getParameter());
 				currentNode = buildBranch(input, currentNode);
 				System.out.println("Parent: " + currentNode.getParent().getInput().getParameter());
-				System.out.println();
 			}
 			return mRootNode;
 		} catch (Exception e) {
@@ -113,19 +125,28 @@ public class ExpressionTree {
 			if (currNode == mRootNode)
 				return mRootNode;
 			currNode = currNode.getParent();
-			// System.out.println("Parent Node: "+
-			// currNode.getInput().getParameter());
 		}
+		currNode = checkFinishedList(currNode, inputNode);
 		inputNode.setParent(currNode);
 		currNode.getChildren().add(inputNode);
 		currNode = inputNode;
 		return currNode;
 	}
 
+	private ExpressionTreeNode checkFinishedList(ExpressionTreeNode currNode, ExpressionTreeNode inputNode) {
+		if (isListEnd(inputNode.getInput())) {
+			currNode = currNode.getParent();
+			return currNode;
+		}
+		inputNode.setParent(currNode);
+		currNode.getChildren().add(inputNode);
+		currNode = inputNode;
+		return currNode;
+	}
 	
 	private boolean isChildrenFull(ExpressionTreeNode node) throws UnrecognizedCommandException {
 		return node != mRootNode && (isConstant(node.getInput()) || (isVariable(node.getInput()))
-				|| mCommandLib.getNumParam(node.getInput().getParameter()) == node.getChildren().size());
+				|| (isCommand(node.getInput())&&mCommandLib.getNumParam(node.getInput().getParameter()) == node.getChildren().size()));
 	}
 
 	private boolean isCommand(Input i) {
@@ -143,6 +164,12 @@ public class ExpressionTree {
 	private boolean isVariableStored(Input i, Model m) {
 		return m.mVariableLibrary.hasVariable(i.getParameter());
 	}
+	private boolean isListStart(Input i) {
+		return i.getType().equals(Constant.LISTSTART_TYPE);
+	}
+	private boolean isListEnd(Input i) {
+		return i.getType().equals(Constant.LISTEND_TYPE);
+	}
 
 	/**
 	 * Given an already-built ExpressionTree, we traverse it using depth first
@@ -158,59 +185,74 @@ public class ExpressionTree {
 	
 
 
-	private double createFinalOutput() {
+	private double createFinalOutput(ExpressionTreeNode myRoot) {
 		double output = -1;
-		for (ExpressionTreeNode child : mRootNode.getChildren()){
-			output = (double) child.getOxygen().getContent();
+		for (ExpressionTreeNode child : myRoot.getChildren()){
+			output = (double) child.getOxygen().getReturnValue();
 		}
 		return output;
 	}
 
-	private void traverseKid(ExpressionTreeNode node, Model state)
+	public void traverseKid(ExpressionTreeNode node, Model state)
 			throws VariableNotFoundException, CommandException {
-		if (node == null)
-			return;
+		if (node == null){
+			return;}
+		checkListStart(state, node);
 		Input currInput = node.getInput();
 		String nodeName = currInput.getParameter();
 		if (isConstant(currInput)) {
-			node.setExecuted();
 			return;
-		} else if (isVariable(currInput)) { 
+		} 
+		else if(isVariable(currInput)) { 
 			if (isVariableStored(currInput, state)) { // Turn a variable into a constant directly
 				Double value = state.mVariableLibrary.retrieveVariable(nodeName);
 				Oxygen<Double> constantOxy = new Oxygen<>(this.currentLanguage, Constant.CONSTANT_TYPE);
 				constantOxy.convertLight(value.toString());
+				constantOxy.putReturnValue(value);
 				constantOxy.putSubContent(nodeName); // In case we are redefining the same variable again
 				node.setOxygen(constantOxy);
 			}
-			node.setExecuted();
 			return;
 		} else if (isCommand(currInput)) {
-			for (ExpressionTreeNode kid : node.getChildren()) {
-				traverseKid(kid, state);
-			}
-			int paramNum = mCommandLib.getNumParam(nodeName);
-			if (paramNum != node.getChildren().size())
-				throw new NotEnoughParameterException(currInput.getParameter(), paramNum, node.getChildren().size());
-
-			// Input the correct type of inputs to the command in the TreeNode
-			CommandInterface command = mCommandLib.getCommand(nodeName);
-			Oxygen[] params = new Oxygen[paramNum];
-			Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
-			for (int i = 0; i < params.length; i++) {
-				params[i] = iter.next().getOxygen();
-				System.out.println("Oxygen Content: " + params[i].getContent().toString());
-			}
-			command.setParameters(params);
-			Double value = command.Execute(state);	
-			Oxygen<Double> valueOxy = new Oxygen<Double>(this.currentLanguage, Constant.CONSTANT_TYPE);
-			valueOxy.convertLight(value.toString());
-			node.setOxygen(valueOxy);
-			node.setExecuted();
+			libraryLookUp(node, state);
 		}
 	}
 	
-	public static void main(String[] args) {
+	private void nodeExecute(ExpressionTreeNode node, Model state, CommandInterface command)
+			throws CommandException, VariableNotFoundException {
+		Double value = command.Execute(state);	
+		node.getOxygen().putReturnValue(value);
+	}
+	
+	private void libraryLookUp(ExpressionTreeNode node, Model state) throws CommandException, VariableNotFoundException{
+		CommandInterface command = null;
+		try{
+			 command = mCommandLib.getCommand(node.getInput().getParameter());
+		}
+		catch(CommandException e){
+			if(state.getCustomCommands().containsKey(node.getInput().getParameter())){
+				command = state.getCustomCommands().get(node.getInput().getParameter());	
+			} else {
+				throw new UnrecognizedCommandException(node.getInput().getParameter());
+			}
+		}
+		ExpressionTree [] arr = new ExpressionTree[1];
+		arr[0]=new ExpressionTree(node,this.getLanguage());
+		command.setParameters(state, arr);
+		nodeExecute(node, state, command);
+	}
+		
+	private void checkListStart(Model state, ExpressionTreeNode node) throws CommandException, VariableNotFoundException {
+		if (isListStart(node.getInput())) {
+			for (ExpressionTreeNode kid : node.getChildren()) {
+				traverseKid(kid, state);
+			}
+			Double value = createFinalOutput(node);	
+			node.getOxygen().putReturnValue(value);
+		}
+	}
+	
+	/*public static void main(String[] args) {
 		ExpressionTree test = new ExpressionTree("English");
 		String s = "MAKE :X 3";
 		String d = "FD :X";
@@ -228,12 +270,8 @@ public class ExpressionTree {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 
-	}
-	public ExpressionTreeNode getRootNode()
-	{
-		return mRootNode;
-	}
+	}*/
 
 }

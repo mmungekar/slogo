@@ -34,6 +34,10 @@ public class Model extends Observable {
 		setBackgroundColor(Color.WHITE);
 		mVariableLibrary = new VariableLibrary();
 	}
+
+	public HashMap<String,CustomCommand> getCustomCommands(){
+		return customCommands;
+	}
 	
 	private void setChangedAndNotifyObservers() {
 		setChanged();
