@@ -1,24 +1,42 @@
 package front_end;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
+import back_end.CustomVariable;
+import back_end.model.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
+import javafx.util.converter.DoubleStringConverter;
 
-public class UserDefinedEntries extends TabPane {
-	public static final ObservableList<String> customVariables = FXCollections.observableArrayList();
-	public static final ObservableList<String> customCommands = FXCollections.observableArrayList();
+public class UserDefinedEntries extends TabPane implements Observer {
+	private ObservableList<CustomVariable> customVariables = FXCollections.observableArrayList();
+	private ObservableList<String> customCommands = FXCollections.observableArrayList();
 	private View myView;
 
 	private Tab tabCommands;
 	private Tab tabVariables;
+	private TableView<CustomVariable> tableVariables;
 
-	public UserDefinedEntries(View view) {
+	private Model myModel;
+
+	public UserDefinedEntries(Model model, View view) {
+		this.myModel = model;
+		model.addObserver(this);
+
 		tabCommands = new Tab();
 		tabCommands.setContent(createCommandView());
 
@@ -31,26 +49,30 @@ public class UserDefinedEntries extends TabPane {
 		this.myView = view;
 	}
 
-	/*
-	 * I know this is repeated code. The createVariableView method will be
-	 * changed once I figure out how to make it editable.
-	 * 
-	 * TODO: Make values in this editable, not executable
-	 */
-	private ListView<String> createVariableView() {
-		/*
-		 * TableView table = new TableView(); TableColumn variableNameCol = new
-		 * TableColumn("Name"); TableColumn variableValueCol = new
-		 * TableColumn("Value"); variableNameCol.setEditable(false);
-		 * variableValueCol.setEditable(true);
-		 */
+	private Node createVariableView() {
+		// http://docs.oracle.com/javafx/2/ui_controls/table-view.htm#CJAGDAHE
+		// http://stackoverflow.com/questions/20020037/editing-a-number-cell-in-a-tableview
+		tableVariables = new TableView<CustomVariable>();
+		tableVariables.setEditable(true);
+		TableColumn<CustomVariable, String> variableNameCol = new TableColumn<CustomVariable, String>("Name");
+		variableNameCol.setCellValueFactory(new PropertyValueFactory<CustomVariable, String>("Name"));
 
-		ListView<String> myListView = new ListView<String>();
-		myListView.setItems(customVariables);
-		myListView.setPrefWidth(150);
-		myListView.setPrefHeight(175);
-		setClickActionOnCustomListView(myListView); // this will be replaced
-		return myListView;
+		TableColumn<CustomVariable, Double> variableValueCol = new TableColumn<CustomVariable, Double>("Value");
+		variableValueCol.setCellValueFactory(new PropertyValueFactory<CustomVariable, Double>("Value"));
+		variableValueCol
+				.setCellFactory(TextFieldTableCell.<CustomVariable, Double>forTableColumn(new DoubleStringConverter()));
+		variableValueCol.setOnEditCommit(new EventHandler<CellEditEvent<CustomVariable, Double>>() {
+			@Override
+			public void handle(CellEditEvent<CustomVariable, Double> t) {
+				((CustomVariable) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+						.setValue(t.getNewValue());
+			}
+		});
+
+		tableVariables.getColumns().addAll(variableNameCol, variableValueCol);
+		tableVariables.setItems(customVariables);
+
+		return tableVariables;
 	}
 
 	private ListView<String> createCommandView() {
@@ -89,5 +111,22 @@ public class UserDefinedEntries extends TabPane {
 		tabVariables.setText(resource.getString("CustomVariables"));
 		tabCommands.setText(resource.getString("CustomCommands"));
 
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (myModel == o) {
+			customVariables = FXCollections.observableArrayList(myModel.getUserDefinedVariables());
+			// customCommands =
+			// FXCollections.observableArrayList(myModel.getUserDefinedCommands());
+			updateVisualLibraries();
+		}
+
+	}
+
+	private void updateVisualLibraries() {
+		
+		//tabCommands.getContent()).setItems(customCommands);
+		tableVariables.setItems(customVariables);
 	}
 }

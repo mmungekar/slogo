@@ -4,8 +4,6 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 import back_end.model.Model;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -56,7 +54,7 @@ public class View implements ViewInterface {
 	private void createViewComponents(Stage s, Model model, Group root) {
 		createCanvas(model, root);
 		createTerminal(root);
-		createUserDefinedEntries(root);
+		createUserDefinedEntries(model, root);
 		createSideBar(s, model, root);
 		
 	}
@@ -69,8 +67,8 @@ public class View implements ViewInterface {
 		root.getChildren().add(sideBar);
 	}
 
-	private void createUserDefinedEntries(Group root) {
-		userDefinedEntries = new UserDefinedEntries(this);
+	private void createUserDefinedEntries(Model model, Group root) {
+		userDefinedEntries = new UserDefinedEntries(model, this);
 		userDefinedEntries.setLayoutY(WINDOW_HEIGHT - 350);
 		userDefinedEntries.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
 		userDefinedEntries.setPrefHeight(350 - DEFAULT_SPACING);

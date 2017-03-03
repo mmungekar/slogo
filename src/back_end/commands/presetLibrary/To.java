@@ -33,8 +33,8 @@ public class To implements CommandInterface<ExpressionTree>
 		}
 		try
 		{
-			mainTree.getCustomCommandContainer().put(mainTree.getRootNode().getInput().getParameter(),
-					new CustomCommand(variableNames, new ExpressionTree(iterator.next(), mainTree.getLanguage())));
+			model.addCustomCommand(mainTree.getRootNode().getInput().getParameter(),
+					new CustomCommand(variableNames, new ExpressionTree(iterator.next(), model.getCurrentLanguage())));
 		}
 		catch (Exception e)
 		{

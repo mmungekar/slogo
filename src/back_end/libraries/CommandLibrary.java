@@ -19,8 +19,6 @@ public class CommandLibrary {
 	public static final String PARAMETER_DIRECTORY = "resources/parameters/";
 	public static final String COMMAND_PREFIX = "back_end.commands.presetLibrary.";
 	private ProgramParser mParser;
-	private HashMap<String, CustomCommand> customCommands;
-	
 	private String currentLanguage;	
 	
 
@@ -31,7 +29,7 @@ public class CommandLibrary {
 
 	public void buildLib() {
 		commandNames = new ArrayList<String>();
-		customCommands = new HashMap<String, CustomCommand>();
+
 		resource = ResourceBundle.getBundle(LANGUAGE_DIRECTORY + this.currentLanguage);
 		presource = ResourceBundle.getBundle(PARAMETER_DIRECTORY + "Parameter");
 		mParser = new ProgramParser();
@@ -39,7 +37,6 @@ public class CommandLibrary {
 		for (String x : resource.keySet()) {
 			commandNames.add(x);
 		}
-		customCommands = new HashMap<String, CustomCommand>();
 	}
 
 	public CommandInterface getCommand(String command) throws CommandException {
@@ -48,16 +45,10 @@ public class CommandLibrary {
 			Class<?> clazz = Class.forName(COMMAND_PREFIX.concat(official));
 			return (CommandInterface) clazz.newInstance();
 		} catch (ClassNotFoundException ex) {
-			if (customCommands.containsKey(command)) return customCommands.get(command);
-			else throw new UnrecognizedCommandException(command);
+			 throw new UnrecognizedCommandException(command);
 		} catch (InstantiationException | IllegalAccessException ex) {
 			throw new InitializationException(command);
 		}
-	}
-	
-	public HashMap<String, CustomCommand> getCustomCommandContainer()
-	{
-		return customCommands;
 	}
 	
 	public int getNumParam(String command) throws UnrecognizedCommandException {

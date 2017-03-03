@@ -45,7 +45,7 @@ import javafx.util.Callback;
 public class SideBar extends VBox implements Observer{
 	public static final String PLEASE_SELECT_PROPER_IMG_FILE = "Please select a %s file for the image of the Turtle";
 	public static final String PLEASE_SELECT_A_TURTLE = "Please Select a Turtle";
-	public static final String RESOURCES_MISC_HELP_HTML = "/resources/misc/help.html";
+	public static final List<String> RESOURCES_MISC_HELP_HTML = Arrays.asList("/resources/misc/basicCommands.html", "/resources/misc/extendedCommands.html");
 	public static final String IMAGE_FILE_DIRECTORY = "src/resources/images/";
 	public static final String IMAGE_EXTENSION = ".gif";
 	private ObservableList<String> languages = FXCollections.observableArrayList("Chinese", "English", "French", "German", "Italian", "Portuguese", "Russian", "Spanish");
