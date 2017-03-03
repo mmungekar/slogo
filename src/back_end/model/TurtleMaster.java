@@ -215,10 +215,9 @@ public class TurtleMaster {
 	}
 
 	private int findLowestIDnotTaken() {
-		int newID = 0;
-		int lowID = turtleContainer.keySet().stream().min(Integer::min).get();
-		while(newID == lowID){
-			lowID += 1;
+		int newID = 1;
+		while(turtleContainer.keySet().contains(newID)){
+			newID += 1;
 		}
 		return newID;
 	}
