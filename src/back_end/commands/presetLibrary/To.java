@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import back_end.model.Model;
-import back_end.model.Oxygen;
-import back_end.commands.CustomCommand;
+import back_end.commands.custom.CustomCommand;
 import back_end.exceptions.NotEnoughParameterException;
 import back_end.interfaces.CommandInterface;
 import back_end.model.ExpressionTree;
