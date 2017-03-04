@@ -5,13 +5,11 @@ import java.util.function.Consumer;
 
 import back_end.model.Model;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
-import javafx.scene.Scene;
+import javafx.geometry.Pos;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 
 public class View implements ViewInterface {
 	public static final int WINDOW_HEIGHT = 800;
@@ -20,81 +18,60 @@ public class View implements ViewInterface {
 	public static final int CANVAS_WIDTH = 600;
 	public static final Color BACKGROUND_COLOR = Color.GREY;
 	public static final int DEFAULT_SPACING = 30;
-	public static final Point2D HOME = new Point2D(CANVAS_WIDTH / 2 + DEFAULT_SPACING,
-			CANVAS_HEIGHT / 2 + DEFAULT_SPACING);
+	public static final Point2D HOME = new Point2D(CANVAS_WIDTH / 2,
+			CANVAS_HEIGHT / 2);
 	public static final String LANGUAGE_DIRECTORY = "resources/languages/";
-
-	private Consumer<String> onMessageReceivedHandler;
-	//private Consumer<String> languageHandler;
 
 	
 	private Terminal terminal;
-	private Rectangle canvas;
-	private VBox sideBar;
+	private Canvas canvas;
+	private ToolBarController toolBar;
 	private TabPane userDefinedEntries;
-	
-	private Color canvasColor = Color.WHITE;
 	private String currentLanguage;
 
-	public View(Stage s, Model model) {
-		Group root = new Group();
-		createViewComponents(s, model, root);
+	public View(Tab tab, Model model)
+	{
+		BorderPane root = new BorderPane();
+		createViewComponents(model, root);
+		setLanguage(model.getCurrentLanguage());
 		
-		this.setLanguage(model.getCurrentLanguage());
-
-		Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT, BACKGROUND_COLOR);
-
-		s.setTitle("SLogo Team 16");
-		s.setScene(scene);
-		s.show();
-		
+		tab.setContent(root);
 		model.setHome(HOME); // also creates first turtle
 	}
 
-	private void createViewComponents(Stage s, Model model, Group root) {
+	private void createViewComponents(Model model, BorderPane root)
+	{
 		createCanvas(model, root);
 		createTerminal(root);
 		createUserDefinedEntries(model, root);
-		createSideBar(s, model, root);
+		createToolBar(model, root);
 		
 	}
 
-	private void createSideBar(Stage s, Model model, Group root) {
-		sideBar = new SideBar(s, model, root, this);
-		sideBar.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
-		sideBar.setLayoutY(DEFAULT_SPACING);
-		sideBar.setSpacing(DEFAULT_SPACING / 2);
-		root.getChildren().add(sideBar);
+	private void createToolBar(Model model, BorderPane root)
+	{
+		toolBar = new ToolBarController(model, root);
 	}
 
-	private void createUserDefinedEntries(Model model, Group root) {
+	private void createUserDefinedEntries(Model model, BorderPane root) {
 		userDefinedEntries = new UserDefinedEntries(model, this);
-		userDefinedEntries.setLayoutY(WINDOW_HEIGHT - 350);
-		userDefinedEntries.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
-		userDefinedEntries.setPrefHeight(350 - DEFAULT_SPACING);
-		root.getChildren().add(userDefinedEntries);
+		root.setRight(userDefinedEntries);
 	}
 
-	private void createCanvas(Model model, Group root) {
-		canvas = new Canvas(model, root);
-		canvas.setX(DEFAULT_SPACING);
-		canvas.setY(DEFAULT_SPACING);
+	private void createCanvas(Model model, BorderPane root) {
+		canvas = new Canvas(model);
 		canvas.setWidth(CANVAS_WIDTH);
 		canvas.setHeight(CANVAS_HEIGHT);
-		canvas.setFill(canvasColor);
-		root.getChildren().add(canvas);
+		root.setCenter(canvas.getRoot());
 	}
 
-	private void createTerminal(Group root) {
+	private void createTerminal(BorderPane root) {
 		terminal = new Terminal();
-		terminal.setSpacing(DEFAULT_SPACING);
-		terminal.setLayoutY(WINDOW_HEIGHT - 350);
-		terminal.setLayoutX(40);
-		root.getChildren().add(terminal);
+		BorderPane.setAlignment(terminal, Pos.BOTTOM_RIGHT);
+		root.setBottom(terminal);
 	}
 	
 	public void setEnterListener(Consumer<String> action) {
-		this.onMessageReceivedHandler = action;
 		terminal.setEnterListener(action);
 
 	}
@@ -110,7 +87,7 @@ public class View implements ViewInterface {
 
 	private void refreshGUITitles(ResourceBundle resource) {
 		terminal.refreshGUITitles(resource);
-		((SideBar) sideBar).refreshGUITitles(resource);
+		//((SideBar) sideBar).refreshGUITitles(resource);
 		((UserDefinedEntries) userDefinedEntries).refreshGUITitles(resource);
 	}
 
@@ -121,9 +98,6 @@ public class View implements ViewInterface {
 	}
 	*/
 
-	public void changeBackgroundColor(Color newColor) {
-		canvas.setFill(newColor);
-	}
 
 	public void setOutput(String message) {
 		terminal.setOutputText(message);
@@ -140,6 +114,11 @@ public class View implements ViewInterface {
 	public void submitInput(String item) {
 		terminal.setText(item);
 		terminal.submitInput();
+	}
+
+	public void setNewTabButton(Runnable r)
+	{
+		toolBar.setNewTabButton(r);
 	}
 
 

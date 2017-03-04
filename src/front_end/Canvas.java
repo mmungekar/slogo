@@ -7,28 +7,34 @@ import back_end.model.Model;
 import back_end.model.Turtle;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
-public class Canvas extends Rectangle implements Observer {
+public class Canvas implements Observer {
 	public static final int arc = 25;
 
-	private Group myRoot;
 	private Model observedModel = null;
+	private Rectangle rectangle;
+	private Group myRoot;
 
-	public Canvas(Model model, Group root) {
+	public Canvas(Model model)
+	{
+		myRoot = new Group();
 		this.observedModel = model;
-		this.myRoot = root;
-		formatBorder();
+		addRectangle();
 		model.addObserver(this);
 	}
 
-	private void formatBorder() {
-		this.setStroke(Color.BLACK);
-		this.setStrokeWidth(10);
-		this.setArcHeight(arc);
-		this.setArcWidth(arc);
+	private void addRectangle() {
+		rectangle = new Rectangle();
+		rectangle.setStroke(Color.BLACK);
+		rectangle.setStrokeWidth(10);
+		rectangle.setArcHeight(arc);
+		rectangle.setArcWidth(arc);
+		updateBackground();
+		myRoot.getChildren().add(rectangle);
 	}
 
 	@Override
@@ -47,8 +53,9 @@ public class Canvas extends Rectangle implements Observer {
 
 	}
 
-	private void updateBackground() {
-		this.setFill(observedModel.getBackgroundColor());
+	private void updateBackground()
+	{
+		rectangle.setFill(observedModel.getBackgroundColor());
 	}
 
 	private void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {
@@ -68,5 +75,20 @@ public class Canvas extends Rectangle implements Observer {
 			}
 		}
 		
+	}
+
+	public void setWidth(int canvasWidth)
+	{
+		rectangle.setWidth(canvasWidth);
+	}
+
+	public void setHeight(int canvasHeight)
+	{
+		rectangle.setHeight(canvasHeight);
+	}
+
+	public Node getRoot()
+	{
+		return myRoot;
 	}
 }
