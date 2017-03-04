@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import back_end.model.Model;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
@@ -54,9 +55,6 @@ public class View implements ViewInterface {
 
 	private void createUserDefinedEntries(Model model, BorderPane root) {
 		userDefinedEntries = new UserDefinedEntries(model, this);
-		userDefinedEntries.setLayoutY(WINDOW_HEIGHT - 350);
-		userDefinedEntries.setLayoutX(CANVAS_WIDTH + 3 * DEFAULT_SPACING);
-		userDefinedEntries.setPrefHeight(350 - DEFAULT_SPACING);
 		root.setRight(userDefinedEntries);
 	}
 
@@ -69,6 +67,7 @@ public class View implements ViewInterface {
 
 	private void createTerminal(BorderPane root) {
 		terminal = new Terminal();
+		BorderPane.setAlignment(terminal, Pos.BOTTOM_RIGHT);
 		root.setBottom(terminal);
 	}
 	
