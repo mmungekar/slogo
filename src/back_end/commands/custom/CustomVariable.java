@@ -1,4 +1,4 @@
-package back_end;
+package back_end.commands.custom;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;

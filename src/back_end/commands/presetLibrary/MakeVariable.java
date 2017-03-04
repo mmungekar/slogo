@@ -5,7 +5,7 @@ import back_end.interfaces.CommandInterface;
 import back_end.model.Model;
 import back_end.model.Oxygen;
 
-public class MakeVariable implements CommandInterface<Oxygen>{
+public class MakeVariable implements CommandInterface<ExpressionTree>{
     private String name;
     private double value;
 	@Override
