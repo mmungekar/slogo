@@ -188,7 +188,6 @@ public class SideBar extends VBox implements Observer{
 
 		backgroundColors.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
-				myView.changeBackgroundColor(Color.web(new_val));
 				model.setBackgroundColor(Color.web(new_val));
 			}
 		});

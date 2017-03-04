@@ -18,10 +18,11 @@ public class Model extends Observable {
 	public static final String IMAGE_DIRECTORY = "resources/images/";
 	public static final String DEFAULT_TURTLE = "turtle.gif";
 	public static final String DEFAULT_LANGUAGE = "English";
+	private static final Color DEFAULT_BACKGROUND_COLOR = Color.WHITE;
 
 	private Map<Integer, Turtle> turtleContainer;
 	private HashMap<String, CustomCommand> customCommands;
-	private String currentLanguage = DEFAULT_LANGUAGE;
+	private String currentLanguage;
 	private Color backgroundColor;
 	private Point2D home;
 	private boolean clear;
@@ -33,6 +34,8 @@ public class Model extends Observable {
 		customCommands = new HashMap<String, CustomCommand>();
 		setBackgroundColor(Color.WHITE);
 		mVariableLibrary = new VariableLibrary();
+		currentLanguage = DEFAULT_LANGUAGE;
+		backgroundColor = DEFAULT_BACKGROUND_COLOR;
 	}
 	
 	private void setChangedAndNotifyObservers() {
