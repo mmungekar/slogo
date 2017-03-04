@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
@@ -170,5 +171,13 @@ public class Model extends Observable {
 	public void createTurtle(int newID) {
 		myTurtleMaster.breedTurtle(newID);
 		setChangedAndNotifyObservers();
+	}
+
+	public double getActiveTurtleID() {
+		return myTurtleMaster.getActiveTurtleID();
+	}
+
+	public void tell(List<Integer> parametersInteger) {
+		myTurtleMaster.setActiveTurtles(parametersInteger);
 	}
 }

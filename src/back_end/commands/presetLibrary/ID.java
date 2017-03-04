@@ -10,6 +10,6 @@ public class ID extends SimpleParameterCommand implements CommandInterface<Oxyge
 
 	@Override
 	public double Execute(Model model) {
-		return model.getSingleActiveTurtle();
+		return model.getActiveTurtleID();
 	}
 }

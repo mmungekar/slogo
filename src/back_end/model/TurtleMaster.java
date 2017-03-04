@@ -22,179 +22,150 @@ import javafx.scene.image.Image;
 public class TurtleMaster {
 	public static final String IMAGE_DIRECTORY = "resources/images/";
 	public static final String DEFAULT_TURTLE = "turtle.gif";
-	
+
 	private Point2D home;
 	private Map<Integer, Turtle> turtleContainer;
 	private List<Integer> activeTurtleIDs;
 	private List<Integer> tempActiveTurtleIDs;
 	private boolean tempActiveTurtles;
 	private Integer activeTurtleID;
-	
-	public TurtleMaster(){
+
+	public TurtleMaster() {
 		turtleContainer = new HashMap<Integer, Turtle>();
 		activeTurtleIDs = new ArrayList<Integer>();
 		tempActiveTurtleIDs = new ArrayList<Integer>();
+		tempActiveTurtles = false;
+		activeTurtleID = 0;
 	}
-	
+
 	void setHome(Point2D home) {
 		this.home = home;
-		
+
 	}
-	
-	private void cycleThroughActive(List<Integer> turtleIDs, Consumer<? super Turtle> action){
-		turtleIDs.stream()
-		        .filter(elt -> elt != null)
-		        .forEach(id -> {
-		        	activeTurtleID = id;
-		        	Turtle turtle = turtleContainer.get(id);
-		        	action.accept(turtle);
-		        });
-		       
+
+	private void cycleThroughActive(List<Integer> turtleIDs, Consumer<? super Turtle> action) {
+		turtleIDs.stream().filter(elt -> elt != null).forEach(id -> {
+			activeTurtleID = id;
+			Turtle turtle = turtleContainer.get(id);
+			action.accept(turtle);
+		});
+
 	}
-	
-	private List<Integer> pickTurtles() {
-		if (tempActiveTurtles){
+
+	private double operationOnLastTurtle(List<Integer> turtleIDs, Function<Turtle, Double> action) {
+		return action.apply(turtleContainer.get(turtleIDs.size() - 1));
+	}
+
+	private List<Integer> getListeningTurtleIDs() {
+		if (tempActiveTurtles) {
 			return Collections.unmodifiableList(tempActiveTurtleIDs);
 		} else {
+			System.out.println("getting active list");
 			return Collections.unmodifiableList(activeTurtleIDs);
 		}
 	}
-	
+
 	void moveForward(double mag) {
-		moveForward(pickTurtles(), mag);
-	}
-	
-	
-	private void moveForward(List<Integer> turtleIDs, double mag) {
-		cycleThroughActive(turtleIDs, );
-	}
-	
-	void rotate(double angle) {
-		rotate(pickTurtles(), angle);
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
+			turtle.moveForward(mag);
+		});
 	}
 
-	private void rotate(List<Integer> turtleIDs, double angle) {
-		cycleThroughActive(turtleIDs, turtle -> {
+	void rotate(double angle) {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
 			turtle.setAngle(turtle.getAngle() + angle);
 		});
 	}
-	
-	void setVisible(boolean b){
-		setVisible(pickTurtles(), b);
-	}
-	
-	private void setVisible(List<Integer> turtleIDs, boolean b){
-		cycleThroughActive(turtleIDs, turtle -> turtle.setVisible(b));
-	}
-	
-	double sendHome(){
-		double value = lastTurtleDistanceFromPos(pickTurtles(), home);
-		sendHome(pickTurtles());
-		return value;
-	}
-	
-	private double lastTurtleDistanceFromPos(List<Integer> turtleIDs, Point2D pos) {
-		return turtleContainer.get(turtleIDs.get(turtleIDs.size() - 1)).calcDistanceFromPos(pos);
+
+	void setVisible(boolean b) {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> turtle.setVisible(b));
 	}
 
-	private void sendHome(List<Integer> turtleIDs){
-		cycleThroughActive(turtleIDs, turtle -> {turtle.setPosition(home); turtle.dontDrawLine();});		
+	double sendHome() {
+		return sendHome(getListeningTurtleIDs());
 	}
-	
-	double setPos(double inX, double inY){
-		double distance = lastTurtleDistanceFromPos(pickTurtles(), new Point2D(inX, inY));
-		setPos(pickTurtles(), inX, inY);
+
+	private double sendHome(List<Integer> turtleIDs) {
+		double value = operationOnLastTurtle(turtleIDs, turtle -> turtle.setPosition(home));
+		cycleThroughActive(turtleIDs, turtle -> {
+			turtle.setPosition(home);
+			turtle.dontDrawLine();
+		});
+		return value;
+	}
+
+	double setPos(double inX, double inY) {
+		double distance = operationOnLastTurtle(getListeningTurtleIDs(),
+				turtle -> turtle.setPosition(new Point2D(inX, inY)));
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
+			turtle.setPosition(inX, inY);
+		});
 		return distance;
 	}
-	
-	private void setPos(List<Integer> turtleIDs, double inX, double inY){
-		cycleThroughActive(turtleIDs, turtle -> turtle.setPosition(inX, inY));		
+
+	boolean isVisible() {
+		return isVisible(getListeningTurtleIDs());
 	}
-	
-	
-	boolean isVisible(){
-		return isVisible(pickTurtles());
-	}
-	
+
 	private boolean isVisible(List<Integer> pickTurtles) {
 		return turtleContainer.get(pickTurtles.get(pickTurtles.size() - 1)).isVisible();
 	}
-	
-	void setPenDown(){
-		setPenDown(pickTurtles());
-	}
-	
-	private void setPenDown(List<Integer> turtleIDs){
-		cycleThroughActive(turtleIDs, turtle -> turtle.setPenDown());
-	}
-	
-	void setPenUp(){
-		setPenUp(pickTurtles());
-	}
-	
-	private void setPenUp(List<Integer> turtleIDs){
-		cycleThroughActive(turtleIDs, turtle -> turtle.setPenUp());
-	}
-	
-	void setAngle(double angle) {
-		setAngle(pickTurtles(), angle);
+
+	void setPenDown() {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
+			turtle.setPenDown();
+		});
 	}
 
-	private void setAngle(List<Integer> turtleIDs, double angle) {
-		cycleThroughActive(turtleIDs, turtle -> {
+	void setPenUp() {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> turtle.setPenUp());
+	}
+
+	void setAngle(double angle) {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
 			turtle.setAngle(angle);
 		});
 	}
-	
-	boolean isPenDown(){
-		return isPenDown(pickTurtles());
+
+	boolean isPenDown() {
+		return isPenDown(getListeningTurtleIDs());
 	}
-	
+
 	private boolean isPenDown(List<Integer> pickTurtles) {
 		return turtleContainer.get(pickTurtles.get(pickTurtles.size() - 1)).isPenDown();
 	}
-	
+
 	double setTowards(double ox, double oy) {
-		double angleChange = lastTurtleAngleChange(pickTurtles(), ox, oy);
-		setTowards(pickTurtles(), ox, oy);
+		double newX = home.getX() + ox;
+		double newY = home.getY() - oy;
+		double angleChange = operationOnLastTurtle(getListeningTurtleIDs(), turtle -> turtle.setTowards(newX, newY));
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
+			turtle.setTowards(newX, newY);
+		});
 		return angleChange;
 	}
 
-	private double lastTurtleAngleChange(List<Integer> turtleIDs, double ox, double oy) {
-		return operationOnLastTurtle(ox, oy)
-				
-				setTowards(turtleIDs.size() - 1, ox, oy);
-	}
-
-	private void setTowards(List<Integer> turtleIDs, double ox, double oy) {
-		cycleThroughActive(turtleIDs, turtle -> {
-			turtle.setTowards(home.getX() + ox, home.getY() - oy);
-		});
-	}
-	
 	double clearScreen() {
 		// TODO remove lines
 		List<Integer> allTurtleIDs = new ArrayList<Integer>(turtleContainer.keySet());
-		double value = lastTurtleDistanceFromPos(allTurtleIDs, home);
+		double value = operationOnLastTurtle(allTurtleIDs, turtle -> turtle.setPosition(home));
 		sendHome(allTurtleIDs);
 		return value;
 	}
-	
+
 	public List<Integer> getAllTurtleIDs() {
 		return Collections.unmodifiableList(new ArrayList<Integer>(turtleContainer.keySet()));
 	}
 
 	double getCoordinate(Integer coordinate) {
-		return getCoordinate(pickTurtles(), coordinate);
+		return getCoordinate(getListeningTurtleIDs(), coordinate);
 	}
-	
-	private double getCoordinate(List<Integer> pickTurtles, Integer coordinate){
+
+	private double getCoordinate(List<Integer> pickTurtles, Integer coordinate) {
 		Point2D lastTurtleCenterPos = turtleContainer.get(pickTurtles.get(pickTurtles.size() - 1)).getCenterPosition();
-		
-		double[] pos = new double[]{lastTurtleCenterPos.getX(), lastTurtleCenterPos.getY()};
-		double[] homePos = new double[]{home.getX(), home.getY()};
-		return homePos[coordinate] - (coordinate.equals(0)? 0 : -1) * pos[coordinate];
-		
+		double[] pos = new double[] { lastTurtleCenterPos.getX(), lastTurtleCenterPos.getY() };
+		double[] homePos = new double[] { home.getX(), home.getY() };
+		return homePos[coordinate] - (coordinate.equals(0) ? 0 : -1) * pos[coordinate];
 	}
 
 	Collection<Turtle> getTurtles() {
@@ -202,45 +173,52 @@ public class TurtleMaster {
 	}
 
 	void breedTurtle(int newTurtleID) {
-		if(newTurtleID == -1){
+		if (newTurtleID == -1) {
 			newTurtleID = findLowestIDnotTaken();
 		}
 		turtleContainer.put(newTurtleID, new Turtle(getDefaultTurtleImage(), home));
-		
+
 	}
 
 	private int findLowestIDnotTaken() {
 		int newID = 1;
-		while(turtleContainer.keySet().contains(newID)){
+		while (turtleContainer.keySet().contains(newID)) {
 			newID += 1;
 		}
 		return newID;
 	}
-	
+
 	private Image getDefaultTurtleImage() {
 		String imageLocation = IMAGE_DIRECTORY + DEFAULT_TURTLE;
 		Image imageTurtle = new Image(getClass().getClassLoader().getResourceAsStream(imageLocation));
 		return imageTurtle;
 	}
-	
+
 	void changeTurtleImage(File newImageFile) {
 		Image newTurtleImage = new Image(
 				getClass().getClassLoader().getResourceAsStream(IMAGE_DIRECTORY + newImageFile.getName()));
-		changeTurtleImage(pickTurtles(), newTurtleImage);
-	}
-
-	private void changeTurtleImage(List<Integer> turtleIDs, Image newTurtleImage) {
-		cycleThroughActive(turtleIDs, turtle -> {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
 			turtle.changeImage(newTurtleImage);
 		});
 	}
 
 	public void setActiveTurtles(List<Integer> newActives) {
+
+		newActives.stream().forEach(id -> {
+			if (!turtleContainer.containsKey(id)) {
+				this.breedTurtle(id);
+			}
+		});
+
 		this.activeTurtleIDs = newActives;
-	}	
-	
+	}
+
 	public void setTempActiveTurtles(List<Integer> newTempActives) {
 		this.tempActiveTurtleIDs = newTempActives;
 		this.tempActiveTurtles = true;
+	}
+
+	double getActiveTurtleID() {
+		return this.activeTurtleID;
 	}
 }

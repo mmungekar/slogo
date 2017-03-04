@@ -39,16 +39,20 @@ public class Turtle {
 		setPosition(new Point2D(inX, inY));
 	}
 
-	public void setPosition(Point2D newPos) {
+	public double setPosition(Point2D newPos) {
+		double displacement = 0;
 		if (this.centerPos != null) {
 			this.prevCenterPos = this.centerPos;
+			displacement = this.centerPos.distance(newPos);
 		} else {
 			this.prevCenterPos = newPos;
 		}
+		
 		this.centerPos = newPos;
 		myImageView.setX(this.centerPos.getX() - halfDems[0]);
 		myImageView.setY(this.centerPos.getY() - halfDems[1]);
 		this.topLeftPos = new Point2D(myImageView.getX(), myImageView.getY());
+		return displacement;
 	}
 
 	public boolean isPenDown() {
