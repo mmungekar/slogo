@@ -13,8 +13,8 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		Controller runtime = new Controller();
-		runtime.start(primaryStage);
+		ControllerMaster cM = new ControllerMaster();
+		cM.start(primaryStage);
 	}
 
 }

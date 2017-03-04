@@ -1,4 +1,4 @@
-package back_end.commands;
+package back_end.commands.custom;
 
 import java.util.ArrayList;
 import java.util.HashMap;

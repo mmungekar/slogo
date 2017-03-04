@@ -1,21 +1,27 @@
 package back_end.commands.presetLibrary;
 
+import java.util.Iterator;
+
 import back_end.exceptions.NotEnoughParameterException;
 import back_end.interfaces.CommandInterface;
+import back_end.model.ExpressionTree;
+import back_end.model.ExpressionTreeNode;
 import back_end.model.Model;
 import back_end.model.Oxygen;
 
-public class MakeVariable implements CommandInterface<Oxygen>{
+public class MakeVariable implements CommandInterface<ExpressionTree>{
     private String name;
     private double value;
 	@Override
-	public void setParameters(Model model, Oxygen... os) throws NotEnoughParameterException {
+	public void setParameters(Model model, ExpressionTree...os) throws NotEnoughParameterException {
+		Iterator<ExpressionTreeNode> iter = os[0].getRootNode().getChildren().iterator();
+		ExpressionTreeNode firstChild = iter.next();
 		try {
-			name = (String) os[0].getContent();
+			name = (String) firstChild.getOxygen().getContent();
 		} catch (ClassCastException ex) {
-			name = (String) os[0].getSubContent();
+			name = (String) firstChild.getOxygen().getSubContent();
 		}
-		value = (Double) os[1].getContent();
+		value = (Double) iter.next().getOxygen().getContent();
 	}
 
 	@Override

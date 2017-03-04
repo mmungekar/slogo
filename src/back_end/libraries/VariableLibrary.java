@@ -2,7 +2,7 @@ package back_end.libraries;
 
 import java.util.HashMap;
 
-import back_end.CustomVariable;
+import back_end.commands.custom.CustomVariable;
 import back_end.exceptions.VariableNotFoundException;
 
 public class VariableLibrary extends HashMap<String, CustomVariable>{	

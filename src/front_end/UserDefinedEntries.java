@@ -4,7 +4,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-import back_end.CustomVariable;
+import back_end.commands.custom.CustomVariable;
 import back_end.model.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -117,8 +117,7 @@ public class UserDefinedEntries extends TabPane implements Observer {
 	public void update(Observable o, Object arg) {
 		if (myModel == o) {
 			customVariables = FXCollections.observableArrayList(myModel.getUserDefinedVariables());
-			// customCommands =
-			// FXCollections.observableArrayList(myModel.getUserDefinedCommands());
+			customCommands = FXCollections.observableArrayList(myModel.getUserDefinedCommands());
 			updateVisualLibraries();
 		}
 
@@ -126,7 +125,7 @@ public class UserDefinedEntries extends TabPane implements Observer {
 
 	private void updateVisualLibraries() {
 		
-		//tabCommands.getContent()).setItems(customCommands);
+		((ListView<String>) tabCommands.getContent()).setItems(customCommands);
 		tableVariables.setItems(customVariables);
 	}
 }

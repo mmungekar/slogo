@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 import back_end.model.Input;
 import back_end.model.ProgramParser;
-import back_end.commands.CustomCommand;
 import back_end.commands.constant.Constant;
+import back_end.commands.custom.CustomCommand;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.NotEnoughParameterException;
 import back_end.exceptions.VariableNotFoundException;
@@ -157,7 +157,7 @@ public class ExpressionTree {
 	}
 
 	private boolean isVariableStored(Input i, Model m) {
-		return m.mVariableLibrary.hasVariable(i.getParameter());
+		return m.hasCustomVariable(i.getParameter());
 	}
 	private boolean isListStart(Input i) {
 		return i.getType().equals(Constant.LISTSTART_TYPE);
@@ -188,19 +188,20 @@ public class ExpressionTree {
 		return output;
 	}
 
-	public void traverseKid(ExpressionTreeNode node, Model state)
+
+	public void traverseKid(ExpressionTreeNode node, Model model)
 			throws VariableNotFoundException, CommandException {
 		if (node == null){
 			return;}
-		checkListStart(state, node);
+		checkListStart(model, node);
 		Input currInput = node.getInput();
 		String nodeName = currInput.getParameter();
 		if (isConstant(currInput)) {
 			return;
-		} 
-		else if(isVariable(currInput)) { 
-			if (isVariableStored(currInput, state)) { // Turn a variable into a constant directly
-				Double value = state.mVariableLibrary.retrieveVariable(nodeName);
+
+		} else if (isVariable(currInput)) { 
+			if (isVariableStored(currInput, model)) { // Turn a variable into a constant directly
+				Double value = model.retrieveCustomVariable(nodeName);
 				Oxygen<Double> constantOxy = new Oxygen<>(this.currentLanguage, Constant.CONSTANT_TYPE);
 				constantOxy.convertLight(value.toString());
 				constantOxy.putReturnValue(value);
@@ -209,7 +210,7 @@ public class ExpressionTree {
 			}
 			return;
 		} else if (isCommand(currInput)) {
-			libraryLookUp(node, state);
+			libraryLookUp(node, model);
 		}
 	}
 	
@@ -237,10 +238,10 @@ public class ExpressionTree {
 		nodeExecute(node, state, command);
 	}
 		
-	private void checkListStart(Model state, ExpressionTreeNode node) throws CommandException, VariableNotFoundException {
+	private void checkListStart(Model model, ExpressionTreeNode node) throws CommandException, VariableNotFoundException {
 		if (isListStart(node.getInput())) {
 			for (ExpressionTreeNode kid : node.getChildren()) {
-				traverseKid(kid, state);
+				traverseKid(kid, model);
 			}
 			Double value = createFinalOutput(node);	
 			node.getOxygen().putReturnValue(value);
@@ -248,6 +249,31 @@ public class ExpressionTree {
 	}
 	
 	/*public static void main(String[] args) {
+=======
+			int paramNum = mCommandLib.getNumParam(nodeName);
+			if (paramNum != node.getChildren().size())
+				throw new NotEnoughParameterException(currInput.getParameter(), paramNum, node.getChildren().size());
+
+			// Input the correct type of inputs to the command in the TreeNode
+			CommandInterface command = mCommandLib.getCommand(nodeName);
+			Oxygen[] params = new Oxygen[paramNum];
+			Iterator<ExpressionTreeNode> iter = node.getChildren().iterator();
+			for (int i = 0; i < params.length; i++) {
+				params[i] = iter.next().getOxygen();
+				System.out.println("Oxygen Content: " + params[i].getContent().toString());
+			}
+			command.setParameters(params);
+			Double value = command.Execute(model);	
+			Oxygen<Double> valueOxy = new Oxygen<Double>(this.currentLanguage, Constant.CONSTANT_TYPE);
+			valueOxy.convertLight(value.toString());
+			node.setOxygen(valueOxy);
+			node.setExecuted();
+		}
+	}
+	
+	/*
+	public static void main(String[] args) {
+>>>>>>> mra21
 		ExpressionTree test = new ExpressionTree("English");
 		String s = "MAKE :X 3";
 		String d = "FD :X";
@@ -267,6 +293,7 @@ public class ExpressionTree {
 			e.printStackTrace();
 		} 
 
+<<<<<<< HEAD
 	}*/
 
 }
