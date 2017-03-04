@@ -129,5 +129,22 @@ public class Turtle {
 	public Node getImageView() {
 		return myImageView;
 	}
+	
+	public void moveForward(double mag) {
+		double angle = this.getAngle();
+		double dx = Math.cos(Math.toRadians(angle)) * mag;
+		double dy = Math.sin(Math.toRadians(angle)) * mag;
+		this.setPosition(this.getCenterPosition().add(dx, dy));	
+	}
+	
+	public double setTowards(double ox, double oy) {
+		double dx = (ox) - this.getCenterPosition().getX();
+	    double dy = (oy) - this.getCenterPosition().getY();
+	    double prevAngle = this.getAngle();
+	    
+	    double angle = Math.toDegrees(Math.atan(dy / dx));
+	    this.setAngle(angle);
+	    return angle-prevAngle;
+	}
 
 }

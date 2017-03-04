@@ -6,10 +6,10 @@ import back_end.interfaces.CommandInterface;
 import back_end.model.Model;
 import back_end.model.Oxygen;
 
-public class Turtles extends SimpleParameterCommand implements CommandInterface<Oxygen<Double>>, Constant{
+public class AskWith extends SimpleParameterCommand implements CommandInterface<Oxygen<Double>>, Constant{
 
 	@Override
 	public double Execute(Model model) {
-		return model.getTurtleCount();
+		return model.getSingleActiveTurtle();
 	}
 }

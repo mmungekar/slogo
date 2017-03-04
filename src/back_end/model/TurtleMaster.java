@@ -10,6 +10,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import back_end.commands.custom.CustomVariable;
 import javafx.geometry.Point2D;
@@ -24,6 +28,7 @@ public class TurtleMaster {
 	private List<Integer> activeTurtleIDs;
 	private List<Integer> tempActiveTurtleIDs;
 	private boolean tempActiveTurtles;
+	private Integer activeTurtleID;
 	
 	public TurtleMaster(){
 		turtleContainer = new HashMap<Integer, Turtle>();
@@ -36,11 +41,22 @@ public class TurtleMaster {
 		
 	}
 	
+	private void cycleThroughActive(List<Integer> turtleIDs, Consumer<? super Turtle> action){
+		turtleIDs.stream()
+		        .filter(elt -> elt != null)
+		        .forEach(id -> {
+		        	activeTurtleID = id;
+		        	Turtle turtle = turtleContainer.get(id);
+		        	action.accept(turtle);
+		        });
+		       
+	}
+	
 	private List<Integer> pickTurtles() {
 		if (tempActiveTurtles){
-			return tempActiveTurtleIDs;
+			return Collections.unmodifiableList(tempActiveTurtleIDs);
 		} else {
-			return activeTurtleIDs;
+			return Collections.unmodifiableList(activeTurtleIDs);
 		}
 	}
 	
@@ -48,18 +64,9 @@ public class TurtleMaster {
 		moveForward(pickTurtles(), mag);
 	}
 	
+	
 	private void moveForward(List<Integer> turtleIDs, double mag) {
-		turtleIDs.stream().forEach(id -> {
-			moveForward(id, mag);
-		});
-			
-	}
-
-	private void moveForward(Integer id, double mag) {
-		double angle = turtleContainer.get(id).getAngle();
-		double dx = Math.cos(Math.toRadians(angle)) * mag;
-		double dy = Math.sin(Math.toRadians(angle)) * mag;
-		turtleContainer.get(id).setPosition(turtleContainer.get(id).getCenterPosition().add(dx, dy));	
+		cycleThroughActive(turtleIDs, );
 	}
 	
 	void rotate(double angle) {
@@ -67,13 +74,9 @@ public class TurtleMaster {
 	}
 
 	private void rotate(List<Integer> turtleIDs, double angle) {
-		turtleIDs.stream().forEach(id -> {
-			setAngle(id, turtleContainer.get(id).getAngle() + angle);
+		cycleThroughActive(turtleIDs, turtle -> {
+			turtle.setAngle(turtle.getAngle() + angle);
 		});
-	}
-
-	private void setAngle(Integer id, double angle) {
-		turtleContainer.get(id).setAngle(angle);
 	}
 	
 	void setVisible(boolean b){
@@ -81,7 +84,7 @@ public class TurtleMaster {
 	}
 	
 	private void setVisible(List<Integer> turtleIDs, boolean b){
-		turtleIDs.stream().forEach(id -> turtleContainer.get(id).setVisible(b));
+		cycleThroughActive(turtleIDs, turtle -> turtle.setVisible(b));
 	}
 	
 	double sendHome(){
@@ -95,7 +98,7 @@ public class TurtleMaster {
 	}
 
 	private void sendHome(List<Integer> turtleIDs){
-		turtleIDs.stream().forEach(id -> {turtleContainer.get(id).setPosition(home); turtleContainer.get(id).dontDrawLine();});		
+		cycleThroughActive(turtleIDs, turtle -> {turtle.setPosition(home); turtle.dontDrawLine();});		
 	}
 	
 	double setPos(double inX, double inY){
@@ -105,7 +108,7 @@ public class TurtleMaster {
 	}
 	
 	private void setPos(List<Integer> turtleIDs, double inX, double inY){
-		turtleIDs.stream().forEach(id -> turtleContainer.get(id).setPosition(inX, inY));		
+		cycleThroughActive(turtleIDs, turtle -> turtle.setPosition(inX, inY));		
 	}
 	
 	
@@ -122,7 +125,7 @@ public class TurtleMaster {
 	}
 	
 	private void setPenDown(List<Integer> turtleIDs){
-		turtleIDs.stream().forEach(id -> turtleContainer.get(id).setPenDown());
+		cycleThroughActive(turtleIDs, turtle -> turtle.setPenDown());
 	}
 	
 	void setPenUp(){
@@ -130,7 +133,7 @@ public class TurtleMaster {
 	}
 	
 	private void setPenUp(List<Integer> turtleIDs){
-		turtleIDs.stream().forEach(id -> turtleContainer.get(id).setPenUp());
+		cycleThroughActive(turtleIDs, turtle -> turtle.setPenUp());
 	}
 	
 	void setAngle(double angle) {
@@ -138,8 +141,8 @@ public class TurtleMaster {
 	}
 
 	private void setAngle(List<Integer> turtleIDs, double angle) {
-		turtleIDs.stream().forEach(id -> {
-			setAngle(id, turtleContainer.get(id).getAngle() + angle);
+		cycleThroughActive(turtleIDs, turtle -> {
+			turtle.setAngle(angle);
 		});
 	}
 	
@@ -158,23 +161,15 @@ public class TurtleMaster {
 	}
 
 	private double lastTurtleAngleChange(List<Integer> turtleIDs, double ox, double oy) {
-		return setTowards(turtleIDs.size() - 1, ox, oy);
+		return operationOnLastTurtle(ox, oy)
+				
+				setTowards(turtleIDs.size() - 1, ox, oy);
 	}
 
 	private void setTowards(List<Integer> turtleIDs, double ox, double oy) {
-		turtleIDs.stream().forEach(id -> {
-			setTowards(id, ox, oy);
+		cycleThroughActive(turtleIDs, turtle -> {
+			turtle.setTowards(home.getX() + ox, home.getY() - oy);
 		});
-	}
-
-	private double setTowards(Integer id, double ox, double oy) {
-		double dx = (home.getX() + ox) - turtleContainer.get(id).getCenterPosition().getX();
-	    double dy = (home.getY() - oy) - turtleContainer.get(id).getCenterPosition().getY();
-	    double prevAngle = turtleContainer.get(id).getAngle();
-	    
-	    double angle = Math.toDegrees(Math.atan(dy / dx));
-	    turtleContainer.get(id).setAngle(angle);
-	    return angle-prevAngle;
 	}
 	
 	double clearScreen() {
@@ -235,8 +230,8 @@ public class TurtleMaster {
 	}
 
 	private void changeTurtleImage(List<Integer> turtleIDs, Image newTurtleImage) {
-		turtleIDs.stream().forEach(id -> {
-			turtleContainer.get(id).changeImage(newTurtleImage);
+		cycleThroughActive(turtleIDs, turtle -> {
+			turtle.changeImage(newTurtleImage);
 		});
 	}
 
