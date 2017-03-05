@@ -110,12 +110,6 @@ public class ExpressionTree {
 	private ExpressionTreeNode buildBranch(Input input, ExpressionTreeNode currNode)
 			throws CommandException {
 		ExpressionTreeNode inputNode = new ExpressionTreeNode(this.currentLanguage, input, null);
-		if (!isChildrenFull(currNode)) {
-			inputNode.setParent(currNode);
-			currNode.getChildren().add(inputNode);
-			currNode = inputNode;
-			return currNode;
-		}
 		while (isChildrenFull(currNode)) {
 			if (currNode == mRootNode)
 				return mRootNode;
@@ -131,16 +125,12 @@ public class ExpressionTree {
 	private ExpressionTreeNode checkFinishedList(ExpressionTreeNode currNode, ExpressionTreeNode inputNode) {
 		if (isListEnd(inputNode.getInput())) {
 			currNode = currNode.getParent();
-			return currNode;
 		}
-		inputNode.setParent(currNode);
-		currNode.getChildren().add(inputNode);
-		currNode = inputNode;
 		return currNode;
 	}
 	
 	private boolean isChildrenFull(ExpressionTreeNode node) throws UnrecognizedCommandException {
-		return node != mRootNode && (isConstant(node.getInput()) || (isVariable(node.getInput()))
+		return node!= mRootNode && (isConstant(node.getInput()) || (isVariable(node.getInput()))
 				|| (isCommand(node.getInput())&&mCommandLib.getNumParam(node.getInput().getParameter()) == node.getChildren().size()));
 	}
 
