@@ -1,6 +1,13 @@
 package front_end;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.function.Consumer;
 
 import back_end.model.Model;
@@ -45,12 +52,27 @@ public class View implements ViewInterface {
 		createTerminal(root);
 		createUserDefinedEntries(model, root);
 		createToolBar(model, root);
-		
 	}
-
+	//TODO: HANDLE EXCEPTION HERE
 	private void createToolBar(Model model, BorderPane root)
 	{
 		toolBar = new ToolBarController(model, root);
+		toolBar.setFileButton((File f) ->
+		{
+			Scanner scan;
+			try
+			{
+				scan = new Scanner(f);
+				scan.useDelimiter("\\Z");  
+				String content = scan.next();
+				terminal.submitInput(content);
+			}
+			catch (FileNotFoundException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 
 	private void createUserDefinedEntries(Model model, BorderPane root) {
