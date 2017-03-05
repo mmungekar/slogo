@@ -15,7 +15,7 @@ public class Product extends SimpleParameterCommand implements CommandInterface<
 	@Override
 	public double Execute(Model state) {
 		List<Double> parameters = this.getParameterValue();
-		double product = 0;
+		double product = 1;
 		for(Double a : parameters){
 			product *= a;
 		}

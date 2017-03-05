@@ -3,10 +3,12 @@ package back_end.commands.abstracts;
 import java.util.ArrayList;
 import java.util.List;
 
+import back_end.commands.constant.Constant;
 import back_end.exceptions.CommandException;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import back_end.exceptions.NotEnoughParameterException;
@@ -21,17 +23,21 @@ import back_end.model.Oxygen;
 
 public abstract class SimpleParameterCommand implements CommandInterface<ExpressionTree> {
 	List<Double> myParams;
+	ExpressionTreeNode firstChild;
+	
 	private int getParamNum(ExpressionTree myTree, String currentLanguage) throws UnrecognizedCommandException {
 		CommandLibrary commandLib = new CommandLibrary(currentLanguage);
 		return commandLib.getNumParam(myTree.getRootNode().getInput().getParameter());
 	}
 
 	private void extractParams(ExpressionTree myTree, Model model) throws VariableNotFoundException, CommandException {
+		Iterator<ExpressionTreeNode> iter = myTree.getRootNode().getChildren().iterator();
+		firstChild = iter.next();
 		for (ExpressionTreeNode kid : myTree.getRootNode().getChildren()) {
 			myTree.traverseKid(kid, model);
 		}
 		int paramNum = getParamNum(myTree, myTree.getLanguage());
-		if (paramNum != myTree.getRootNode().getChildren().size())
+		if (paramNum!= myTree.getRootNode().getChildren().size() && !firstChild.getInput().getType().equals(Constant.GROUPSTART_TYPE))
 			throw new NotEnoughParameterException(myTree.getRootNode().getInput().getParameter(), paramNum,
 					myTree.getRootNode().getChildren().size());
 	}
@@ -48,10 +54,15 @@ public abstract class SimpleParameterCommand implements CommandInterface<Express
 	public void setParameters(Model model, ExpressionTree... ds) throws VariableNotFoundException, CommandException {
 		ExpressionTree myTree = ds[0];
 		extractParams(myTree, model);
+		ExpressionTreeNode hasParams = firstChild;
+		if(!hasParams.getInput().getType().equals(Constant.GROUPSTART_TYPE)){
+			hasParams = myTree.getRootNode();
+		}
 		myParams = new ArrayList<Double>();
-		for (ExpressionTreeNode child : myTree.getRootNode().getChildren()) {
+		for (ExpressionTreeNode child : hasParams.getChildren()) {
 			myParams.add(child.getOxygen().getReturnValue());
 		}
+		System.out.println(myParams);
 	}
 
 	protected List<Double> getParameterValue() {

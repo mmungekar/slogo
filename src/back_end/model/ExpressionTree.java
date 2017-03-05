@@ -123,7 +123,7 @@ public class ExpressionTree {
 	}
 
 	private ExpressionTreeNode checkFinishedList(ExpressionTreeNode currNode, ExpressionTreeNode inputNode) {
-		if (isListEnd(inputNode.getInput())) {
+		if (isEnd(inputNode.getInput())) {
 			currNode = currNode.getParent();
 		}
 		return currNode;
@@ -149,11 +149,11 @@ public class ExpressionTree {
 	private boolean isVariableStored(Input i, Model m) {
 		return m.hasCustomVariable(i.getParameter());
 	}
-	private boolean isListStart(Input i) {
-		return i.getType().equals(Constant.LISTSTART_TYPE);
+	private boolean isStart(Input i) {
+		return i.getType().equals(Constant.LISTSTART_TYPE)||i.getType().equals(Constant.GROUPSTART_TYPE);
 	}
-	private boolean isListEnd(Input i) {
-		return i.getType().equals(Constant.LISTEND_TYPE);
+	private boolean isEnd(Input i) {
+		return i.getType().equals(Constant.LISTEND_TYPE)||i.getType().equals(Constant.GROUPEND_TYPE);
 	}
 
 	/**
@@ -229,7 +229,7 @@ public class ExpressionTree {
 	}
 		
 	private void checkListStart(Model model, ExpressionTreeNode node) throws CommandException, VariableNotFoundException {
-		if (isListStart(node.getInput())) {
+		if (isStart(node.getInput())) {
 			for (ExpressionTreeNode kid : node.getChildren()) {
 				traverseKid(kid, model);
 			}

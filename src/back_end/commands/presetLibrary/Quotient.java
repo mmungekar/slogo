@@ -14,9 +14,9 @@ public class Quotient extends SimpleParameterCommand implements CommandInterface
 	@Override
 	public double Execute(Model state) {
 		List<Double> parameters = this.getParameterValue();
-		double quotient = 0;
-		for(Double a : parameters){
-			quotient /= a;
+		double quotient = parameters.get(0);
+		for(int i = 1; i<parameters.size();i++){
+			quotient /= parameters.get(i);
 		}
 		return quotient;
 	}
