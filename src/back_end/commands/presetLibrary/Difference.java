@@ -15,9 +15,9 @@ public class Difference extends SimpleParameterCommand implements CommandInterfa
 	@Override
 	public double Execute(Model state) {
 		List<Double> parameters = this.getParameterValue();
-		double difference = 0;
-		for(Double a : parameters){
-			difference -= a;
+		double difference = parameters.get(0);
+		for(int i = 1; i<parameters.size();i++){
+			difference -= parameters.get(i);
 		}
 		return difference;
 	}
