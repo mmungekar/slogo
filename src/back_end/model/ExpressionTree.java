@@ -59,7 +59,7 @@ public class ExpressionTree {
 		}
 		return createFinalOutput(mRootNode);
 	}
-	
+
 	public void initTree() {
 		mInputs = new ArrayList<>();
 		mRootNode = null;

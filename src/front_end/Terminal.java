@@ -118,8 +118,7 @@ public class Terminal extends VBox {
 					int index = cell.getIndex();
 					if (!historyView.getSelectionModel().getSelectedIndices().contains(index)) {
 						historyView.getSelectionModel().select(index);
-						inputConsole.setText(cell.getItem());
-						submitInput();
+						submitInput(cell.getItem());
 						historyView.getSelectionModel().clearSelection(index);
 					}
 					event.consume();
@@ -167,6 +166,12 @@ public class Terminal extends VBox {
 	private void loadHistoryIntoTextInput() {
 		inputConsole.setText(history.get(historyPointer));
 		inputConsole.selectAll();
+	}
+	
+	public void submitInput(String in)
+	{
+		inputConsole.setText(in);
+		submitInput();
 	}
 
 	void submitInput() {

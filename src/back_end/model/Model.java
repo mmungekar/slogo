@@ -1,12 +1,13 @@
 package back_end.model;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
-
 import back_end.commands.custom.CustomCommand;
 import back_end.commands.custom.CustomVariable;
 import back_end.exceptions.VariableNotFoundException;
@@ -19,7 +20,8 @@ public class Model extends Observable {
 	public static final String IMAGE_DIRECTORY = "resources/images/";
 	public static final String DEFAULT_TURTLE = "turtle.gif";
 	public static final String DEFAULT_LANGUAGE = "English";
-	private static final Color DEFAULT_BACKGROUND_COLOR = Color.WHITE;
+	public static final int DEFAULT_BACKGROUND_COLOR_INDEX = 0;
+	public static final List<String> DEFAULT_COLOR_HTML_NAMES = Arrays.asList("white", "black","blue","red","green","yellow", "orange");
 
 	private Map<Integer, Turtle> turtleContainer;
 	private HashMap<String, CustomCommand> customCommands;
@@ -28,7 +30,8 @@ public class Model extends Observable {
 	private Point2D home;
 	private boolean clear;
 	private VariableLibrary mVariableLibrary;
-
+	private HashMap<Integer, Color> colorContainer;
+	
 	public Model()
 	{
 		turtleContainer = new HashMap<Integer, Turtle>();
@@ -36,7 +39,12 @@ public class Model extends Observable {
 		setBackgroundColor(Color.WHITE);
 		mVariableLibrary = new VariableLibrary();
 		currentLanguage = DEFAULT_LANGUAGE;
-		backgroundColor = DEFAULT_BACKGROUND_COLOR;
+		createDefaultColors();
+	}
+
+	public void setColorRGB(int index, int r, int g, int b)
+	{
+		colorContainer.put(index, Color.rgb(r, g, b));
 	}
 
 	public HashMap<String,CustomCommand> getCustomCommands(){
@@ -89,6 +97,11 @@ public class Model extends Observable {
 	public void setBackgroundColor(Color backgroundColor) {
 		this.backgroundColor = backgroundColor;
 		setChangedAndNotifyObservers();
+	}
+	
+	public void setBackgroundColor(int index)
+	{
+		setBackgroundColor(colorContainer.get(index));
 	}
 	
 	public void changeTurtleImage(Integer ID, File newImageFile) {
@@ -158,6 +171,16 @@ public class Model extends Observable {
 		String imageLocation = IMAGE_DIRECTORY + DEFAULT_TURTLE;
 		Image imageTurtle = new Image(getClass().getClassLoader().getResourceAsStream(imageLocation));
 		return imageTurtle;
+	}
+	
+	private void createDefaultColors()
+	{
+		colorContainer = new HashMap<Integer, Color>();
+		for (int i = 0; i < DEFAULT_COLOR_HTML_NAMES.size(); i++)
+		{
+			colorContainer.put(i, Color.web(DEFAULT_COLOR_HTML_NAMES.get(i)));
+		}
+		backgroundColor = colorContainer.get(DEFAULT_BACKGROUND_COLOR_INDEX);
 	}
 	
 	@Override
