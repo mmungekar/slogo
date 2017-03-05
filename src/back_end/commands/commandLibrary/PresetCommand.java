@@ -8,7 +8,7 @@ import back_end.exceptions.NotEnoughParameterException;
 import back_end.exceptions.UnrecognizedCommandException;
 import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
-import back_end.libraries.CommandLibrary;
+import back_end.libraries.CommandFactory;
 import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.expressiontree.Oxygen;
@@ -23,7 +23,7 @@ public abstract class PresetCommand implements CommandInterface {
 	private Double[] parameters;
 
 	private int getParamNum(ExpressionTree myTree, String currentLanguage) throws UnrecognizedCommandException {
-		CommandLibrary commandLib = new CommandLibrary(currentLanguage);
+		CommandFactory commandLib = new CommandFactory(currentLanguage);
 		return commandLib.getNumParam(myTree.getRootNode().getInput().getParameter());
 	}
 

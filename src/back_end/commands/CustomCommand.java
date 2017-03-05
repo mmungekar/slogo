@@ -1,67 +1,47 @@
 package back_end.commands;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 
-import back_end.model.expressiontree.ExpressionTree;
-import back_end.model.expressiontree.ExpressionTreeNode;
-import back_end.model.expressiontree.Oxygen;
-import back_end.model.scene.Model;
-import back_end.interfaces.CommandInterface;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.NotEnoughParameterException;
-import back_end.exceptions.UnrecognizedCommandException;
 import back_end.exceptions.VariableNotFoundException;
+import back_end.interfaces.CommandInterface;
+import back_end.libraries.VariableLibrary;
+import back_end.model.expressiontree.ExpressionTree;
+import back_end.model.expressiontree.ExpressionTreeNode;
+import back_end.model.scene.Model;
 
-public class CustomCommand implements CommandInterface
-{
-	private ArrayList<String> variableNames;
-	private HashMap<String, Double> variableValues;
-	private ExpressionTree commandTree;
+public class CustomCommand implements CommandInterface {
+	private String mName;
+	private VariableLibrary mCustomVarLib;
+	private ExpressionTree mCommandTree;
 	private Double[] parameters;
-	
-	
-	public CustomCommand(ArrayList<String> variableList, ExpressionTree commandTree)
-	{
-		variableNames = variableList;
-		variableValues = new HashMap<String, Double>();
-		this.commandTree = commandTree;
-	}
-	
-	public void setParameters(Model model, Oxygen<Double>...ds)
-	{
-		parameters = new Double[ds.length];
-		for(int i = 0; i < ds.length ; i++){
-			parameters[i] = ds[i].getContent();
-		}
+
+	public CustomCommand(String name, VariableLibrary varLib, ExpressionTree tree) {
+		mName = name;
+		mCustomVarLib = varLib;
+		mCommandTree = tree;
 	}
 
-	public double Execute(Model model) throws CommandException, VariableNotFoundException
-	{
-		for (int i = 0; i < parameters.length; i++)
-		{
-			variableValues.put(variableNames.get(i), parameters[i]);
+	public void setParameters(Model model, ExpressionTree tree) throws NotEnoughParameterException {
+		ExpressionTreeNode root = tree.getRootNode();
+		Iterator<ExpressionTreeNode> valIter = root.getChildren().iterator();
+		Iterator<String> nameIter = mCustomVarLib.keySet().iterator();
+		while (valIter.hasNext()) {
+			mCustomVarLib.replace(nameIter.next(), (Double) valIter.next().getOxygen().getContent());
 		}
-		
-		replaceVariables(commandTree.getRootNode());
-		
-		return commandTree.traverse(model);
-	
+		if(nameIter.hasNext())
+			throw new NotEnoughParameterException("Missing parameters for the custom command: " + mName, 
+					mCustomVarLib.keySet().size(), root.getChildren().size());
+
 	}
 
-	private void replaceVariables(ExpressionTreeNode node)
-	{
-		if(node==null){
-			return;
-		}
-		if (variableValues.containsKey(node.getInput().getParameter()))
-		{
-			Oxygen<Double> test = (Oxygen<Double>) node.getOxygen();
-			test.putContent(variableValues.get(node.getInput().getParameter()));
-			node.setOxygen(test);
-		}
-		for(ExpressionTreeNode x: node.getChildren()){
-			replaceVariables(x);
-		}
+	public double Execute(Model model) throws CommandException, VariableNotFoundException {
+		model.mLocalVariableLibrary = mCustomVarLib;
+		double retVal = mCommandTree.traverse(model);
+		model.mLocalVariableLibrary = null;
+		return retVal;
+
 	}
+
 }

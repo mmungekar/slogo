@@ -21,7 +21,6 @@ public abstract class Iteration {
 		if(mLocalVarLib.containsKey(name)){
 			mLocalVarLib.remove(name);
 		}
-		CustomVariable customvariable = new CustomVariable(name, value);
-		mLocalVarLib.put(name, customvariable);
+		mLocalVarLib.put(name, value);
 	}
 }

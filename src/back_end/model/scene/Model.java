@@ -1,9 +1,11 @@
 package back_end.model.scene;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
@@ -21,7 +23,6 @@ public class Model extends Observable {
 	public static final String DEFAULT_LANGUAGE = "English";
 
 	private Map<Integer, Turtle> turtleContainer;
-	private HashMap<String, CustomCommand> customCommands;
 	private String currentLanguage = DEFAULT_LANGUAGE;
 	private Color backgroundColor;
 	private Point2D home;
@@ -33,16 +34,16 @@ public class Model extends Observable {
 	public Model()
 	{
 		turtleContainer = new HashMap<Integer, Turtle>();
-		customCommands = new HashMap<String, CustomCommand>();
 		setBackgroundColor(Color.WHITE);
 		mGlobalVariableLibrary = new VariableLibrary();
 		mLocalVariableLibrary = new VariableLibrary();
 		mCustomCommandLibrary = new CustomCommandLibrary();
 	}
-
-	public HashMap<String,CustomCommand> getCustomCommands(){
-		return customCommands;
+	
+	public CustomCommandLibrary getCustomCommandLibrary(){
+		return mCustomCommandLibrary;
 	}
+
 	
 	private void setChangedAndNotifyObservers() {
 		setChanged();
@@ -51,7 +52,7 @@ public class Model extends Observable {
 	
 	public void addCustomCommand(String name, CustomCommand command)
 	{
-		customCommands.put(name, command);
+		mCustomCommandLibrary.put(name, command);
 		setChangedAndNotifyObservers();
 	}
 
@@ -181,7 +182,11 @@ public class Model extends Observable {
 	}
 	
 	public Collection<CustomVariable> getUserDefinedVariables(){
-		return mGlobalVariableLibrary.values();
+		List<CustomVariable> vars = new ArrayList<>();
+		for(String key : mGlobalVariableLibrary.keySet()){
+			CustomVariable var = new CustomVariable(key, mGlobalVariableLibrary.get(key));
+		}
+		return vars;
 	}
 
 	public Collection<String> getUserDefinedCommands() {

@@ -1,24 +1,16 @@
 package back_end.model.expressiontree;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
-import back_end.model.container.Input;
-import back_end.model.scene.Model;
-import back_end.overhead.ProgramParser;
-import back_end.commands.CustomCommand;
 import back_end.commands.constant.Constant;
 import back_end.exceptions.CommandException;
-import back_end.exceptions.NotEnoughParameterException;
+import back_end.exceptions.UnrecognizedCommandException;
 import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
-import back_end.libraries.CommandLibrary;
-import back_end.exceptions.UnrecognizedCommandException;
+import back_end.libraries.CommandFactory;
+import back_end.model.container.Input;
+import back_end.model.scene.Model;
 
 /**
  * Main language parsing structure, construct all commands and constants in a
@@ -33,7 +25,7 @@ public class ExpressionTree {
 	private List<Input> mInputs;
 	private ExpressionTreeNode mRootNode;
 
-	private CommandLibrary mCommandLib;
+	private CommandFactory mCommandLib;
 	private String currentLanguage;
 
 	public ExpressionTree(String lang) {
@@ -70,7 +62,7 @@ public class ExpressionTree {
 	public void initTree() {
 		mInputs = new ArrayList<>();
 		mRootNode = null;
-		mCommandLib = new CommandLibrary(this.currentLanguage);
+		mCommandLib = new CommandFactory(this.currentLanguage);
 	}
 
 	// Turn a full list of commands into a sub tree
@@ -222,8 +214,8 @@ public class ExpressionTree {
 		try {
 			command = mCommandLib.getCommand(node.getInput().getParameter());
 		} catch (CommandException e) {
-			if (state.getCustomCommands().containsKey(node.getInput().getParameter())) {
-				command = state.getCustomCommands().get(node.getInput().getParameter());
+			if (state.getCustomCommandLibrary().containsKey(node.getInput().getParameter())) {
+				command = state.getCustomCommandLibrary().get(node.getInput().getParameter());
 			} else {
 				throw new UnrecognizedCommandException(node.getInput().getParameter());
 			}

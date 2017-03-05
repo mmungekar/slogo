@@ -2,7 +2,7 @@ package back_end.model.expressiontree;
 
 import back_end.interfaces.CommandInterface;
 import back_end.interfaces.NodeIntermediateInteface;
-import back_end.libraries.CommandLibrary;
+import back_end.libraries.CommandFactory;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.UnrecognizedCommandException;
 
@@ -17,7 +17,7 @@ import back_end.exceptions.UnrecognizedCommandException;
  */
 public class Oxygen<T> implements NodeIntermediateInteface<T> {
 	private String mType;
-	private CommandLibrary mCommandLib;
+	private CommandFactory mCommandLib;
 
 	private T mContent;
 	private String mSubContent;
@@ -25,7 +25,7 @@ public class Oxygen<T> implements NodeIntermediateInteface<T> {
 
 	public Oxygen(String language, String type) {
 		mType = type;
-		mCommandLib = new CommandLibrary(language);
+		mCommandLib = new CommandFactory(language);
 	}
 
 	public void convertLight(String light) throws CommandException {
