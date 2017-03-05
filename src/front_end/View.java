@@ -2,10 +2,6 @@ package front_end;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.function.Consumer;
@@ -63,9 +59,18 @@ public class View implements ViewInterface {
 			try
 			{
 				scan = new Scanner(f);
-				scan.useDelimiter("\\Z");  
-				String content = scan.next();
-				terminal.submitInput(content);
+				StringBuilder content = new StringBuilder();
+				while (scan.hasNextLine())
+				{
+					String s = scan.nextLine();
+					if (s.equals("")) continue;
+					
+					Scanner stringScanner = new Scanner(s);
+					if (!stringScanner.next().equals("#")) content.append(s + " ");
+					stringScanner.close();
+				}
+				
+				terminal.submitInput(content.toString());
 			}
 			catch (FileNotFoundException e)
 			{
