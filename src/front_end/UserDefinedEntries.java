@@ -5,7 +5,7 @@ import java.util.Observer;
 import java.util.ResourceBundle;
 
 import back_end.CustomVariable;
-import back_end.model.Model;
+import back_end.model.scene.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;

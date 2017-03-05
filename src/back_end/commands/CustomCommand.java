@@ -3,16 +3,17 @@ package back_end.commands;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import back_end.model.ExpressionTree;
-import back_end.model.ExpressionTreeNode;
-import back_end.model.Model;
-import back_end.model.Oxygen;
+import back_end.model.expressiontree.ExpressionTree;
+import back_end.model.expressiontree.ExpressionTreeNode;
+import back_end.model.expressiontree.Oxygen;
+import back_end.model.scene.Model;
 import back_end.interfaces.CommandInterface;
 import back_end.exceptions.CommandException;
+import back_end.exceptions.NotEnoughParameterException;
 import back_end.exceptions.UnrecognizedCommandException;
 import back_end.exceptions.VariableNotFoundException;
 
-public class CustomCommand implements CommandInterface<Oxygen<Double>>
+public class CustomCommand implements CommandInterface
 {
 	private ArrayList<String> variableNames;
 	private HashMap<String, Double> variableValues;
