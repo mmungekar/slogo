@@ -4,11 +4,13 @@ import back_end.exceptions.CommandException;
 import back_end.exceptions.NotEnoughParameterException;
 import back_end.exceptions.UnrecognizedCommandException;
 import back_end.exceptions.VariableNotFoundException;
-import back_end.model.ExpressionTree;
-import back_end.model.Model;
+import back_end.model.expressiontree.ExpressionTree;
+import back_end.model.expressiontree.ExpressionTreeNode;
+import back_end.model.scene.Model;
 
-public interface CommandInterface<A>{
-	void setParameters(Model model, A...os) throws NotEnoughParameterException, VariableNotFoundException, CommandException;
+public interface CommandInterface {
+	void setParameters(Model model, ExpressionTree tree)
+			throws NotEnoughParameterException, VariableNotFoundException, CommandException;
 
 	double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException;
 }
