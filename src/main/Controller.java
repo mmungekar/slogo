@@ -1,11 +1,14 @@
 package main;
 
 import front_end.View;
-import back_end.model.Model;
+
+import back_end.*;
 import back_end.overhead.Interpreter;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.VariableNotFoundException;
+import back_end.model.scene.Model;
 import javafx.scene.control.Tab;
+import javafx.stage.Stage;
 
 public class Controller {
 	public static final String RETURN_PREFIX = "Returns: %s";

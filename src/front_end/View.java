@@ -10,7 +10,7 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
-import back_end.model.Model;
+import back_end.model.scene.Model;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Tab;
