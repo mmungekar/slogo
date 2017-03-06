@@ -9,6 +9,7 @@ import back_end.exceptions.UnrecognizedCommandException;
 import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
 import back_end.libraries.CommandFactory;
+import back_end.libraries.CustomCommandLibrary;
 import back_end.model.container.Input;
 import back_end.model.scene.Model;
 
@@ -26,16 +27,19 @@ public class ExpressionTree {
 	private ExpressionTreeNode mRootNode;
 
 	private CommandFactory mCommandLib;
+	private CustomCommandLibrary mCustomCommandLib;
 	private String currentLanguage;
 
 	public ExpressionTree(String lang) {
 		this.currentLanguage = lang;
 		this.initTree();
+		mCustomCommandLib = new CustomCommandLibrary();
 	}
 
-	public ExpressionTree(ExpressionTreeNode node, String lang) {
+	public ExpressionTree(ExpressionTreeNode node, String lang, CustomCommandLibrary customLib) {
 		this(lang);
 		mRootNode = node;
+		mCustomCommandLib = customLib;
 	}
 
 	public String getLanguage() {
@@ -117,13 +121,24 @@ public class ExpressionTree {
 	}
 
 	private boolean isChildrenFull(ExpressionTreeNode node) throws UnrecognizedCommandException {
-		if(isListStart(node.getInput()))
+		Input input = node.getInput();
+		if (isListStart(input))
 			return false;
-		if(isListEnd(node.getInput()))
+		if (isListEnd(input))
 			return true;
-		return node != mRootNode
-				&& (isConstant(node.getInput()) || (isVariable(node.getInput())) || (isCommand(node.getInput())
-						&& mCommandLib.getNumParam(node.getInput().getParameter()) == node.getChildren().size()));
+		if (isCommand(input))
+			try {
+				return mCommandLib.getNumParam(input.getParameter()) == node.getChildren().size();
+			} catch (CommandException e) {
+				if (mCustomCommandLib.contains(input.getParameter())) {
+					System.out.println("Contains " + input.getParameter());
+					return mCustomCommandLib.getCustomCommand(input.getParameter()).getNumParams() == node.getChildren()
+							.size();
+				} else
+					return true;
+			}
+		return node != mRootNode && (isConstant(input) || (isVariable(input))
+				|| (isCommand(input) && mCommandLib.getNumParam(input.getParameter()) == node.getChildren().size()));
 	}
 
 	private boolean isCommand(Input i) {
@@ -198,7 +213,8 @@ public class ExpressionTree {
 			}
 			return;
 		} else if (isCommand(currInput)) {
-			libraryLookUp(node, state);
+			CommandInterface command = libraryLookUp(node, state);
+			nodeExecute(node, state, command);
 		}
 	}
 
@@ -208,7 +224,7 @@ public class ExpressionTree {
 		node.getOxygen().putReturnValue(value);
 	}
 
-	private void libraryLookUp(ExpressionTreeNode node, Model state)
+	private CommandInterface libraryLookUp(ExpressionTreeNode node, Model state)
 			throws CommandException, VariableNotFoundException {
 		CommandInterface command = null;
 		try {
@@ -220,8 +236,9 @@ public class ExpressionTree {
 				throw new UnrecognizedCommandException(node.getInput().getParameter());
 			}
 		}
-		command.setParameters(state, new ExpressionTree(node, this.getLanguage()));
-		nodeExecute(node, state, command);
+		command.setParameters(state, new ExpressionTree(node, this.getLanguage(), state.mCustomCommandLibrary));
+		return command;
+
 	}
 
 	private void checkListStart(Model state, ExpressionTreeNode node)

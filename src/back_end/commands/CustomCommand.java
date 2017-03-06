@@ -15,14 +15,13 @@ public class CustomCommand implements CommandInterface {
 	private String mName;
 	private VariableLibrary mCustomVarLib;
 	private ExpressionTree mCommandTree;
-	private Double[] parameters;
-
 	public CustomCommand(String name, VariableLibrary varLib, ExpressionTree tree) {
 		mName = name;
 		mCustomVarLib = varLib;
 		mCommandTree = tree;
 	}
 
+	@Override
 	public void setParameters(Model model, ExpressionTree tree) throws NotEnoughParameterException {
 		ExpressionTreeNode root = tree.getRootNode();
 		Iterator<ExpressionTreeNode> valIter = root.getChildren().iterator();
@@ -35,7 +34,16 @@ public class CustomCommand implements CommandInterface {
 					mCustomVarLib.keySet().size(), root.getChildren().size());
 
 	}
+	
+	public String getName(){
+		return mName;
+	}
+	
+	public int getNumParams(){
+		return mCustomVarLib.keySet().size();
+	}
 
+	@Override
 	public double Execute(Model model) throws CommandException, VariableNotFoundException {
 		model.mLocalVariableLibrary = mCustomVarLib;
 		double retVal = mCommandTree.traverse(model);

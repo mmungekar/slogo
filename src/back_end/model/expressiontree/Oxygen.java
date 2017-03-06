@@ -42,7 +42,8 @@ public class Oxygen<T> implements NodeIntermediateInteface<T> {
 			putContent((T) s);
 			break;
 		case COMMAND_TYPE:
-			CommandInterface ci = mCommandLib.getCommand(light);
+			//CommandInterface ci = mCommandLib.getCommand(light);
+			String ci = light;
 			putContent((T) ci);
 			break;
 		}

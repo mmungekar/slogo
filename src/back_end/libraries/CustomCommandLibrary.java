@@ -24,5 +24,9 @@ public class CustomCommandLibrary extends HashMap<String, CustomCommand>{
 			return this.get(command);
 		throw new UnrecognizedCommandException("Cannot find the user defined command: " + command);
 	}
+	
+	public boolean contains(String command){
+		return this.containsKey(command);
+	}
 
 }
