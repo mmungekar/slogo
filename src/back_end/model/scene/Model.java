@@ -11,6 +11,8 @@ import back_end.commands.custom.CustomCommand;
 import back_end.commands.custom.CustomVariable;
 import back_end.exceptions.VariableNotFoundException;
 
+import back_end.commands.custom.CustomVariable;
+import back_end.commands.custom.CustomCommand;
 import back_end.libraries.CustomCommandLibrary;
 import back_end.libraries.VariableLibrary;
 import javafx.geometry.Point2D;
