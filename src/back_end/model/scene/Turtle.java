@@ -113,7 +113,7 @@ public class Turtle {
 		return this.penColor;
 	}
 
-	public void changePenColor(Color newColor) {
+	public void setPenColor(Color newColor) {
 		this.penColor = newColor;
 		
 	}
