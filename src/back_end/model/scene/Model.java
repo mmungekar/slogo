@@ -1,6 +1,7 @@
 package back_end.model.scene;
 
 import java.util.Arrays;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,9 +29,9 @@ public class Model extends Observable {
 	private Color backgroundColor;
 	private Point2D home;
 	private boolean clear;
-	public VariableLibrary mGlobalVariableLibrary;
-	public VariableLibrary mLocalVariableLibrary;
-	public CustomCommandLibrary mCustomCommandLibrary;
+	private VariableLibrary mGlobalVariableLibrary;
+	private VariableLibrary mLocalVariableLibrary;
+	private CustomCommandLibrary mCustomCommandLibrary;
 	private HashMap<Integer, Color> colorContainer;
 	private TurtleMaster myTurtleMaster;
 
@@ -122,10 +123,6 @@ public class Model extends Observable {
 
 	public boolean hasCustomVariable(String parameter) {
 		return mLocalVariableLibrary.hasVariable(parameter);
-	}
-
-	public Double retrieveCustomVariable(String nodeName) throws VariableNotFoundException {
-		return mLocalVariableLibrary.retrieveVariable(nodeName);
 	}
 	
 	public void setHome(Point2D home) {
@@ -231,7 +228,45 @@ public class Model extends Observable {
 		setChangedAndNotifyObservers();
 	}
 
-	public void setPenColor(Color web) {
-		// TODO Auto-generated method stub
+	public void setPenColor(Color color) {
+		myTurtleMaster.setPenColor(color);
+	}
+
+	public void removeActiveTurtles() {
+		myTurtleMaster.removeActiveTurtles();
+	}
+
+	public void setTurtleImage(File newImageFile) {
+		myTurtleMaster.setTurtleImage(newImageFile);
+	}
+
+	public void clearVariables() {
+		mGlobalVariableLibrary = new VariableLibrary();
+		mLocalVariableLibrary = new VariableLibrary();
+	}
+
+	public void clearCommands() {
+		mCustomCommandLibrary = new CustomCommandLibrary();
+	}
+
+	public boolean isVariableStored(String parameter) {
+		return this.mGlobalVariableLibrary.hasVariable(parameter)
+				|| this.mLocalVariableLibrary.hasVariable(parameter);
+	}
+
+	public VariableLibrary getLocalVariableLibrary() {
+		return this.mLocalVariableLibrary;
+	}
+
+	public void setLocalVariableLibrary(VariableLibrary mCustomVarLib) {
+		this.mLocalVariableLibrary = mCustomVarLib;
+	}
+
+	public Double retrieveVariable(String nodeName) {
+		if(this.mGlobalVariableLibrary.hasVariable(nodeName)){
+			return this.mGlobalVariableLibrary.get(nodeName).getValue();
+		} else {
+			return this.mLocalVariableLibrary.get(nodeName).getValue();
+		}
 	}
 }

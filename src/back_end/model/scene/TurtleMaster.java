@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import back_end.commands.custom.CustomVariable;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 public class TurtleMaster {
 	public static final String IMAGE_DIRECTORY = "resources/images/";
@@ -60,7 +61,6 @@ public class TurtleMaster {
 		if (tempActiveTurtles) {
 			return Collections.unmodifiableList(tempActiveTurtleIDs);
 		} else {
-			System.out.println("getting active list");
 			return Collections.unmodifiableList(activeTurtleIDs);
 		}
 	}
@@ -194,7 +194,7 @@ public class TurtleMaster {
 		return imageTurtle;
 	}
 
-	void changeTurtleImage(File newImageFile) {
+	void setTurtleImage(File newImageFile) {
 		Image newTurtleImage = new Image(
 				getClass().getClassLoader().getResourceAsStream(IMAGE_DIRECTORY + newImageFile.getName()));
 		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
@@ -220,5 +220,17 @@ public class TurtleMaster {
 
 	double getActiveTurtleID() {
 		return this.activeTurtleID;
+	}
+
+	public void removeActiveTurtles() {
+		activeTurtleIDs.stream().filter(elt -> elt != null).forEach(id -> { 
+			turtleContainer.remove(id);
+		});
+	}
+
+	public void setPenColor(Color color) {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
+			turtle.setPenColor(color);
+		});
 	}
 }
