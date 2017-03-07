@@ -45,9 +45,9 @@ public class CustomCommand implements CommandInterface {
 
 	@Override
 	public double Execute(Model model) throws CommandException, VariableNotFoundException {
-		model.setLocalVariableLibrary(mCustomVarLib);
+		model.mLocalVariableLibrary = mCustomVarLib;
 		double retVal = mCommandTree.traverse(model);
-		model.setLocalVariableLibrary(null);
+		model.mLocalVariableLibrary = null;
 		return retVal;
 
 	}

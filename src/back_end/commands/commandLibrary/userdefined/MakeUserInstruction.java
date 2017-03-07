@@ -26,7 +26,7 @@ public class MakeUserInstruction implements CommandInterface {
 		commandName = (String) iter.next().getOxygen().getContent();
 		customVarLib = getCustomVarLib(iter.next());
 		iter.next();
-		ExpressionTree commandTree = new ExpressionTree(iter.next(), mTree.getLanguage(), model.getCustomCommandLibrary());
+		ExpressionTree commandTree = new ExpressionTree(iter.next(), mTree.getLanguage(), model.mCustomCommandLibrary);
 		mVarTreePair = new Pair<>(customVarLib, commandTree);
 	}
 	
@@ -46,7 +46,7 @@ public class MakeUserInstruction implements CommandInterface {
 	 */
 	public double Execute(Model model) {
 		CustomCommand command = new CustomCommand(commandName, mVarTreePair.getA(), mVarTreePair.getB());
-		model.getCustomCommandLibrary().put(commandName, command);
+		model.mCustomCommandLibrary.put(commandName, command);
 //		System.out.println("Put new command: " + command + "into the CustomCommandLib.");
 //		System.out.println("Needs " + command.getNumParams() + " parameters.");
 		return 1d;
