@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import back_end.commands.custom.CustomVariable;
 import back_end.exceptions.VariableNotFoundException;
 
-public class VariableLibrary extends LinkedHashMap<String, Double>{	
+public class VariableLibrary extends LinkedHashMap<String, CustomVariable>{	
 	
 	public boolean hasVariable(String name){
 	    return this.containsKey(name);	
@@ -14,7 +14,7 @@ public class VariableLibrary extends LinkedHashMap<String, Double>{
 	public void insertVariable(String name, Double value){
 		if(name.isEmpty())
 			return;
-		this.put(name, value);
+		this.put(name, new CustomVariable(name, value));
 	}
 	
 	public void updateVariable(String name, Double value){
@@ -27,6 +27,7 @@ public class VariableLibrary extends LinkedHashMap<String, Double>{
 	public Double retrieveVariable(String name) throws VariableNotFoundException{
 		if(!this.containsKey(name))
 			throw new VariableNotFoundException(name);
-		return this.get(name);
+		return this.get(name).getValue();
 	}
+	
 }

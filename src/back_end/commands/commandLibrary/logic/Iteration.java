@@ -21,6 +21,6 @@ public abstract class Iteration {
 		if(mLocalVarLib.containsKey(name)){
 			mLocalVarLib.remove(name);
 		}
-		mLocalVarLib.put(name, value);
+		mLocalVarLib.insertVariable(name, value);
 	}
 }

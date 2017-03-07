@@ -11,7 +11,6 @@ public abstract class OneParameterCommand extends SimpleParameterCommand impleme
     
     protected void getParams(){
     	A = this.getParameterValue().get(0);
-    	System.out.println(A);
     }
 
 
