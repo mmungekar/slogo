@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import back_end.commands.constant.Constant;
+import back_end.commands.custom.CustomCommand;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.UnrecognizedCommandException;
 import back_end.exceptions.VariableNotFoundException;
@@ -96,11 +97,19 @@ public class ExpressionTree {
 			System.out.println("Children Full? " + currNode.getInput().getParameter());
 		}
 
-		currNode = checkFinishedList(currNode, inputNode);
+		currNode = placeNewNode(currNode, inputNode);
+		inputNode.setParent(currNode);
+		currNode.getChildren().add(inputNode);
+		currNode = inputNode;
 		return currNode;
 	}
 
-
+	private ExpressionTreeNode placeNewNode(ExpressionTreeNode currNode, ExpressionTreeNode newNode) {
+		if (isListEnd(newNode.getInput())) {
+			currNode = currNode.getParent();
+		}
+		return currNode;
+	}
 
 	private boolean isChildrenFull(ExpressionTreeNode node) throws UnrecognizedCommandException {
 
@@ -111,8 +120,7 @@ public class ExpressionTree {
 			return true;
 		if (isCommand(input))
 			try {
-				return mCommandLib.getNumParam(input.getParameter()) == node.getChildren().size() 
-						&& node.getParent().getInput().getType().equals(Constant.GROUPSTART_TYPE);
+				return mCommandLib.getNumParam(input.getParameter()) == node.getChildren().size();
 			} catch (CommandException e) {
 				if (mCustomCommandLib.contains(input.getParameter())) {
 					System.out.println("Contains " + input.getParameter());
@@ -239,20 +247,6 @@ public class ExpressionTree {
 			Double value = createFinalOutput(node);
 			node.getOxygen().putReturnValue(value);
 		}
-	}
-	
-	private ExpressionTreeNode checkFinishedList(ExpressionTreeNode currNode, ExpressionTreeNode inputNode) {
-		if (isListEnd(inputNode.getInput())) {
-			currNode = currNode.getParent();
-			if(inputNode.getInput().getType().equals(Constant.GROUPEND_TYPE)){
-				currNode = currNode.getParent();
-			}
-			return currNode;
-		}
-		inputNode.setParent(currNode);
-		currNode.getChildren().add(inputNode);
-		currNode = inputNode;
-		return currNode;
 	}
 
 	/*
