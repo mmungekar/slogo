@@ -29,12 +29,9 @@ public class FileMenu extends Menu{
 		newTabButton = new MenuItem("New Tab");
 		fileButton = new MenuItem("Run File");
 		languageOptions = new MenuOptionsList("Set Language", languages, "English", lang -> model.setCurrentLanguage(lang));
-		MenuItem clear = new MenuItem("Clear");
-		clear.setOnAction(e -> {
-			model.clearScreen();
-		});
 		
-		this.getItems().addAll(newTabButton, fileButton, languageOptions, clear);
+		
+		this.getItems().addAll(newTabButton, fileButton, languageOptions);
 	}
 
 	public void setFileButton(Consumer<File> r)

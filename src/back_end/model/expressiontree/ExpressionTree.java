@@ -146,8 +146,7 @@ public class ExpressionTree {
 	}
 
 	private boolean isVariableStored(Input i, Model m) {
-		return m.mGlobalVariableLibrary.hasVariable(i.getParameter())
-				|| m.mLocalVariableLibrary.hasVariable(i.getParameter());
+		return m.isVariableStored(i.getParameter());
 	}
 
 	private boolean isListStart(Input i) {
@@ -192,11 +191,7 @@ public class ExpressionTree {
 			if (isVariableStored(currInput, state)) { // Turn a variable into a
 														// constant directly
 				Double value = 0d;
-				if (state.mGlobalVariableLibrary.hasVariable(nodeName)) {
-					value = state.mGlobalVariableLibrary.retrieveVariable(nodeName);
-				} else {
-					value = state.mLocalVariableLibrary.retrieveVariable(nodeName);
-				}
+				value = retriveVariable(state, nodeName);
 				Oxygen<Double> constantOxy = new Oxygen<>(this.currentLanguage, Constant.CONSTANT_TYPE);
 				constantOxy.convertLight(value.toString());
 				constantOxy.putReturnValue(value);
@@ -211,6 +206,10 @@ public class ExpressionTree {
 			CommandInterface command = libraryLookUp(node, state);
 			nodeExecute(node, state, command);
 		}
+	}
+
+	private Double retriveVariable(Model state, String nodeName) {
+		return state.retrieveVariable(nodeName);
 	}
 
 	private void nodeExecute(ExpressionTreeNode node, Model state, CommandInterface command)
@@ -232,7 +231,7 @@ public class ExpressionTree {
 				throw new UnrecognizedCommandException(node.getInput().getParameter());
 			}
 		}
-		command.setParameters(state, new ExpressionTree(node, this.getLanguage(), state.mCustomCommandLibrary));
+		command.setParameters(state, new ExpressionTree(node, this.getLanguage(), state.getCustomCommandLibrary()));
 		return command;
 
 	}
