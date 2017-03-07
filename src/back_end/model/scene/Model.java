@@ -225,5 +225,6 @@ public class Model extends Observable {
 
 	public void tell(List<Integer> parametersInteger) {
 		myTurtleMaster.setActiveTurtles(parametersInteger);
+		setChangedAndNotifyObservers();
 	}
 }

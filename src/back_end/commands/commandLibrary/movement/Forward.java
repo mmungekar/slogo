@@ -7,6 +7,7 @@ public class Forward extends ForwardBackward implements CommandInterface{
 
 	@Override
 	public double Execute(Model model) {
+		this.getParams();
 		this.moveForward(model, A);
 		return A;
 	}

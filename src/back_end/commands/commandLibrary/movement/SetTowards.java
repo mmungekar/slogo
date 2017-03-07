@@ -8,6 +8,7 @@ public class SetTowards extends TwoParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model model) {
+		this.getParams();
 	    return model.setTowards(A, B);
 	}
 

@@ -1,4 +1,4 @@
-package back_end.commands.commandLibrary.scene;
+package back_end.commands.commandLibrary.multipleTurtles;
 
 import back_end.commands.commandLibrary.SimpleParameterCommand;
 import back_end.commands.constant.Constant;

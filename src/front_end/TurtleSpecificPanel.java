@@ -45,8 +45,13 @@ public class TurtleSpecificPanel extends HBox implements Observer{
 	private RadioButton penDown;
 	private Button sendHome;
 	private Button fileChoose;
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	
+	/*
 	public TurtleSpecificPanel(View view, Model model, Stage s){
 		this.myView = view;
 		this.model = model;
@@ -215,6 +220,7 @@ public class TurtleSpecificPanel extends HBox implements Observer{
 			updateTurtleSelection();
 		}
 	}
+	*/
 	
 
 }

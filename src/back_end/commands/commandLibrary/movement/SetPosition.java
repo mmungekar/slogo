@@ -8,6 +8,7 @@ public class SetPosition extends TwoParameterCommand implements CommandInterface
 
 	@Override
 	public double Execute(Model model) {
+		this.getParams();
 		return model.setPos(model.getHome().getX() + A, model.getHome().getY() - B);
 	}
 

@@ -7,6 +7,7 @@ public class Right extends LeftRight implements CommandInterface{
 
 	@Override
 	public double Execute(Model model) {
+		this.getParams();
 		this.rotateRight(model, A);
 	    return A;
 	}

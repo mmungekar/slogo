@@ -55,8 +55,6 @@ public abstract class SimpleParameterCommand implements CommandInterface {
 		for (ExpressionTreeNode child : myTree.getRootNode().getChildren()) {
 			myParams.add(child.getOxygen().getReturnValue());
 		}
-
-		myParams.toArray(new Double[myParams.size()]);
 	}
 
 	protected List<Double> getParameterValue() {
