@@ -21,9 +21,8 @@ public class Controller {
 		model = new Model();
 		view = new View(tab, model);
 		mInterpreter = new Interpreter();
-
+		
 		view.setEnterListener((String rawUserInput) -> {
-			//System.out.println(model.toString());
 			String message;
 			try {
 				message = String.format(RETURN_PREFIX, mInterpreter.execute(model, rawUserInput));
@@ -31,8 +30,9 @@ public class Controller {
 				message = e.getMessage();
 			}
 			view.setOutput(String.format(OUTPUT_STRING_FORMAT, rawUserInput, message));
-			//System.out.println(model.toString());
 		});
+		
+		
 	}
 
 	public void setNewTabButton(Runnable r)

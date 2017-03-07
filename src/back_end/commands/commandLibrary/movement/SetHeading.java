@@ -1,17 +1,14 @@
 package back_end.commands.commandLibrary.movement;
 
-import back_end.model.expressiontree.ExpressionTree;
-import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
-import back_end.commands.commandLibrary.PresetCommand;
+import back_end.commands.commandLibrary.OneParameterCommand;
 import back_end.interfaces.CommandInterface;
 
-public class SetHeading extends PresetCommand implements CommandInterface{
+public class SetHeading extends OneParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model model) {
-		double a = this.getParameterValue()[0];
-	    model.setAngle(0, a);
-	    return a;
+		model.setAngle(A);
+	    return A;
 	}
 
 }

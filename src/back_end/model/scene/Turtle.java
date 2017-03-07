@@ -1,11 +1,14 @@
 package back_end.model.scene;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
-public class Turtle extends ImageView {
+public class Turtle {
+	private ImageView myImageView;
+	
 	private Point2D topLeftPos;
 	private Point2D centerPos = null;
 	private Point2D prevCenterPos = null;
@@ -14,8 +17,8 @@ public class Turtle extends ImageView {
 	private double angle;
 	private Color penColor = Color.BLACK;
 
-	Turtle(Image image, Point2D initPos) {
-		super(image);
+	Turtle(Image image, Point2D initPos) {		
+		myImageView = new ImageView(image);
 		this.setAngle(0);
 		calcHalfDems();
 		setAngle(-90);
@@ -24,8 +27,8 @@ public class Turtle extends ImageView {
 	}
 
 	private void calcHalfDems() {
-		halfDems[0] = this.getImage().getWidth() / 2.0;
-		halfDems[1] = this.getImage().getHeight() / 2.0;
+		halfDems[0] = myImageView.getImage().getWidth() / 2.0;
+		halfDems[1] = myImageView.getImage().getHeight() / 2.0;
 	}
 
 	Turtle(Image image, double x, double y) {
@@ -36,16 +39,20 @@ public class Turtle extends ImageView {
 		setPosition(new Point2D(inX, inY));
 	}
 
-	public void setPosition(Point2D newPos) {
+	public double setPosition(Point2D newPos) {
+		double displacement = 0;
 		if (this.centerPos != null) {
 			this.prevCenterPos = this.centerPos;
+			displacement = this.centerPos.distance(newPos);
 		} else {
 			this.prevCenterPos = newPos;
 		}
+		
 		this.centerPos = newPos;
-		this.setX(this.centerPos.getX() - halfDems[0]);
-		this.setY(this.centerPos.getY() - halfDems[1]);
-		this.topLeftPos = new Point2D(this.getX(), this.getY());
+		myImageView.setX(this.centerPos.getX() - halfDems[0]);
+		myImageView.setY(this.centerPos.getY() - halfDems[1]);
+		this.topLeftPos = new Point2D(myImageView.getX(), myImageView.getY());
+		return displacement;
 	}
 
 	public boolean isPenDown() {
@@ -79,7 +86,7 @@ public class Turtle extends ImageView {
 	public void setAngle(double angle) {
 		this.angle = angle;
 		keepAngleWithin360();
-		this.setRotate(this.angle);
+		myImageView.setRotate(this.angle);
 	}
 
 	private void keepAngleWithin360() {
@@ -89,7 +96,7 @@ public class Turtle extends ImageView {
 	}
 
 	public void changeImage(Image newTurtleImage) {
-		this.setImage(newTurtleImage);
+		myImageView.setImage(newTurtleImage);
 		calcHalfDems();
 		setPosition(this.centerPos);
 	}
@@ -109,6 +116,39 @@ public class Turtle extends ImageView {
 	public void changePenColor(Color newColor) {
 		this.penColor = newColor;
 		
+	}
+
+	public boolean isVisible() {
+		return myImageView.isVisible();
+	}
+
+	public double calcDistanceFromPos(Point2D pos) {
+		return Math.sqrt(Math.pow((pos.getX() - this.getCenterPosition().getX()), 2) + Math.pow((pos.getY() - this.getCenterPosition().getY()), 2)); 
+	}
+
+	public void setVisible(boolean b) {
+		myImageView.setVisible(b);
+	}
+
+	public Node getImageView() {
+		return myImageView;
+	}
+	
+	public void moveForward(double mag) {
+		double angle = this.getAngle();
+		double dx = Math.cos(Math.toRadians(angle)) * mag;
+		double dy = Math.sin(Math.toRadians(angle)) * mag;
+		this.setPosition(this.getCenterPosition().add(dx, dy));	
+	}
+	
+	public double setTowards(double ox, double oy) {
+		double dx = (ox) - this.getCenterPosition().getX();
+	    double dy = (oy) - this.getCenterPosition().getY();
+	    double prevAngle = this.getAngle();
+	    
+	    double angle = Math.toDegrees(Math.atan(dy / dx));
+	    this.setAngle(angle);
+	    return angle-prevAngle;
 	}
 
 }

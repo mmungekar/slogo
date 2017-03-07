@@ -1,6 +1,7 @@
 package back_end.commands.commandLibrary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import back_end.exceptions.CommandException;
@@ -11,7 +12,6 @@ import back_end.interfaces.CommandInterface;
 import back_end.libraries.CommandFactory;
 import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
-import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
 /**
@@ -19,8 +19,8 @@ import back_end.model.scene.Model;
  * 
  *
  */
-public abstract class PresetCommand implements CommandInterface {
-	private Double[] parameters;
+public abstract class SimpleParameterCommand implements CommandInterface {
+	private List<Double> myParams;
 
 	private int getParamNum(ExpressionTree myTree, String currentLanguage) throws UnrecognizedCommandException {
 		CommandFactory commandLib = new CommandFactory(currentLanguage);
@@ -51,16 +51,16 @@ public abstract class PresetCommand implements CommandInterface {
 			throws NotEnoughParameterException, VariableNotFoundException, CommandException {
 		ExpressionTree myTree = tree;
 		prepareChildren(myTree, model);
-		List<Double> myParams = new ArrayList<Double>();
+		myParams = new ArrayList<Double>();
 		for (ExpressionTreeNode child : myTree.getRootNode().getChildren()) {
 			myParams.add(child.getOxygen().getReturnValue());
 		}
 
-		parameters = myParams.toArray(new Double[myParams.size()]);
+		myParams.toArray(new Double[myParams.size()]);
 	}
 
-	protected Double[] getParameterValue() {
-		return parameters;
+	protected List<Double> getParameterValue() {
+		return Collections.unmodifiableList(myParams);
 	}
 
 	@Override
