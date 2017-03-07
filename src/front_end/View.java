@@ -2,15 +2,12 @@ package front_end;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
 import back_end.model.scene.Model;
+import front_end.toolbar.ToolBarController;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Tab;

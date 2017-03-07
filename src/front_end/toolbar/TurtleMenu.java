@@ -1,4 +1,4 @@
-package front_end;
+package front_end.toolbar;
 
 import java.io.File;
 import java.util.Observable;
@@ -6,8 +6,10 @@ import java.util.Observer;
 import java.util.ResourceBundle;
 
 import back_end.model.scene.Model;
+import front_end.View;
 import front_end.customJavaFxNodes.ActionButton;
 import front_end.customJavaFxNodes.ColorComboBox;
+import front_end.customJavaFxNodes.MenuOptionsList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,6 +18,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
@@ -25,7 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class TurtleSpecificPanel extends HBox implements Observer{
+public class TurtleMenu extends Menu implements Observer{
 	public static final String IMAGE_FILE_DIRECTORY = "src/resources/images/";
 	public static final String IMAGE_EXTENSION = ".gif";
 	public static final String PLEASE_SELECT_PROPER_IMG_FILE = "Please select a %s file for the image of the Turtle";
@@ -35,8 +39,10 @@ public class TurtleSpecificPanel extends HBox implements Observer{
 			"darkorchid", "darkgoldenrod", "lightsalmon", "rosybrown", "blue", "blueviolet", "brown");
 
 	
-	private View myView;
+	
 	private Model model;
+	
+	private Menu penColorOptions;
 	
 	private ComboBox<Integer> turtleIDs;
 	
@@ -45,37 +51,27 @@ public class TurtleSpecificPanel extends HBox implements Observer{
 	private RadioButton penDown;
 	private Button sendHome;
 	private Button fileChoose;
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	
-	/*
-	public TurtleSpecificPanel(View view, Model model, Stage s){
-		this.myView = view;
+	
+	public TurtleMenu(String title, Model model){
+		super(title);
 		this.model = model;
 		model.addObserver(this);
 		
+		MenuItem activeMessage = new MenuItem("Only effects active turtles");
+		activeMessage.setDisable(true);
+		penColorOptions = new MenuOptionsList("Set Pen Color", colors, "Black", color -> model.setPenColor(Color.web(color)));
 		
-		VBox turtleOptions = new VBox();
+		
+		
+		//MenuItem imageChoose = createTurtleImageChoose();
+		//MenuItem sendHome = createSendHomeButton();
+		//MenuItem penControls = createPenToggle();
 
-		createTurtleIDSelector();
-
-		Button imageChoose = createTurtleImageChoose(s);
-		Button sendHome = createSendHomeButton();
-		VBox penControls = createPenToggle();
-
-		turtleOptions.getChildren().addAll(imageChoose, sendHome, penControls);
-		turtleOptions.setSpacing(myView.getDefaultSpacing() / 3);
-
-		this.getChildren().addAll(turtleIDs, turtleOptions);
-
-		this.setLayoutX(myView.getCanvasDimensions()[0] + 3 * myView.getDefaultSpacing());
-		this.setLayoutY(3 * myView.getDefaultSpacing());
-		this.setSpacing(myView.getDefaultSpacing());
+		this.getItems().addAll(activeMessage, penColorOptions);
 	}
-
+	/*
 	private VBox createPenToggle() {
 		VBox penControls = new VBox();
 
@@ -213,14 +209,14 @@ public class TurtleSpecificPanel extends HBox implements Observer{
 		penUp.setText("Pen Up");
 		sendHome.setText("Send Home");
 	}
-	
+	*/
 	@Override
 	public void update(Observable obs, Object obj) {
 		if (obs == model) {
-			updateTurtleSelection();
+			//supdateTurtleSelection();
 		}
 	}
-	*/
+	
 	
 
 }

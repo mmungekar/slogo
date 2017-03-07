@@ -127,5 +127,6 @@ public class UserDefinedEntries extends TabPane implements Observer {
 		
 		((ListView<String>) tabCommands.getContent()).setItems(customCommands);
 		tableVariables.setItems(customVariables);
+		//System.out.println(customVariables.toString());
 	}
 }

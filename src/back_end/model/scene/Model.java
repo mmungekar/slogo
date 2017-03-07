@@ -108,7 +108,8 @@ public class Model extends Observable {
 	public Collection<CustomVariable> getUserDefinedVariables() {
 		List<CustomVariable> vars = new ArrayList<>();
 		for (String key : mGlobalVariableLibrary.keySet()) {
-			CustomVariable var = new CustomVariable(key, mGlobalVariableLibrary.get(key));
+			vars.add(mGlobalVariableLibrary.get(key));
+			
 		}
 		return vars;
 	}
@@ -226,5 +227,9 @@ public class Model extends Observable {
 	public void tell(List<Integer> parametersInteger) {
 		myTurtleMaster.setActiveTurtles(parametersInteger);
 		setChangedAndNotifyObservers();
+	}
+
+	public void setPenColor(Color web) {
+		// TODO Auto-generated method stub
 	}
 }

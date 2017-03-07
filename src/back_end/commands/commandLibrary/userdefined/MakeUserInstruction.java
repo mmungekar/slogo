@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import back_end.commands.custom.CustomCommand;
+import back_end.commands.custom.CustomVariable;
 import back_end.exceptions.NotEnoughParameterException;
 import back_end.interfaces.CommandInterface;
 import back_end.libraries.VariableLibrary;
@@ -34,7 +35,7 @@ public class MakeUserInstruction implements CommandInterface {
 	    for(ExpressionTreeNode varNode : node.getChildren()){
 //	    	System.out.println("Build new custom var lib");
 //	    	System.out.println("Var Name: " + varNode.getOxygen().getContent().toString());
-	    	mVarLib.put((String)varNode.getOxygen().getContent(), 0d);
+	    	mVarLib.put((String)varNode.getOxygen().getContent(), new CustomVariable((String)varNode.getOxygen().getContent(),0d));
 	    }
 	    return mVarLib;
 		
