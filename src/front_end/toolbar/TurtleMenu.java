@@ -43,7 +43,6 @@ public class TurtleMenu extends Menu implements Observer{
 	private Model model;
 	
 	private Menu penColorOptions;
-	private Menu penStatusOption;
 	
 	private ComboBox<Integer> turtleIDs;
 	
@@ -60,98 +59,18 @@ public class TurtleMenu extends Menu implements Observer{
 		this.model = model;
 		model.addObserver(this);
 		
-		MenuItem addTurtle = new MenuItem("Add New Turtle");
-		addTurtle.setOnAction(e -> model.createTurtle(-1));
-		
-		MenuItem activeMessage = new MenuItem("The following only effect active turtles");
+		MenuItem activeMessage = new MenuItem("Only effects active turtles");
 		activeMessage.setDisable(true);
-		
-		MenuItem sendHome = new MenuItem("Send to Home");
-		
-		sendHome.setOnAction(e -> {
-			model.sendTurtleHome();
-		});
-		
-		MenuItem clear = new MenuItem("Clear");
-		clear.setOnAction(e -> {
-			model.clearScreen();
-		});
-		
-		
-		MenuItem remove = new MenuItem("Remove from screen");
-		
-		remove.setOnAction(e -> {
-			model.removeActiveTurtles();
-		});
-		
-		
-		Menu visibility = new Menu("Visibility");
-		
-		MenuItem show = new MenuItem("Show");
-		
-		show.setOnAction(e -> {
-			model.setVisible();
-		});
-		
-		MenuItem hide = new MenuItem("Hide");
-		
-		hide.setOnAction(e -> {
-			model.setInVisible();
-		});
-		
-		
-		visibility.getItems().addAll(show, hide);
-		
-		
-		Menu penProperties = new Menu("Pen Properties");
-		
-		
-		MenuItem image = new MenuItem("Select New Turtle Image");
-		
-		image.setOnAction(e -> {
-			File newImageFile = chooseFile();
-			if (newImageFile != null) {
-				model.setTurtleImage(newImageFile);
-			} else {
-				//myView.setOutput(String.format(PLEASE_SELECT_PROPER_IMG_FILE, IMAGE_EXTENSION));
-			}
-		});
-		
-		
 		penColorOptions = new MenuOptionsList("Set Pen Color", colors, "Black", color -> model.setPenColor(Color.web(color)));
-		penStatusOption = new MenuOptionsList("Set Pen", FXCollections.observableArrayList("Up", "Down"), "Down", selection -> {
-			if (selection.equals("Down")){
-				model.setPenDown();
-			} else {
-				model.setPenUp();
-			}
-		});
 		
 		
-		penProperties.getItems().addAll(penStatusOption, penColorOptions);
+		
 		//MenuItem imageChoose = createTurtleImageChoose();
 		//MenuItem sendHome = createSendHomeButton();
 		//MenuItem penControls = createPenToggle();
 
-		this.getItems().addAll(addTurtle, activeMessage, sendHome, clear, remove, visibility, penProperties, image);
+		this.getItems().addAll(activeMessage, penColorOptions);
 	}
-	
-	private File chooseFile() {
-		FileChooser gifChooser = new FileChooser();
-		gifChooser.setTitle("Choose Turtle Image");
-		gifChooser.setInitialDirectory(new File(IMAGE_FILE_DIRECTORY));
-		File file = gifChooser.showOpenDialog(new Stage());
-		if (file != null) {
-			String name = file.getName();
-			String fileType = name.substring(name.lastIndexOf("."), name.length());
-			if (!fileType.equals(IMAGE_EXTENSION)) {
-				return null;
-			}
-			return file;
-		}
-		return null;
-	}
-	
 	/*
 	private VBox createPenToggle() {
 		VBox penControls = new VBox();
@@ -258,7 +177,21 @@ public class TurtleMenu extends Menu implements Observer{
 		turtleIDs.getItems().addAll(model.getTurtleContainer().keySet());
 	}
 
-	
+	private File chooseFile(Stage s) {
+		FileChooser gifChooser = new FileChooser();
+		gifChooser.setTitle("Choose Turtle Image");
+		gifChooser.setInitialDirectory(new File(IMAGE_FILE_DIRECTORY));
+		File file = gifChooser.showOpenDialog(s);
+		if (file != null) {
+			String name = file.getName();
+			String fileType = name.substring(name.lastIndexOf("."), name.length());
+			if (!fileType.equals(IMAGE_EXTENSION)) {
+				return null;
+			}
+			return file;
+		}
+		return null;
+	}
 	
 	private void updateTurtleSelection() {
 		for (Integer ID : model.getTurtleContainer().keySet()) {

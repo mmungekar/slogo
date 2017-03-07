@@ -12,16 +12,10 @@ public class EditMenu extends Menu{
 		super(title);
 		this.myModel = model;
 		
-		MenuItem clearVariables = new MenuItem("Clear Custom Variables");
+		MenuItem addTurtle = new MenuItem("Add New Turtle");
+		addTurtle.setOnAction(e -> model.createTurtle(-1));
 		
-		clearVariables.setOnAction(e -> model.clearVariables());
-		
-		MenuItem clearCommands = new MenuItem("Clear Custom Commands");
-		
-		clearCommands.setOnAction(e -> model.clearCommands());
-		
-		
-		this.getItems().addAll(clearCommands, clearVariables);
+		this.getItems().add(addTurtle);
 	}
 	
 }
