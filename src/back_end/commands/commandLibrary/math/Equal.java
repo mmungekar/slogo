@@ -8,12 +8,18 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Equal extends TwoParameterCommand{
+public class Equal extends SimpleParameterCommand implements CommandInterface{
 
+	/**
+	 * If all equal, return 1; if not all equal, return 0
+	 */
 	@Override
 	public double Execute(Model state) { 
-		this.getParams();
-		return A == B ? 1 : 0;
+		for(Double a:getParameterValue()){
+			if(a!=getParameterValue().get(0)){
+				return 0;
+			}
+		}
+		return 1;
 	}
-
 }

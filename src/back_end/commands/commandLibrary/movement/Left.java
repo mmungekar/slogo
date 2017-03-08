@@ -6,9 +6,11 @@ import back_end.model.scene.Model;
 public class Left extends LeftRight implements CommandInterface{
 	@Override
 	public double Execute(Model model) {
-		this.getParams();
-		this.rotateRight(model, -1 * A);
-	    return A;
+		Double returnVal = (double) 0;
+		for(Double a: getParameterValue()){
+		this.rotateRight(model, -1*a);
+		returnVal = a;
+		}
+		return returnVal;
 	}
-
 }

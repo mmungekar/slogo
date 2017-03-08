@@ -34,7 +34,6 @@ public class For extends Iteration implements CommandInterface{
 		start = (Double)iterVar.next().getOxygen().getContent();
 		end = (Double)iterVar.next().getOxygen().getContent();
 		increment = (Double)iterVar.next().getOxygen().getContent();
-		iter1.next();
 		mExprNode = iter1.next();
 	}
 

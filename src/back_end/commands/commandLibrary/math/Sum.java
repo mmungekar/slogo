@@ -8,12 +8,14 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Sum extends TwoParameterCommand{
-
+public class Sum extends SimpleParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model state) {
-		getParams();
-		return A + B;
+		double sum = 0;
+		for(Double a : getParameterValue()){
+			sum += a;
+		}
+		return sum;
 	}
 
 }

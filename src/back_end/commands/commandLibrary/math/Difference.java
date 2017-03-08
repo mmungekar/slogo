@@ -8,12 +8,13 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Difference extends TwoParameterCommand{
-
+public class Difference extends SimpleParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model state) {
-		this.getParams();
-		return A - B;
+		double difference = getParameterValue().get(0);
+		for(int i = 1; i<getParameterValue().size();i++){
+			difference -= getParameterValue().get(i);
+		}
+		return difference;
 	}
-
 }
