@@ -21,9 +21,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class TurtleMaster {
-	public static final String IMAGE_DIRECTORY = "resources/images/";
-	public static final String DEFAULT_TURTLE = "turtle.gif";
-
 	private Point2D home;
 	private Map<Integer, Turtle> turtleContainer;
 	private List<Integer> activeTurtleIDs;
@@ -44,19 +41,16 @@ public class TurtleMaster {
 
 	}
 
-	private void cycleThroughActive(List<Integer> turtleIDs, Consumer<? super Turtle> action) {
+	private double cycleThroughActive(List<Integer> turtleIDs, Function<Turtle, Double> action) {
+		List<Double> results = new ArrayList<Double>();
 		turtleIDs.stream().filter(elt -> elt != null).forEach(id -> {
 			activeTurtleID = id;
 			Turtle turtle = turtleContainer.get(id);
-			action.accept(turtle);
+			results.add(action.apply(turtle));
 		});
-
+		return results.get(results.size() - 1);
 	}
-
-	private double operationOnLastTurtle(List<Integer> turtleIDs, Function<Turtle, Double> action) {
-		return action.apply(turtleContainer.get(turtleIDs.size() - 1));
-	}
-
+	
 	private List<Integer> getListeningTurtleIDs() {
 		if (tempActiveTurtles) {
 			return Collections.unmodifiableList(tempActiveTurtleIDs);
@@ -65,6 +59,7 @@ public class TurtleMaster {
 		}
 	}
 
+	/*
 	void moveForward(double mag) {
 		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
 			turtle.moveForward(mag);
@@ -77,16 +72,20 @@ public class TurtleMaster {
 		});
 	}
 
-	void setVisible(boolean b) {
-		cycleThroughActive(getListeningTurtleIDs(), turtle -> turtle.setVisible(b));
+	
+	
+	void setAngle(double angle) {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
+			turtle.setAngle(angle);
+		});
 	}
 
-	double sendHome() {
-		return sendHome(getListeningTurtleIDs());
-	}
-
+	
+	
 	private double sendHome(List<Integer> turtleIDs) {
-		double value = operationOnLastTurtle(turtleIDs, turtle -> turtle.setPosition(home));
+		double value = operationOnLastTurtle(turtleIDs, turtle ->
+							turtle.setPosition(home)
+						);
 		cycleThroughActive(turtleIDs, turtle -> {
 			turtle.setPosition(home);
 			turtle.dontDrawLine();
@@ -103,38 +102,6 @@ public class TurtleMaster {
 		return distance;
 	}
 
-	boolean isVisible() {
-		return isVisible(getListeningTurtleIDs());
-	}
-
-	private boolean isVisible(List<Integer> pickTurtles) {
-		return turtleContainer.get(pickTurtles.get(pickTurtles.size() - 1)).isVisible();
-	}
-
-	void setPenDown() {
-		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
-			turtle.setPenDown();
-		});
-	}
-
-	void setPenUp() {
-		cycleThroughActive(getListeningTurtleIDs(), turtle -> turtle.setPenUp());
-	}
-
-	void setAngle(double angle) {
-		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
-			turtle.setAngle(angle);
-		});
-	}
-
-	boolean isPenDown() {
-		return isPenDown(getListeningTurtleIDs());
-	}
-
-	private boolean isPenDown(List<Integer> pickTurtles) {
-		return turtleContainer.get(pickTurtles.get(pickTurtles.size() - 1)).isPenDown();
-	}
-
 	double setTowards(double ox, double oy) {
 		double newX = home.getX() + ox;
 		double newY = home.getY() - oy;
@@ -145,12 +112,63 @@ public class TurtleMaster {
 		return angleChange;
 	}
 
+	
+	public void setPen(boolean b) {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
+			turtle.setPen(b);
+		});
+	}
+	
+	void setVisible(boolean b) {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
+			turtle.setVisible(b);
+		});
+	}
+	
+	
+
+	public void setPenColor(Color color) {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
+			turtle.setPenColor(color);
+		});
+	}
+	
+
+	double sendHome() {
+		return sendHome(getListeningTurtleIDs());
+	}
+
+
+	boolean isPenDown() {
+		return isPenDown(getListeningTurtleIDs());
+	}
+	
+	boolean isVisible() {
+		return isVisible(getListeningTurtleIDs());
+	}
+
+	private boolean isVisible(List<Integer> pickTurtles) {
+		return turtleContainer.get(pickTurtles.get(pickTurtles.size() - 1)).isVisible();
+	}
+
+	private boolean isPenDown(List<Integer> pickTurtles) {
+		return turtleContainer.get(pickTurtles.get(pickTurtles.size() - 1)).isPenDown();
+	}
+
+	
+
 	double clearScreen() {
 		// TODO remove lines
 		List<Integer> allTurtleIDs = new ArrayList<Integer>(turtleContainer.keySet());
 		double value = operationOnLastTurtle(allTurtleIDs, turtle -> turtle.setPosition(home));
 		sendHome(allTurtleIDs);
 		return value;
+	}
+	
+	*/
+	
+	void setTurtleImage(File newImageFile) {
+		cycleThroughActive(getListeningTurtleIDs(), turtle -> turtle.changeImage(newImageFile.getName()));
 	}
 
 	public List<Integer> getAllTurtleIDs() {
@@ -176,7 +194,7 @@ public class TurtleMaster {
 		if (newTurtleID == -1) {
 			newTurtleID = findLowestIDnotTaken();
 		}
-		turtleContainer.put(newTurtleID, new Turtle(getDefaultTurtleImage(), home));
+		turtleContainer.put(newTurtleID, new Turtle(home));
 
 	}
 
@@ -188,20 +206,7 @@ public class TurtleMaster {
 		return newID;
 	}
 
-	private Image getDefaultTurtleImage() {
-		String imageLocation = IMAGE_DIRECTORY + DEFAULT_TURTLE;
-		Image imageTurtle = new Image(getClass().getClassLoader().getResourceAsStream(imageLocation));
-		return imageTurtle;
-	}
-
-	void setTurtleImage(File newImageFile) {
-		Image newTurtleImage = new Image(
-				getClass().getClassLoader().getResourceAsStream(IMAGE_DIRECTORY + newImageFile.getName()));
-		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
-			turtle.changeImage(newTurtleImage);
-		});
-	}
-
+	
 	public void setActiveTurtles(List<Integer> newActives) {
 
 		newActives.stream().forEach(id -> {
@@ -228,9 +233,7 @@ public class TurtleMaster {
 		});
 	}
 
-	public void setPenColor(Color color) {
-		cycleThroughActive(getListeningTurtleIDs(), turtle -> {
-			turtle.setPenColor(color);
-		});
+	public double operateOnTurtle(Function<Turtle, Double> action) {
+		return cycleThroughActive(getListeningTurtleIDs(), action);
 	}
 }

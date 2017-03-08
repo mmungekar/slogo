@@ -7,6 +7,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 public class Turtle {
+	public static final String IMAGE_DIRECTORY = "resources/images/";
+	public static final String DEFAULT_TURTLE = "turtle.gif";
 	private ImageView myImageView;
 	
 	private Point2D topLeftPos;
@@ -17,8 +19,8 @@ public class Turtle {
 	private double angle;
 	private Color penColor = Color.BLACK;
 
-	Turtle(Image image, Point2D initPos) {		
-		myImageView = new ImageView(image);
+	Turtle(Point2D initPos) {		
+		myImageView = new ImageView(getTurtleImage(DEFAULT_TURTLE));
 		this.setAngle(0);
 		calcHalfDems();
 		setAngle(-90);
@@ -31,8 +33,8 @@ public class Turtle {
 		halfDems[1] = myImageView.getImage().getHeight() / 2.0;
 	}
 
-	Turtle(Image image, double x, double y) {
-		this(image, new Point2D(x, y));
+	Turtle(double x, double y) {
+		this(new Point2D(x, y));
 	}
 
 	public void setPosition(double inX, double inY) {
@@ -58,14 +60,7 @@ public class Turtle {
 	public boolean isPenDown() {
 		return penDown;
 	}
-
-	public void setPenDown() {
-		this.penDown = true;
-	}
 	
-	public void setPenUp() {
-		this.penDown = false;
-	}
 
 	public Point2D getCenterPosition() {
 		return this.centerPos;
@@ -83,10 +78,12 @@ public class Turtle {
 		return angle;
 	}
 
-	public void setAngle(double angle) {
-		this.angle = angle;
+	public double setAngle(double newAngle) {
+		double oldAngle = this.angle;
+		this.angle = newAngle;
 		keepAngleWithin360();
 		myImageView.setRotate(this.angle);
+		return newAngle - oldAngle;
 	}
 
 	private void keepAngleWithin360() {
@@ -95,10 +92,11 @@ public class Turtle {
 		}
 	}
 
-	public void changeImage(Image newTurtleImage) {
-		myImageView.setImage(newTurtleImage);
+	public double changeImage(String newTurtleImagePath) {
+		myImageView.setImage(getTurtleImage(newTurtleImagePath));
 		calcHalfDems();
 		setPosition(this.centerPos);
+		return 0;
 	}
 
 	public boolean hasMoved() {
@@ -113,9 +111,9 @@ public class Turtle {
 		return this.penColor;
 	}
 
-	public void setPenColor(Color newColor) {
+	public double setPenColor(Color newColor) {
 		this.penColor = newColor;
-		
+		return 0;
 	}
 
 	public boolean isVisible() {
@@ -126,29 +124,49 @@ public class Turtle {
 		return Math.sqrt(Math.pow((pos.getX() - this.getCenterPosition().getX()), 2) + Math.pow((pos.getY() - this.getCenterPosition().getY()), 2)); 
 	}
 
-	public void setVisible(boolean b) {
+	public double setVisible(boolean b) {
 		myImageView.setVisible(b);
+		return 0;
 	}
 
 	public Node getImageView() {
 		return myImageView;
 	}
 	
-	public void moveForward(double mag) {
+	public double moveForward(double mag) {
 		double angle = this.getAngle();
 		double dx = Math.cos(Math.toRadians(angle)) * mag;
 		double dy = Math.sin(Math.toRadians(angle)) * mag;
 		this.setPosition(this.getCenterPosition().add(dx, dy));	
+		return mag;
 	}
 	
 	public double setTowards(double ox, double oy) {
 		double dx = (ox) - this.getCenterPosition().getX();
 	    double dy = (oy) - this.getCenterPosition().getY();
+	    System.out.println(new Point2D(dx, dy));
 	    double prevAngle = this.getAngle();
-	    
-	    double angle = Math.toDegrees(Math.atan(dy / dx));
+	    double angle = Math.toDegrees(Math.atan2(dy, dx));
 	    this.setAngle(angle);
 	    return angle-prevAngle;
 	}
 
+	public double setPen(boolean b) {
+		this.penDown = b;
+		return 0;
+	}
+	
+	public void setPenDown() {
+		this.penDown = true;
+	}
+	
+	public void setPenUp() {
+		this.penDown = false;
+	}
+
+	private Image getTurtleImage(String imagePath) {
+		String imageLocation = IMAGE_DIRECTORY + imagePath;
+		Image imageTurtle = new Image(getClass().getClassLoader().getResourceAsStream(imageLocation));
+		return imageTurtle;
+	}
 }

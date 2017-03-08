@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import back_end.commands.custom.CustomCommand;
 import back_end.commands.custom.CustomVariable;
 import back_end.exceptions.VariableNotFoundException;
@@ -136,6 +139,8 @@ public class Model extends Observable {
 	public Iterator<Turtle> getTurtleIterator(){
 		return myTurtleMaster.getTurtles().iterator();
 	}
+	
+	/*
 
 	public double clearScreen() {
 		double a = myTurtleMaster.clearScreen();
@@ -175,11 +180,11 @@ public class Model extends Observable {
 	}
 
 	public void setPenDown() {
-		myTurtleMaster.setPenDown();
+		myTurtleMaster.setPen(true);
 	}
 
 	public void setPenUp() {
-		myTurtleMaster.setPenUp();
+		myTurtleMaster.setPen(false);
 	}
 
 	public void setAngle(double a) {
@@ -204,6 +209,15 @@ public class Model extends Observable {
 		myTurtleMaster.setVisible(true);
 		setChangedAndNotifyObservers();
 	}
+	
+	public void setPenColor(Color color) {
+		myTurtleMaster.setPenColor(color);
+	}
+	
+	public void setTurtleImage(File newImageFile) {
+		myTurtleMaster.setTurtleImage(newImageFile);
+	}
+	*/
 
 
 	public double getTurtleCount() {
@@ -228,17 +242,13 @@ public class Model extends Observable {
 		setChangedAndNotifyObservers();
 	}
 
-	public void setPenColor(Color color) {
-		myTurtleMaster.setPenColor(color);
-	}
+	
 
 	public void removeActiveTurtles() {
 		myTurtleMaster.removeActiveTurtles();
 	}
 
-	public void setTurtleImage(File newImageFile) {
-		myTurtleMaster.setTurtleImage(newImageFile);
-	}
+
 
 	public void clearVariables() {
 		mGlobalVariableLibrary = new VariableLibrary();
@@ -268,5 +278,11 @@ public class Model extends Observable {
 		} else {
 			return this.mLocalVariableLibrary.get(nodeName).getValue();
 		}
+	}
+
+	public double operateOnTurtle(Function<Turtle, Double> action) {
+		double result = myTurtleMaster.operateOnTurtle(action);
+		setChangedAndNotifyObservers();
+		return result;
 	}
 }

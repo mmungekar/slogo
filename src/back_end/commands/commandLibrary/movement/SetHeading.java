@@ -8,7 +8,7 @@ public class SetHeading extends OneParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model model) {
 		this.getParams();
-		model.setAngle(A);
+		model.operateOnTurtle(turtle -> turtle.setAngle(A));
 	    return A;
 	}
 

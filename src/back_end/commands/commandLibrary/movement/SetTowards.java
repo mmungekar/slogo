@@ -9,7 +9,8 @@ public class SetTowards extends TwoParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model model) {
 		this.getParams();
-	    return model.setTowards(A, B);
+		System.out.println(model.getHome());
+	    return model.operateOnTurtle(turtle -> turtle.setTowards(model.getHome().getX() + A, model.getHome().getY() - B));
 	}
 
 }
