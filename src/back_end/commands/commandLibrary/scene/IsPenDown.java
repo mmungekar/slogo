@@ -8,8 +8,9 @@ public class IsPenDown extends SimpleParameterCommand implements CommandInterfac
 
 	@Override
 	public double Execute(Model model) {
-		double down = model.isPenDown() == true ? 1 : 0;
-		return down;
+		return model.operateOnTurtle(turtle -> {
+			 return (turtle.isPenDown() == true) ? 1.0 : 0.0;
+		});
 	}
 
 }

@@ -7,7 +7,7 @@ import back_end.model.scene.Model;
 public abstract class ForwardBackward extends SimpleParameterCommand implements CommandInterface{
 	
 	protected void moveForward(Model model,double mag){
-		model.moveForward(mag);
+		model.operateOnTurtle(turtle -> turtle.moveForward(mag));
 		
 	}
 }

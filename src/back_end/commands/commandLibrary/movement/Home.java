@@ -8,7 +8,7 @@ public class Home extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model model) {		
-		return model.sendTurtleHome();
+		return model.operateOnTurtle(turtle -> turtle.setPosition(model.getHome()));
 	}
 	
 

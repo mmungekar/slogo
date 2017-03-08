@@ -8,7 +8,7 @@ public class PenDown extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model model) {
-		model.setPenDown();
+		model.operateOnTurtle(turtle -> turtle.setPen(true));
 		return 1;
 	}
 	

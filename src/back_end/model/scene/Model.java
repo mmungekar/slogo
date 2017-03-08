@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import back_end.commands.custom.CustomCommand;
 import back_end.commands.custom.CustomVariable;
 import back_end.exceptions.VariableNotFoundException;
@@ -136,76 +139,7 @@ public class Model extends Observable {
 	public Iterator<Turtle> getTurtleIterator(){
 		return myTurtleMaster.getTurtles().iterator();
 	}
-
-	public double clearScreen() {
-		double a = myTurtleMaster.clearScreen();
-		setChangedAndNotifyObservers();
-		return a;
-	}
-
-
-	public void setInVisible() {
-		myTurtleMaster.setVisible(false);
-		setChangedAndNotifyObservers();
-
-	}
-
-	public double sendTurtleHome() {
-		double a = myTurtleMaster.sendHome();
-		setChangedAndNotifyObservers();
-		return a;
-	}
-
-	public boolean isPenDown() {
-		return myTurtleMaster.isPenDown();
-	}
-
-	public void moveForward(double mag) {
-		myTurtleMaster.moveForward(mag);
-		setChangedAndNotifyObservers();
-	}
-
-	public void rotate(double angle) {
-		myTurtleMaster.rotate(angle);
-		setChangedAndNotifyObservers();		
-	}
-
-	public boolean isVisible() {
-		return myTurtleMaster.isVisible();
-	}
-
-	public void setPenDown() {
-		myTurtleMaster.setPenDown();
-	}
-
-	public void setPenUp() {
-		myTurtleMaster.setPenUp();
-	}
-
-	public void setAngle(double a) {
-		myTurtleMaster.setAngle(a);
-		setChangedAndNotifyObservers();
-	}
-
-
-	public double setPos(double d, double e) {
-		double a = myTurtleMaster.setPos(d, e);
-		setChangedAndNotifyObservers();
-		return a;
-	}
-
-	public double setTowards(double ox, double oy) {
-		double a = myTurtleMaster.setTowards(ox, oy);
-		setChangedAndNotifyObservers();
-		return a;
-	}
-
-	public void setVisible() {
-		myTurtleMaster.setVisible(true);
-		setChangedAndNotifyObservers();
-	}
-
-
+	
 	public double getTurtleCount() {
 		return myTurtleMaster.getAllTurtleIDs().size();
 	}
@@ -228,16 +162,10 @@ public class Model extends Observable {
 		setChangedAndNotifyObservers();
 	}
 
-	public void setPenColor(Color color) {
-		myTurtleMaster.setPenColor(color);
-	}
+	
 
 	public void removeActiveTurtles() {
 		myTurtleMaster.removeActiveTurtles();
-	}
-
-	public void setTurtleImage(File newImageFile) {
-		myTurtleMaster.setTurtleImage(newImageFile);
 	}
 
 	public void clearVariables() {
@@ -268,5 +196,11 @@ public class Model extends Observable {
 		} else {
 			return this.mLocalVariableLibrary.get(nodeName).getValue();
 		}
+	}
+
+	public double operateOnTurtle(Function<Turtle, Double> action) {
+		double result = myTurtleMaster.operateOnTurtle(action);
+		setChangedAndNotifyObservers();
+		return result;
 	}
 }

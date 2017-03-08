@@ -45,6 +45,7 @@ public class TurtleMenu extends Menu implements Observer{
 	private Menu penColorOptions;
 	private Menu penStatusOption;
 	
+	/*
 	private ComboBox<Integer> turtleIDs;
 	
 	private ComboBox<String> penColors;
@@ -52,7 +53,7 @@ public class TurtleMenu extends Menu implements Observer{
 	private RadioButton penDown;
 	private Button sendHome;
 	private Button fileChoose;
-
+	*/
 	
 	
 	public TurtleMenu(String title, Model model){
@@ -69,12 +70,15 @@ public class TurtleMenu extends Menu implements Observer{
 		MenuItem sendHome = new MenuItem("Send to Home");
 		
 		sendHome.setOnAction(e -> {
-			model.sendTurtleHome();
+			model.operateOnTurtle(turtle -> turtle.setPosition(model.getHome()));
 		});
 		
 		MenuItem clear = new MenuItem("Clear");
 		clear.setOnAction(e -> {
-			model.clearScreen();
+			model.operateOnTurtle(turtle -> {
+				turtle.dontDrawLine();
+				return turtle.setPosition(model.getHome());
+			});
 		});
 		
 		
@@ -90,13 +94,13 @@ public class TurtleMenu extends Menu implements Observer{
 		MenuItem show = new MenuItem("Show");
 		
 		show.setOnAction(e -> {
-			model.setVisible();
+			model.operateOnTurtle(turtle -> turtle.setVisible(true));
 		});
 		
 		MenuItem hide = new MenuItem("Hide");
 		
 		hide.setOnAction(e -> {
-			model.setInVisible();
+			model.operateOnTurtle(turtle -> turtle.setVisible(false));
 		});
 		
 		
@@ -111,19 +115,21 @@ public class TurtleMenu extends Menu implements Observer{
 		image.setOnAction(e -> {
 			File newImageFile = chooseFile();
 			if (newImageFile != null) {
-				model.setTurtleImage(newImageFile);
+				model.operateOnTurtle(turtle -> turtle.changeImage(newImageFile.toString()));
 			} else {
 				//myView.setOutput(String.format(PLEASE_SELECT_PROPER_IMG_FILE, IMAGE_EXTENSION));
 			}
 		});
 		
 		
-		penColorOptions = new MenuOptionsList("Set Pen Color", colors, "Black", color -> model.setPenColor(Color.web(color)));
+		penColorOptions = new MenuOptionsList("Set Pen Color", colors, "Black", color -> {
+			model.operateOnTurtle(turtle -> turtle.setPenColor(Color.web(color)));
+			});
 		penStatusOption = new MenuOptionsList("Set Pen", FXCollections.observableArrayList("Up", "Down"), "Down", selection -> {
 			if (selection.equals("Down")){
-				model.setPenDown();
+				model.operateOnTurtle(turtle -> turtle.setPen(true));
 			} else {
-				model.setPenUp();
+				model.operateOnTurtle(turtle -> turtle.setPen(false));
 			}
 		});
 		

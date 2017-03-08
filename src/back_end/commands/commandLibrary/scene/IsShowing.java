@@ -10,7 +10,9 @@ public class IsShowing extends SimpleParameterCommand implements CommandInterfac
 
 	@Override
 	public double Execute(Model model) {
-		return model.isVisible() == true ? 1 : 0;
+		return model.operateOnTurtle(turtle -> {
+			 return (turtle.isVisible() == true) ? 1.0 : 0.0;
+		});
 	}
 
 }

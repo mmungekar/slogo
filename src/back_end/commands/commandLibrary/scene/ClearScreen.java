@@ -8,6 +8,11 @@ public class ClearScreen extends SimpleParameterCommand implements CommandInterf
 
 	@Override
 	public double Execute(Model model) {
-		return model.clearScreen();
+		return model.operateOnTurtle(turtle -> {
+			
+			double result = turtle.setPosition(model.getHome());
+			turtle.dontDrawLine();
+			return result;
+		});
 	}
 }

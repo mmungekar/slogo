@@ -7,10 +7,10 @@ import back_end.interfaces.CommandInterface;
 public class SetHeading extends SimpleParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model model) {
+
 		Double returnVal = (double) 0;
 		for(Double a: getParameterValue()){
-		model.setAngle(a);
-		returnVal += a;
+			returnVal += model.operateOnTurtle(turtle -> turtle.setAngle(-1 * a));
 		}
 		return returnVal;
 	}

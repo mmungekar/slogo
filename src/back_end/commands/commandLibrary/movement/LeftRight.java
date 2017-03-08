@@ -5,6 +5,6 @@ import back_end.model.scene.Model;
 
 public abstract class LeftRight extends SimpleParameterCommand implements CommandInterface{
 	protected void rotateRight(Model model, double angle){
-	    model.rotate(angle);
+	    model.operateOnTurtle(turtle -> turtle.setAngle(turtle.getAngle() + angle));
 	}
 }
