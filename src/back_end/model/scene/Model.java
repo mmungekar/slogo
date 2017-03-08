@@ -140,86 +140,6 @@ public class Model extends Observable {
 		return myTurtleMaster.getTurtles().iterator();
 	}
 	
-	/*
-
-	public double clearScreen() {
-		double a = myTurtleMaster.clearScreen();
-		setChangedAndNotifyObservers();
-		return a;
-	}
-
-
-	public void setInVisible() {
-		myTurtleMaster.setVisible(false);
-		setChangedAndNotifyObservers();
-
-	}
-
-	public double sendTurtleHome() {
-		double a = myTurtleMaster.sendHome();
-		setChangedAndNotifyObservers();
-		return a;
-	}
-
-	public boolean isPenDown() {
-		return myTurtleMaster.isPenDown();
-	}
-
-	public void moveForward(double mag) {
-		myTurtleMaster.moveForward(mag);
-		setChangedAndNotifyObservers();
-	}
-
-	public void rotate(double angle) {
-		myTurtleMaster.rotate(angle);
-		setChangedAndNotifyObservers();		
-	}
-
-	public boolean isVisible() {
-		return myTurtleMaster.isVisible();
-	}
-
-	public void setPenDown() {
-		myTurtleMaster.setPen(true);
-	}
-
-	public void setPenUp() {
-		myTurtleMaster.setPen(false);
-	}
-
-	public void setAngle(double a) {
-		myTurtleMaster.setAngle(a);
-		setChangedAndNotifyObservers();
-	}
-
-
-	public double setPos(double d, double e) {
-		double a = myTurtleMaster.setPos(d, e);
-		setChangedAndNotifyObservers();
-		return a;
-	}
-
-	public double setTowards(double ox, double oy) {
-		double a = myTurtleMaster.setTowards(ox, oy);
-		setChangedAndNotifyObservers();
-		return a;
-	}
-
-	public void setVisible() {
-		myTurtleMaster.setVisible(true);
-		setChangedAndNotifyObservers();
-	}
-	
-	public void setPenColor(Color color) {
-		myTurtleMaster.setPenColor(color);
-	}
-	
-	public void setTurtleImage(File newImageFile) {
-		myTurtleMaster.setTurtleImage(newImageFile);
-	}
-	*/
-
-
 	public double getTurtleCount() {
 		return myTurtleMaster.getAllTurtleIDs().size();
 	}
@@ -247,8 +167,6 @@ public class Model extends Observable {
 	public void removeActiveTurtles() {
 		myTurtleMaster.removeActiveTurtles();
 	}
-
-
 
 	public void clearVariables() {
 		mGlobalVariableLibrary = new VariableLibrary();
