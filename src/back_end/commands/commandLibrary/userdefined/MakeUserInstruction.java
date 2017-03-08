@@ -25,7 +25,6 @@ public class MakeUserInstruction implements CommandInterface {
 		Iterator<ExpressionTreeNode> iter = mRootNode.getChildren().iterator();
 		commandName = (String) iter.next().getOxygen().getContent();
 		customVarLib = getCustomVarLib(iter.next());
-		iter.next();
 		ExpressionTree commandTree = new ExpressionTree(iter.next(), mTree.getLanguage(), model.getCustomCommandLibrary());
 		mVarTreePair = new Pair<>(customVarLib, commandTree);
 	}

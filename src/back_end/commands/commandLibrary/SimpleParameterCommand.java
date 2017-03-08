@@ -32,7 +32,7 @@ public abstract class SimpleParameterCommand implements CommandInterface {
 			myTree.traverseKid(kid, model);
 		}
 		int paramNum = getParamNum(myTree, myTree.getLanguage());
-		if (paramNum != myTree.getRootNode().getChildren().size())
+		if (paramNum > myTree.getRootNode().getChildren().size())
 			throw new NotEnoughParameterException(myTree.getRootNode().getInput().getParameter(), paramNum,
 					myTree.getRootNode().getChildren().size());
 	}

@@ -8,12 +8,14 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Quotient extends TwoParameterCommand{
-
+public class Quotient extends SimpleParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model state) {
-		getParams();
-		return A / B;
+		double quotient = getParameterValue().get(0);
+		for(int i = 1; i<getParameterValue().size();i++){
+			quotient /= getParameterValue().get(i);
+		}
+		return quotient;
 	}
 
 }

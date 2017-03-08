@@ -77,7 +77,7 @@ public class ExpressionTree {
 				System.out.println();
 				System.out.println("Input: " + input.getParameter());
 				currentNode = addLeaf(input, currentNode);
-				System.out.println("Parent: " + currentNode.getParent().getInput().getParameter());
+			//	System.out.println("Parent: " + currentNode.getParent().getInput().getParameter());
 				System.out.println();
 			}
 			return mRootNode;
@@ -97,17 +97,7 @@ public class ExpressionTree {
 			System.out.println("Children Full? " + currNode.getInput().getParameter());
 		}
 
-		currNode = placeNewNode(currNode, inputNode);
-		inputNode.setParent(currNode);
-		currNode.getChildren().add(inputNode);
-		currNode = inputNode;
-		return currNode;
-	}
-
-	private ExpressionTreeNode placeNewNode(ExpressionTreeNode currNode, ExpressionTreeNode newNode) {
-		if (isListEnd(newNode.getInput())) {
-			currNode = currNode.getParent();
-		}
+		currNode = checkFinishedList(currNode, inputNode);
 		return currNode;
 	}
 
@@ -116,11 +106,10 @@ public class ExpressionTree {
 		Input input = node.getInput();
 		if (isListStart(input))
 			return false;
-		if (isListEnd(input))
-			return true;
 		if (isCommand(input))
 			try {
-				return mCommandLib.getNumParam(input.getParameter()) == node.getChildren().size();
+				return mCommandLib.getNumParam(input.getParameter()) == node.getChildren().size()
+						&& !node.getParent().getInput().getType().equals(Constant.GROUPSTART_TYPE);
 			} catch (CommandException e) {
 				if (mCustomCommandLib.contains(input.getParameter())) {
 					System.out.println("Contains " + input.getParameter());
@@ -247,6 +236,21 @@ public class ExpressionTree {
 			node.getOxygen().putReturnValue(value);
 		}
 	}
+	
+	private ExpressionTreeNode checkFinishedList(ExpressionTreeNode currNode, ExpressionTreeNode inputNode) {
+		if (isListEnd(inputNode.getInput())) {
+			currNode = currNode.getParent();
+			if(inputNode.getInput().getType().equals(Constant.GROUPEND_TYPE)){
+				currNode = currNode.getParent();
+			}
+			return currNode;
+		}
+		inputNode.setParent(currNode);
+		currNode.getChildren().add(inputNode);
+		currNode = inputNode;
+		return currNode;
+	}
+
 
 	/*
 	 * public static void main(String[] args) { ExpressionTree test = new

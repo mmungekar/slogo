@@ -27,7 +27,6 @@ public class IfElse implements CommandInterface {
 		myTree.traverseKid(firstChild,model);
 		if(firstChild.getOxygen().getReturnValue()==0){
 			iter.next();
-			iter.next();
 		}
 		ExpressionTreeNode toBeExecuted = iter.next();
 		myTree.traverseKid(toBeExecuted,model);

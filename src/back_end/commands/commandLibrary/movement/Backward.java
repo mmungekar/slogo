@@ -4,13 +4,14 @@ import back_end.model.scene.Model;
 import back_end.interfaces.CommandInterface;
 
 public class Backward extends ForwardBackward implements CommandInterface {
-
 	@Override
 	public double Execute(Model model) {
-		this.getParams();
-		this.moveForward(model, -1 * A);
-		return A;
+		Double returnVal = (double) 0;
+		for(Double a: getParameterValue()){
+		this.moveForward(model, -1*a);
+		returnVal += a;
+		}
+		return returnVal;
 	}
-
 
 }

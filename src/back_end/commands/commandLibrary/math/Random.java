@@ -8,12 +8,11 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Random extends OneParameterCommand{
+public class Random extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model state) {
-		getParams();
-		return new java.util.Random().nextDouble() * A;
+		return new java.util.Random().nextDouble() * getParameterValue().get(0);
 	}
 
 }

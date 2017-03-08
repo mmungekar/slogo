@@ -8,13 +8,12 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Remainder extends TwoParameterCommand{
+public class Remainder extends SimpleParameterCommand implements CommandInterface{
 
 
 	@Override
 	public double Execute(Model state) {
-		getParams();
-		return (int) (A % B);
+		return (int) (getParameterValue().get(0) % getParameterValue().get(1));
 	}
 
 }

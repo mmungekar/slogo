@@ -8,12 +8,18 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Not extends OneParameterCommand{
-
+public class Not extends SimpleParameterCommand implements CommandInterface{
+/**
+ * If any are not equal to zero, return zero
+ */
 	@Override
 	public double Execute(Model state) { 
-		getParams();
-		return A == 0 ? 1 : 0;
+		for(Double a:getParameterValue()){
+			if(a!=0){
+				return 0;
+			}
+		}
+		return 1;
 	}
 
 }

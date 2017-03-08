@@ -30,7 +30,6 @@ public class DoTimes extends Iteration implements CommandInterface{
 		Iterator<ExpressionTreeNode> iterVar = listStart.getChildren().iterator();
 		variable = (String)iterVar.next().getOxygen().getContent();
 		limit = (Double)iterVar.next().getOxygen().getContent();
-		iter1.next();
 		mCommandNode = iter1.next();
 	}
 

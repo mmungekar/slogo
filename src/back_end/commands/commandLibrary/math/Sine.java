@@ -8,13 +8,12 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Sine extends OneParameterCommand{
+public class Sine extends SimpleParameterCommand implements CommandInterface{
 
 
 	@Override
 	public double Execute(Model state) {
-		getParams();
-		return Math.sin(Math.toRadians(A));
+		return Math.sin(Math.toRadians(getParameterValue().get(0)));
 	}
 
 }

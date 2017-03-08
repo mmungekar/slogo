@@ -8,11 +8,10 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Power extends TwoParameterCommand{
+public class Power extends SimpleParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model state) {
-		getParams();
-		return Math.pow(A, B);
+		return Math.pow(getParameterValue().get(0),getParameterValue().get(1));
 	}
 
 }

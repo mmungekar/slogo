@@ -8,12 +8,11 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Tangent extends OneParameterCommand{
+public class Tangent extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model state) {
-		getParams();
-		return Math.tan(Math.toRadians(A));
+		return Math.tan(Math.toRadians(getParameterValue().get(0)));
 	}
 
 }

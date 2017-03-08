@@ -8,11 +8,10 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class GreaterThan extends TwoParameterCommand{
+public class GreaterThan extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model state) { 
-		this.getParams();
-		return  A > B ? 1 : 0;
+		return  getParameterValue().get(0) > getParameterValue().get(1) ? 1 : 0;
 	}
 }
