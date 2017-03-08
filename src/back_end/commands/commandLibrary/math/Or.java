@@ -8,13 +8,16 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Or extends TwoParameterCommand{
+public class Or extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model state) { 
-		getParams();
-		return A == B ? 1 : 0;
+		for(Double a:getParameterValue()){
+			if(a!=0){
+				return 1;
+			}
+		}
+		return 0;
 	}
-
 
 }

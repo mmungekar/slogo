@@ -6,5 +6,9 @@ public abstract class CommandException extends Exception{
 	public CommandException(String string) {
 		super(string);
 	}
+	
+	public CommandException(){
+		super();
+	}
 
 }

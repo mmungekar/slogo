@@ -8,13 +8,14 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Product extends TwoParameterCommand{
-
+public class Product extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model state) {
-		getParams();
-		return B * A;
+		double product = 1;
+		for(Double a : getParameterValue()){
+			product *= a;
+		}
+		return product;
 	}
-
 }
