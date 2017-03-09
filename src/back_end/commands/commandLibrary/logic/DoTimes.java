@@ -2,13 +2,10 @@ package back_end.commands.commandLibrary.logic;
 
 import java.util.Iterator;
 
-import com.sun.org.apache.xpath.internal.ExpressionNode;
-
 import back_end.exceptions.CommandException;
 import back_end.exceptions.NotEnoughParameterException;
 import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
-import back_end.libraries.VariableLibrary;
 import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
