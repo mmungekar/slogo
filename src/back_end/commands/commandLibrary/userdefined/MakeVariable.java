@@ -5,8 +5,8 @@ import java.util.Iterator;
 import back_end.exceptions.NotEnoughParameterException;
 import back_end.interfaces.CommandInterface;
 import back_end.model.expressiontree.ExpressionTree;
-import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.expressiontree.Oxygen;
+import back_end.model.expressiontree.node.TreeNode;
 import back_end.model.scene.Model;
 
 public class MakeVariable implements CommandInterface {
@@ -15,15 +15,11 @@ public class MakeVariable implements CommandInterface {
 
 	@Override
 	public void setParameters(Model model, ExpressionTree tree) throws NotEnoughParameterException {
-		ExpressionTreeNode mRoot = tree.getRootNode();
-		Iterator<ExpressionTreeNode> iter = mRoot.getChildren().iterator();
-		Oxygen oxygen = iter.next().getOxygen();
-		try {
-			name = (String) oxygen.getContent();
-		} catch (ClassCastException ex) {
-			name = (String) oxygen.getSubContent();
-		}
-		value = (Double) iter.next().getOxygen().getContent();
+		TreeNode mRoot = tree.getRootNode();
+		Iterator<TreeNode> iter = mRoot.getChildren().iterator();
+		TreeNode node = iter.next();
+		name = node.getName();
+		value = iter.next().getValue();
 	}
 
 	@Override

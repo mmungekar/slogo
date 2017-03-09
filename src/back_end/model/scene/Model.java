@@ -193,9 +193,9 @@ public class Model extends Observable {
 	public Double retrieveVariable(String nodeName) {
 		if(this.mGlobalVariableLibrary.hasVariable(nodeName)){
 			return this.mGlobalVariableLibrary.get(nodeName).getValue();
-		} else {
+		} else if (this.mLocalVariableLibrary.hasVariable(nodeName)){
 			return this.mLocalVariableLibrary.get(nodeName).getValue();
-		}
+		} return 0d;
 	}
 
 	public double operateOnTurtle(Function<Turtle, Double> action) {

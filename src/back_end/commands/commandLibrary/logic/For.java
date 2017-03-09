@@ -10,12 +10,12 @@ import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
 import back_end.libraries.VariableLibrary;
 import back_end.model.expressiontree.ExpressionTree;
-import back_end.model.expressiontree.ExpressionTreeNode;
+import back_end.model.expressiontree.node.TreeNode;
 import back_end.model.scene.Model;
 
 public class For extends Iteration implements CommandInterface{
 	private ExpressionTree mTree;
-	private ExpressionTreeNode mExprNode;
+	private TreeNode mExprNode;
 	private double start;
 	private double end;
 	private double increment;
@@ -26,14 +26,14 @@ public class For extends Iteration implements CommandInterface{
 			throws NotEnoughParameterException, VariableNotFoundException, CommandException {
 		// TODO Auto-generated method stub
 		mTree = tree;
-		ExpressionTreeNode root = mTree.getRootNode();
-		Iterator<ExpressionTreeNode> iter1 = root.getChildren().iterator();
-		ExpressionTreeNode listStart = iter1.next();
-		Iterator<ExpressionTreeNode> iterVar = listStart.getChildren().iterator();
-		variable = (String)iterVar.next().getOxygen().getContent();
-		start = (Double)iterVar.next().getOxygen().getContent();
-		end = (Double)iterVar.next().getOxygen().getContent();
-		increment = (Double)iterVar.next().getOxygen().getContent();
+		TreeNode root = mTree.getRootNode();
+		Iterator<TreeNode> iter1 = root.getChildren().iterator();
+		TreeNode listStart = iter1.next();
+		Iterator<TreeNode> iterVar = listStart.getChildren().iterator();
+		variable = (String)iterVar.next().getName();
+		start = (Double)iterVar.next().getValue();
+		end = (Double)iterVar.next().getValue();
+		increment = (Double)iterVar.next().getValue();
 		mExprNode = iter1.next();
 	}
 
@@ -43,7 +43,7 @@ public class For extends Iteration implements CommandInterface{
 			assignLocalVariable(model, variable, count);
 			repeat(model, mTree, mExprNode);
 		}
-		return mExprNode.getOxygen().getReturnValue();
+		return mExprNode.getValue();
 	}
 	
 	
