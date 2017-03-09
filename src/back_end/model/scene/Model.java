@@ -45,43 +45,26 @@ public class Model extends Observable {
 		mLocalVariableLibrary = new VariableLibrary();
 		mCustomCommandLibrary = new CustomCommandLibrary();
 	}
-	
-	private void setChangedAndNotifyObservers() {
-		setChanged();
-		notifyObservers();
-	}
-	
-	public double operateOnTurtle(Function<Turtle, Double> action) {
-		double result = myTurtleMaster.operateOnTurtle(action);
-		setChangedAndNotifyObservers();
-		return result;
-	}
-	
-	public void addCustomCommand(String name, CustomCommand command) {
-		mCustomCommandLibrary.put(name, command);
-		setChangedAndNotifyObservers();
-	}
-	
-	public void setCurrentLanguage(String currentLanguage) {
-		this.currentLanguage = currentLanguage;
-		setChangedAndNotifyObservers();
-
-	}
-	
-	public void setBackgroundColor(Color backgroundColor) {
-		this.backgroundColor = backgroundColor;
-		setChangedAndNotifyObservers();
-	}
-	
-	public void updateVariable(String name, double value) {
-		mGlobalVariableLibrary.updateVariable(name, value);
-		setChangedAndNotifyObservers();
-	}
 
 	public void setColorRGB(int index, int r, int g, int b) {
 		colorContainer.put(index, Color.rgb(r, g, b));
 
 	}
+
+	public CustomCommandLibrary getCustomCommandLibrary() {
+		return mCustomCommandLibrary;
+	}
+
+	private void setChangedAndNotifyObservers() {
+		setChanged();
+		notifyObservers();
+	}
+
+	public void addCustomCommand(String name, CustomCommand command) {
+		mCustomCommandLibrary.put(name, command);
+		setChangedAndNotifyObservers();
+	}
+
 
 	public void setClear(boolean clear) {
 		this.clear = clear;
@@ -98,40 +81,21 @@ public class Model extends Observable {
 	public String getCurrentLanguage() {
 		return currentLanguage;
 	}
-	
-	public void setHome(Point2D home) {
-		this.home = home;
-		myTurtleMaster.setHome(home);
-		myTurtleMaster.breedTurtle(0);
-		myTurtleMaster.setActiveTurtles(Arrays.asList(0));
+
+	public void setCurrentLanguage(String currentLanguage) {
+		this.currentLanguage = currentLanguage;
 		setChangedAndNotifyObservers();
+
 	}
 	
-	public void createTurtle(int newID) {
-		myTurtleMaster.breedTurtle(newID);
-		setChangedAndNotifyObservers();
-	}
-
-	public void tell(List<Integer> parametersInteger) {
-		myTurtleMaster.setActiveTurtles(parametersInteger);
-		setChangedAndNotifyObservers();
-	}
-
-	public void removeActiveTurtles() {
-		myTurtleMaster.removeActiveTurtles();
-		setChangedAndNotifyObservers();
-	}
-
-	public void clearVariables() {
-		mGlobalVariableLibrary = new VariableLibrary();
-		mLocalVariableLibrary = new VariableLibrary();
+	public void setBackgroundColor(Color backgroundColor) {
+		this.backgroundColor = backgroundColor;
 		setChangedAndNotifyObservers();
 	}
 
 
 	public void setBackgroundColor(int index) {
 		setBackgroundColor(colorContainer.get(index));
-		setChangedAndNotifyObservers();
 	}
 	
 	private void createDefaultColors() {
@@ -142,8 +106,9 @@ public class Model extends Observable {
 		backgroundColor = colorContainer.get(DEFAULT_BACKGROUND_COLOR_INDEX);
 	}
 	
-	public CustomCommandLibrary getCustomCommandLibrary() {
-		return mCustomCommandLibrary;
+	public void updateVariable(String name, double value) {
+		mGlobalVariableLibrary.updateVariable(name, value);
+		setChangedAndNotifyObservers();
 	}
 
 	public Collection<CustomVariable> getUserDefinedVariables() {
@@ -163,6 +128,51 @@ public class Model extends Observable {
 		return mLocalVariableLibrary.hasVariable(parameter);
 	}
 	
+	public void setHome(Point2D home) {
+		this.home = home;
+		myTurtleMaster.setHome(home);
+		myTurtleMaster.breedTurtle(0);
+		myTurtleMaster.setActiveTurtles(Arrays.asList(0));
+		setChangedAndNotifyObservers();
+	}
+	
+	public Iterator<Turtle> getTurtleIterator(){
+		return myTurtleMaster.getTurtles().iterator();
+	}
+	
+	public double getTurtleCount() {
+		return myTurtleMaster.getAllTurtleIDs().size();
+	}
+
+	public double getCoordinate(Integer coordinate) {
+		return myTurtleMaster.getCoordinate(coordinate);
+	}
+
+	public void createTurtle(int newID) {
+		myTurtleMaster.breedTurtle(newID);
+		setChangedAndNotifyObservers();
+	}
+	
+	public double getActiveTurtleID() {
+		return myTurtleMaster.getActiveTurtleID();
+	}
+
+	public void tell(List<Integer> parametersInteger) {
+		myTurtleMaster.setActiveTurtles(parametersInteger);
+		setChangedAndNotifyObservers();
+	}
+
+	
+
+	public void removeActiveTurtles() {
+		myTurtleMaster.removeActiveTurtles();
+	}
+
+	public void clearVariables() {
+		mGlobalVariableLibrary = new VariableLibrary();
+		mLocalVariableLibrary = new VariableLibrary();
+	}
+
 	public void clearCommands() {
 		mCustomCommandLibrary = new CustomCommandLibrary();
 	}
@@ -187,22 +197,10 @@ public class Model extends Observable {
 			return this.mLocalVariableLibrary.get(nodeName).getValue();
 		} return 0d;
 	}
-	
-	
-	
-	public Iterator<Turtle> getTurtleIterator(){
-		return myTurtleMaster.getTurtleIterator();
-	}
-	
-	public double getTurtleCount() {
-		return myTurtleMaster.getAllTurtleIDs().size();
-	}
 
-	public double getCoordinate(Integer coordinate) {
-		return myTurtleMaster.getCoordinate(coordinate);
+	public double operateOnTurtle(Function<Turtle, Double> action) {
+		double result = myTurtleMaster.operateOnTurtle(action);
+		setChangedAndNotifyObservers();
+		return result;
 	}
-	
-	public double getActiveTurtleID() {
-		return myTurtleMaster.getActiveTurtleID();
-	}	
 }
