@@ -1,18 +1,18 @@
 package back_end.commands.commandLibrary.math;
 
 import java.util.List;
+import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
 
 import back_end.commands.commandLibrary.FunctionCommand;
 import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 
-public class ArcTangent extends FunctionCommand implements CommandInterface{
+public class ArcTangent extends MathFunctionCommand implements CommandInterface{
 
 	@Override
 	protected Function<List<Double>, Double> supplyAction(Model model) {
 		return inputs -> Math.toDegrees(Math.atan(inputs.get(0)));
 	}
-
 
 }

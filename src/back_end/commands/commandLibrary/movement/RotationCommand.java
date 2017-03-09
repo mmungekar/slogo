@@ -2,6 +2,7 @@ package back_end.commands.commandLibrary.movement;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
 
 import back_end.commands.commandLibrary.FunctionCommand;
@@ -17,6 +18,11 @@ public abstract class RotationCommand extends FunctionCommand implements Command
 	
 	protected BiFunction<Turtle, Double, Double> angleChange(int direction) {
 		return (turtle, dAngle) -> turtle.getAngle() + direction * dAngle;
+	}
+	
+	@Override
+	protected DoubleBinaryOperator getHowToHandlePreviousValue() {
+		return (prevValue, result) -> prevValue + result;
 	}
 	
 }

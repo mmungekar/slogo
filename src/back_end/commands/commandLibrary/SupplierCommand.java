@@ -2,6 +2,7 @@ package back_end.commands.commandLibrary;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
 
 import back_end.interfaces.CommandInterface;
@@ -10,7 +11,7 @@ import back_end.model.scene.Model;
 public abstract class SupplierCommand extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
-	protected BiFunction<List<Double>, Double, Double> supplyAction(Model model) {
+	protected Function<List<Double>, Double> supplyAction(Model model) {
 		return null;
 	}
 
@@ -18,5 +19,9 @@ public abstract class SupplierCommand extends SimpleParameterCommand implements 
 	protected int getInputNumber() {
 		return 0;
 	}
-
+	
+	protected DoubleBinaryOperator getHowToHandlePreviousValue(){
+		return null;
+	}
+	
 }

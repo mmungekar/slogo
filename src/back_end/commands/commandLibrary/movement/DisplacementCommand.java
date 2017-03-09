@@ -2,6 +2,7 @@ package back_end.commands.commandLibrary.movement;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
 
 import back_end.commands.commandLibrary.FunctionCommand;
@@ -22,6 +23,11 @@ public abstract class DisplacementCommand extends FunctionCommand implements Com
 		double dx = Math.cos(Math.toRadians(angle)) * mag;
 		double dy = Math.sin(Math.toRadians(angle)) * mag;
 		return turtle.getCenterPosition().add(dx, dy);	
+	}
+	
+	@Override
+	protected DoubleBinaryOperator getHowToHandlePreviousValue() {
+		return (prevValue, result) -> prevValue + result;
 	}
 	
 }
