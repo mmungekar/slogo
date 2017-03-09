@@ -4,8 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import back_end.commands.commandLibrary.SimpleParameterCommand;
-import back_end.commands.commandLibrary.TurtleCommand;
+import back_end.commands.commandLibrary.MultipleTurtleCommand;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
@@ -17,7 +16,7 @@ import back_end.model.scene.Model;
  * For a select group of turtles designated by ID, a group of commands is executed
  */
 
-public class Ask extends TurtleCommand implements CommandInterface{
+public class Ask extends MultipleTurtleCommand implements CommandInterface{
 	
 	/**
 	 * The list of turtles is set to temporarily active, and the tree is traversed to execute

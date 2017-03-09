@@ -4,8 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import back_end.commands.commandLibrary.SimpleParameterCommand;
-import back_end.commands.commandLibrary.TurtleCommand;
+import back_end.commands.commandLibrary.MultipleTurtleCommand;
 import back_end.commands.constant.Constant;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.NotEnoughParameterException;
@@ -15,7 +14,7 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
-public class Tell extends TurtleCommand implements CommandInterface{
+public class Tell extends MultipleTurtleCommand implements CommandInterface{
 	/**
 	 * A group of turtles, designated by ID, are set as active
 	 */
