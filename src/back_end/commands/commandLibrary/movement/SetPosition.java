@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import back_end.commands.commandLibrary.TwoParameterCommand;
 import back_end.interfaces.CommandInterface;
-import back_end.model.expressiontree.node.TreeNode;
+import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 import javafx.geometry.Point2D;
 

@@ -5,7 +5,7 @@ import back_end.exceptions.NotEnoughParameterException;
 import back_end.exceptions.UnrecognizedCommandException;
 import back_end.exceptions.VariableNotFoundException;
 import back_end.model.expressiontree.ExpressionTree;
-import back_end.model.expressiontree.node.TreeNode;
+import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
 public interface CommandInterface {
