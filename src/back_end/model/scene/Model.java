@@ -87,14 +87,6 @@ public class Model extends Observable {
 		return currentLanguage;
 	}
 	
-	public void setHome(Point2D home) {
-		this.home = home;
-		myTurtleMaster.setHome(home);
-		myTurtleMaster.breedTurtle(0);
-		myTurtleMaster.setActiveTurtles(Arrays.asList(0));
-		setChangedAndNotifyObservers();
-	}
-	
 	public void createTurtle(int newID) {
 		myTurtleMaster.breedTurtle(newID);
 		setChangedAndNotifyObservers();
@@ -143,6 +135,31 @@ public class Model extends Observable {
 		return mLocalVariableLibrary.hasVariable(parameter);
 	}
 	
+	public void setHome(Point2D home) {
+		this.home = home;
+		myTurtleMaster.setHome(home);
+		myTurtleMaster.breedTurtle(0);
+		myTurtleMaster.setActiveTurtles(Arrays.asList(0));
+		setChangedAndNotifyObservers();
+	}
+ 
+	public List<Integer> getTurtleIDs() {
+		return myTurtleMaster.getAllTurtleIDs();
+	}
+	
+	public void tellTemps(List<Integer> parametersInteger) {
+		myTurtleMaster.setTempActiveTurtles(parametersInteger);
+		setChangedAndNotifyObservers();
+	}
+	
+	public void revertActiveTurtles(){
+		myTurtleMaster.revertActiveTurtles();
+	}
+
+	public void setTurtleImage(File newImageFile) {
+		myTurtleMaster.setTurtleImage(newImageFile);
+	}
+
 	public void clearCommands() {
 		mCustomCommandLibrary = new CustomCommandLibrary();
 	}
@@ -156,6 +173,7 @@ public class Model extends Observable {
 	public void setLocalVariableLibrary(VariableLibrary mCustomVarLib) {
 		this.mLocalVariableLibrary = mCustomVarLib;
 	}
+	
 	public Double retrieveVariable(String nodeName) {
 		if(this.mGlobalVariableLibrary.hasVariable(nodeName)){
 			return this.mGlobalVariableLibrary.get(nodeName).getValue();

@@ -1,25 +1,28 @@
 package back_end.commands.commandLibrary.turtle.multiple;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import back_end.commands.commandLibrary.SimpleParameterCommand;
+import back_end.commands.commandLibrary.MultipleTurtleCommand;
 import back_end.commands.constant.Constant;
+import back_end.exceptions.CommandException;
+import back_end.exceptions.NotEnoughParameterException;
+import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
+import back_end.model.expressiontree.ExpressionTree;
+import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
-public class Tell extends SimpleParameterCommand implements CommandInterface, Constant{
-
+public class Tell extends MultipleTurtleCommand implements CommandInterface{
+	/**
+	 * A group of turtles, designated by ID, are set as active
+	 */
 	@Override
 	public double Execute(Model model) {
-		List<Double> parametersDouble = this.getParameters();
-		
-		List<Integer> parametersInteger = parametersDouble.stream()
-		        .filter(elt -> elt != null)
-		        .map(elt -> elt.intValue())
-		        .collect(Collectors.toList());
-		
-		model.tell(parametersInteger);
-		return parametersInteger.get(parametersInteger.size() - 1);
+		List<Integer> myParamValues = getFirstChild().getChildren().stream() .filter(elt -> elt != null)
+				.map(elt -> elt.getOxygen().getReturnValue().intValue()).collect(Collectors.toList());
+		model.tell(myParamValues);
+		return myParamValues.get(myParamValues.size() - 1);
 	}
 }
