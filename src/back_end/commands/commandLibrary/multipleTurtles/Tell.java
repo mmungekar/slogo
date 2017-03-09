@@ -16,7 +16,9 @@ import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
 public class Tell extends TurtleCommand implements CommandInterface{
-	
+	/**
+	 * A group of turtles, designated by ID, are set as active
+	 */
 	@Override
 	public double Execute(Model model) {
 		List<Integer> myParamValues = getFirstChild().getChildren().stream() .filter(elt -> elt != null)

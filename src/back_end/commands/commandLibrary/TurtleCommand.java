@@ -8,7 +8,9 @@ import back_end.interfaces.CommandInterface;
 import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
-
+/**
+ *Traverses the first (bracketed) child of the expression tree to obtain its parameters
+ */
 public abstract class TurtleCommand implements CommandInterface {
 	private ExpressionTree myTree;
 	private ExpressionTreeNode firstChild;
@@ -19,7 +21,6 @@ public abstract class TurtleCommand implements CommandInterface {
 			myTree = tree;
 			iter = myTree.getRootNode().getChildren().iterator();
 			firstChild = iter.next();
-			System.out.println(firstChild.getInput().getParameter());
 			myTree.traverseKid(firstChild,model);
 
 	}

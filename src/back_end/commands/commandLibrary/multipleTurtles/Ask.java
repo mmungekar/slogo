@@ -13,8 +13,18 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
-public class Ask extends TurtleCommand implements CommandInterface{
+/**
+ * For a select group of turtles designated by ID, a group of commands is executed
+ */
 
+public class Ask extends TurtleCommand implements CommandInterface{
+	
+	/**
+	 * The list of turtles is set to temporarily active, and the tree is traversed to execute
+	 * the commands specifically for those turtles. The original list of active turtles is later
+	 * reverted back to.
+	 */
+	
 	@Override
 	public double Execute(Model model) throws VariableNotFoundException, CommandException {
 		List<Integer> myParamValues = getFirstChild().getChildren().stream().filter(elt -> elt != null)

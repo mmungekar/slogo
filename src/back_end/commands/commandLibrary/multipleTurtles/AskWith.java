@@ -12,12 +12,17 @@ import back_end.interfaces.CommandInterface;
 import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
-
+/**
+ * For all turtles, if the input expression is true, the given set of commands is executed
+ */
 public class AskWith implements CommandInterface{
 	List<Integer> validTurtles = new ArrayList<Integer>();
 	Iterator<ExpressionTreeNode> iter;
 	ExpressionTree myTree;
-	
+/**
+ * All turtles are set to being temporarily active, and the expression is evaluated for each one.
+ * For any return value not equal to zero, the turtle is added to the List validTurtles
+ */
 	@Override
 	public void setParameters(Model model, ExpressionTree tree)
 			throws NotEnoughParameterException, VariableNotFoundException, CommandException {
@@ -33,7 +38,10 @@ public class AskWith implements CommandInterface{
 		}
 		
 	}
-	
+/**
+ * The validTurtle list is set to being temporarily active, and the user's commands are
+ * executed for them
+ */
 	@Override
 	public double Execute(Model model) throws VariableNotFoundException, CommandException {
 		model.tellTemps(validTurtles);
@@ -41,7 +49,6 @@ public class AskWith implements CommandInterface{
 		myTree.traverseKid(secondChild,model);
 		model.revertActiveTurtles();
 		return secondChild.getOxygen().getReturnValue();
-		//return model.getSingleActiveTurtle();
 	}
 
 }
