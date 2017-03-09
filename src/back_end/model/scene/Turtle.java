@@ -87,7 +87,7 @@ public class Turtle {
 	}
 
 	private void keepAngleWithin360() {
-		if (Math.abs(this.angle) >= 360){
+		while (Math.abs(this.angle) >= 360){
 			this.angle -= Math.signum(this.angle) * 360;
 		}
 	}

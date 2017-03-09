@@ -2,23 +2,16 @@ package back_end.model.scene;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import back_end.commands.custom.CustomVariable;
+
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
+
 
 public class TurtleMaster {
 	private Point2D home;
@@ -36,9 +29,12 @@ public class TurtleMaster {
 		activeTurtleID = 0;
 	}
 
-	void setHome(Point2D home) {
+	public void setHome(Point2D home) {
 		this.home = home;
-
+	}
+	
+	public double operateOnTurtle(Function<Turtle, Double> action) {
+		return cycleThroughActive(getListeningTurtleIDs(), action);
 	}
 
 	private double cycleThroughActive(List<Integer> turtleIDs, Function<Turtle, Double> action) {
@@ -60,7 +56,7 @@ public class TurtleMaster {
 	}
 
 	
-	void setTurtleImage(File newImageFile) {
+	public void setTurtleImage(File newImageFile) {
 		cycleThroughActive(getListeningTurtleIDs(), turtle -> turtle.changeImage(newImageFile.getName()));
 	}
 
@@ -76,14 +72,11 @@ public class TurtleMaster {
 		Point2D lastTurtleCenterPos = turtleContainer.get(pickTurtles.get(pickTurtles.size() - 1)).getCenterPosition();
 		double[] pos = new double[] { lastTurtleCenterPos.getX(), lastTurtleCenterPos.getY() };
 		double[] homePos = new double[] { home.getX(), home.getY() };
-		return homePos[coordinate] - (coordinate.equals(0) ? 0 : -1) * pos[coordinate];
+		//return homePos[coordinate] + (coordinate.equals(0) ? 1 : -1) * pos[coordinate];
+		return (coordinate.equals(0) ? -1 : 1) * (homePos[coordinate] - pos[coordinate]);
 	}
 
-	Collection<Turtle> getTurtles() {
-		return turtleContainer.values();
-	}
-
-	void breedTurtle(int newTurtleID) {
+	public void breedTurtle(int newTurtleID) {
 		if (newTurtleID == -1) {
 			newTurtleID = findLowestIDnotTaken();
 		}
@@ -116,7 +109,7 @@ public class TurtleMaster {
 		this.tempActiveTurtles = true;
 	}
 
-	double getActiveTurtleID() {
+	public double getActiveTurtleID() {
 		return this.activeTurtleID;
 	}
 
@@ -126,7 +119,9 @@ public class TurtleMaster {
 		});
 	}
 
-	public double operateOnTurtle(Function<Turtle, Double> action) {
-		return cycleThroughActive(getListeningTurtleIDs(), action);
+	public Iterator<Turtle> getTurtleIterator() {
+		return turtleContainer.values().iterator();
 	}
+
+	
 }

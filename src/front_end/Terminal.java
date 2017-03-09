@@ -21,6 +21,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class Terminal extends VBox {
@@ -42,19 +43,23 @@ public class Terminal extends VBox {
 	private Button clear;
 
 	public Terminal() {
-		this.getChildren().addAll(createInputComponents(), createHistoryAndOutputComponents());
+		initializeInput();
+		initializeOutput();
+		setupHistoryView();
+		clear = new ActionButton(event -> clearHistory());
+		submit = new ActionButton(event -> submitInput());
+		this.getChildren().addAll(createConsoleComponents(inputConsole, submit), createHistoryAndOutputComponents());
 	}
 
 	private Node createHistoryAndOutputComponents() {
-		TabPane tabPane = new TabPane();
-
-		initializeOutput();
+		TabPane tabPane = new TabPane();		
+		
 		outputHolder = new Tab();
-
 		outputHolder.setContent(outputConsole);
 
+		
 		historyHolder = new Tab();
-		historyHolder.setContent(createHistoryComponents());
+		historyHolder.setContent(createConsoleComponents(historyView, clear));
 
 		tabPane.getTabs().addAll(outputHolder, historyHolder);
 
@@ -70,31 +75,16 @@ public class Terminal extends VBox {
 		outputConsole.setEditable(false);
 	}
 
-	private HBox createInputComponents() {
-		HBox inputComponents = new HBox();
+	private HBox createConsoleComponents(Region mainConsole, Button button) {
+		HBox consoleComponents = new HBox();
+		button.setPrefHeight(mainConsole.getPrefHeight());
 
-		initializeInput();
-
-		submit = new ActionButton(event -> submitInput());
-		submit.setPrefHeight(inputConsole.getPrefHeight());
-
-		inputComponents.getChildren().addAll(inputConsole, submit);
-		inputComponents.setSpacing(15);
-		return inputComponents;
+		consoleComponents.getChildren().addAll(mainConsole, button);
+		consoleComponents.setSpacing(15);
+		return consoleComponents;
 	}
-
-	private HBox createHistoryComponents() {
-		HBox historyComponents = new HBox();
-
-		setupHistoryView();
-
-		clear = new ActionButton(event -> clearHistory());
-		clear.setPrefHeight(historyView.getPrefHeight());
-
-		historyComponents.getChildren().addAll(historyView, clear);
-		historyComponents.setSpacing(15);
-		return historyComponents;
-	}
+	
+	
 
 	private void clearHistory() {
 		history.clear();
