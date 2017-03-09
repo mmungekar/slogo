@@ -10,7 +10,7 @@ import back_end.commands.constant.Constant;
 import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 
-public class Tell extends SupplierCommand implements CommandInterface, Constant{
+public class Tell extends SimpleParameterCommand implements CommandInterface, Constant{
 
 	@Override
 	public double Execute(Model model) {

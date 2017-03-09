@@ -25,9 +25,4 @@ public abstract class DisplacementCommand extends FunctionCommand implements Com
 		return turtle.getCenterPosition().add(dx, dy);	
 	}
 	
-	@Override
-	protected DoubleBinaryOperator getHowToHandlePreviousValue() {
-		return (prevValue, result) -> prevValue + result;
-	}
-	
 }

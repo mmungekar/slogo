@@ -21,9 +21,4 @@ public class SetPosition extends BiFunctionCommand implements CommandInterface{
 			return displacement;
 		});
 	}
-
-	@Override
-	protected DoubleBinaryOperator getHowToHandlePreviousValue() {
-		return (prevValue, result) -> prevValue + result;
-	}
 }

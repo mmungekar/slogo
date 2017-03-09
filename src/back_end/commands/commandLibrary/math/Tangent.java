@@ -7,7 +7,7 @@ import back_end.commands.commandLibrary.FunctionCommand;
 import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 
-public class Tangent extends MathFunctionCommand implements CommandInterface{
+public class Tangent extends FunctionCommand implements CommandInterface{
 
 	@Override
 	protected Function<List<Double>, Double> supplyAction(Model model) {

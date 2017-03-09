@@ -1,27 +1,17 @@
 package back_end.commands.commandLibrary;
 
-import java.util.List;
-import java.util.function.BiFunction;
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.Function;
-
+import back_end.exceptions.CommandException;
+import back_end.exceptions.NotEnoughParameterException;
+import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
+import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.scene.Model;
 
-public abstract class SupplierCommand extends SimpleParameterCommand implements CommandInterface{
-
+public abstract class SupplierCommand implements CommandInterface{
 	@Override
-	protected Function<List<Double>, Double> supplyAction(Model model) {
-		return null;
-	}
-
-	@Override
-	protected int getInputNumber() {
-		return 0;
-	}
-	
-	protected DoubleBinaryOperator getHowToHandlePreviousValue(){
-		return null;
+	public void setParameters(Model model, ExpressionTree tree)
+			throws NotEnoughParameterException, VariableNotFoundException, CommandException {
+		// no need to set any parameters
 	}
 	
 }

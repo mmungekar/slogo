@@ -19,10 +19,5 @@ public abstract class RotationCommand extends FunctionCommand implements Command
 	protected BiFunction<Turtle, Double, Double> angleChange(int direction) {
 		return (turtle, dAngle) -> turtle.getAngle() + direction * dAngle;
 	}
-	
-	@Override
-	protected DoubleBinaryOperator getHowToHandlePreviousValue() {
-		return (prevValue, result) -> prevValue + result;
-	}
-	
+
 }

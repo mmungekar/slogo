@@ -20,9 +20,4 @@ public class SetTowards extends BiFunctionCommand implements CommandInterface{
 		});
 	}
 
-	@Override
-	protected DoubleBinaryOperator getHowToHandlePreviousValue() {
-		return (prevValue, result) -> prevValue + result;
-	}
-
 }
