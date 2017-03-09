@@ -1,9 +1,5 @@
 package back_end.commands.commandLibrary.multipleTurtles;
 
-import java.util.List;
-import java.util.function.Function;
-
-import back_end.commands.commandLibrary.SimpleParameterCommand;
 import back_end.commands.commandLibrary.SupplierCommand;
 import back_end.commands.constant.Constant;
 import back_end.interfaces.CommandInterface;

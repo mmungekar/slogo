@@ -1,6 +1,5 @@
 package back_end.commands.commandLibrary.multipleTurtles;
 
-import back_end.commands.commandLibrary.SimpleParameterCommand;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.NotEnoughParameterException;
 import back_end.exceptions.VariableNotFoundException;

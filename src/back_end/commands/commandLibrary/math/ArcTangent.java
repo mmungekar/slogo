@@ -1,7 +1,6 @@
 package back_end.commands.commandLibrary.math;
 
 import java.util.List;
-import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
 
 import back_end.commands.commandLibrary.FunctionCommand;

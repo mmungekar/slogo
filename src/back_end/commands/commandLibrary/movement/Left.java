@@ -1,7 +1,6 @@
 package back_end.commands.commandLibrary.movement;
 
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import back_end.interfaces.CommandInterface;
