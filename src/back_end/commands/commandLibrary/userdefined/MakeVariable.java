@@ -21,7 +21,7 @@ public class MakeVariable implements CommandInterface {
 		try {
 			name = (String) oxygen.getContent();
 		} catch (ClassCastException ex) {
-			name = (String) oxygen.getSubContent();
+			name = oxygen.getSubContent();
 		}
 		value = (Double) iter.next().getOxygen().getContent();
 	}

@@ -1,6 +1,5 @@
 package back_end.commands.commandLibrary.userdefined;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import back_end.commands.custom.CustomCommand;
@@ -18,6 +17,7 @@ public class MakeUserInstruction implements CommandInterface {
 	private String commandName;
 	private Pair<VariableLibrary, ExpressionTree> mVarTreePair;
 
+	@Override
 	public void setParameters(Model model, ExpressionTree tree) throws NotEnoughParameterException {
 		this.mTree = tree;
 		VariableLibrary customVarLib = new VariableLibrary();
@@ -43,6 +43,7 @@ public class MakeUserInstruction implements CommandInterface {
 	/**
 	 * Add the new Custom Command to the CustomCommandLibrary in the model
 	 */
+	@Override
 	public double Execute(Model model) {
 		CustomCommand command = new CustomCommand(commandName, mVarTreePair.getA(), mVarTreePair.getB());
 		model.getCustomCommandLibrary().put(commandName, command);
