@@ -217,6 +217,10 @@ public class TurtleMaster {
 		this.tempActiveTurtleIDs = newTempActives;
 		this.tempActiveTurtles = true;
 	}
+	
+	public void revertActiveTurtles(){
+		this.tempActiveTurtles = false;
+	}
 
 	double getActiveTurtleID() {
 		return this.activeTurtleID;

@@ -205,6 +205,9 @@ public class Model extends Observable {
 		setChangedAndNotifyObservers();
 	}
 
+	public List<Integer> getTurtleIDs() {
+		return myTurtleMaster.getAllTurtleIDs();
+	}
 
 	public double getTurtleCount() {
 		return myTurtleMaster.getAllTurtleIDs().size();
@@ -226,6 +229,15 @@ public class Model extends Observable {
 	public void tell(List<Integer> parametersInteger) {
 		myTurtleMaster.setActiveTurtles(parametersInteger);
 		setChangedAndNotifyObservers();
+	}
+	
+	public void tellTemps(List<Integer> parametersInteger) {
+		myTurtleMaster.setTempActiveTurtles(parametersInteger);
+		setChangedAndNotifyObservers();
+	}
+	
+	public void revertActiveTurtles(){
+		myTurtleMaster.revertActiveTurtles();
 	}
 
 	public void setPenColor(Color color) {
