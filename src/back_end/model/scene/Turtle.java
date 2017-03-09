@@ -37,8 +37,8 @@ public class Turtle {
 		this(new Point2D(x, y));
 	}
 
-	public void setPosition(double inX, double inY) {
-		setPosition(new Point2D(inX, inY));
+	public double setPosition(double inX, double inY) {
+		return setPosition(new Point2D(inX, inY));
 	}
 
 	public double setPosition(Point2D newPos) {
@@ -131,14 +131,6 @@ public class Turtle {
 
 	public Node getImageView() {
 		return myImageView;
-	}
-	
-	public double moveForward(double mag) {
-		double angle = this.getAngle();
-		double dx = Math.cos(Math.toRadians(angle)) * mag;
-		double dy = Math.sin(Math.toRadians(angle)) * mag;
-		this.setPosition(this.getCenterPosition().add(dx, dy));	
-		return mag;
 	}
 	
 	public double setTowards(double ox, double oy) {

@@ -1,4 +1,4 @@
-package back_end.commands.commandLibrary.multipleTurtles;
+package back_end.commands.commandLibrary.turtle.multiple;
 
 import java.util.List;
 import java.util.stream.Collectors;
