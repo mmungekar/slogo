@@ -139,7 +139,7 @@ public class Terminal extends VBox {
 
 				break;
 			case DOWN:
-				if (historyPointer == history.size() - 1) {
+				if (historyPointer >= history.size() - 1) {
 					inputConsole.clear();
 					break;
 				}

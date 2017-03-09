@@ -12,7 +12,7 @@ import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
 import back_end.libraries.CommandFactory;
 import back_end.model.expressiontree.ExpressionTree;
-import back_end.model.expressiontree.ExpressionTreeNode;
+import back_end.model.expressiontree.node.TreeNode;
 import back_end.model.scene.Model;
 
 /**
@@ -29,7 +29,7 @@ public abstract class SimpleParameterCommand implements CommandInterface {
 	}
 
 	private void prepareChildren(ExpressionTree myTree, Model model) throws VariableNotFoundException, CommandException {
-		for (ExpressionTreeNode kid : myTree.getRootNode().getChildren()) {
+		for (TreeNode kid : myTree.getRootNode().getChildren()) {
 			myTree.traverseKid(kid, model);
 		}
 		int paramNum = getParamNum(myTree, myTree.getLanguage());
@@ -53,8 +53,8 @@ public abstract class SimpleParameterCommand implements CommandInterface {
 		ExpressionTree myTree = tree;
 		prepareChildren(myTree, model);
 		myParams = new ArrayList<Double>();
-		for (ExpressionTreeNode child : myTree.getRootNode().getChildren()) {
-			myParams.add(child.getOxygen().getReturnValue());
+		for (TreeNode child : myTree.getRootNode().getChildren()) {
+			myParams.add(child.getValue());
 		}
 	}
 

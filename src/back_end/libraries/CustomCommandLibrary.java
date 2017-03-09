@@ -7,6 +7,7 @@ import back_end.exceptions.UnrecognizedCommandException;
 import back_end.model.container.Pair;
 import back_end.model.expressiontree.ExpressionTree;
 
+@SuppressWarnings("serial")
 public class CustomCommandLibrary extends HashMap<String, CustomCommand>{
 	
 	public void setCustomVarTreePair(String name, CustomCommand command){

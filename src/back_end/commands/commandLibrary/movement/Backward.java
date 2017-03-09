@@ -12,5 +12,4 @@ public class Backward extends DisplacementCommand implements CommandInterface{
 	protected Function<List<Double>, Double> supplyAction(Model model) {
 		return displaceTurtle(model, -1);
 	}
-
 }

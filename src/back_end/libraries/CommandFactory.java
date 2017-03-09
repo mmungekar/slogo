@@ -17,12 +17,11 @@ public class CommandFactory {
 	private ResourceBundle presource;
 	private ArrayList<String> commandNames;
 	public static final String LANGUAGE_DIRECTORY = "resources/languages/";
-	public static final String PARAMETER_DIRECTORY = "resources/parameters/";
 	public static final String COMMAND_PREFIX = "resources.commands.commandpath";
+	public static final String PARAMETER_DIRECTORY = "resources/parameters/";
 	private ResourceBundle COMMAND_PATHS = ResourceBundle.getBundle(COMMAND_PREFIX);
 	private ProgramParser mParser;
-	private String currentLanguage;	
-	
+	private String currentLanguage;
 
 	public CommandFactory(String language) {
 		this.currentLanguage = language;
@@ -31,9 +30,8 @@ public class CommandFactory {
 
 	public void buildLib() {
 		commandNames = new ArrayList<String>();
-
-		resource = ResourceBundle.getBundle(LANGUAGE_DIRECTORY + this.currentLanguage);
 		presource = ResourceBundle.getBundle(PARAMETER_DIRECTORY + "Parameter");
+		resource = ResourceBundle.getBundle(LANGUAGE_DIRECTORY + this.currentLanguage);
 		mParser = new ProgramParser();
 		mParser.addPatterns(LANGUAGE_DIRECTORY + this.currentLanguage);
 		for (String x : resource.keySet()) {
@@ -41,18 +39,20 @@ public class CommandFactory {
 		}
 	}
 
-	public CommandInterface getCommand(String command) throws CommandException {
+	public CommandInterface getCommand(String official) throws CommandException {
 		try {
-			String official = mParser.getSymbol(command);
-			Class<?> clazz = Class.forName(COMMAND_PATHS.getString(official));
-			return (CommandInterface) clazz.newInstance();
+			if (COMMAND_PATHS.containsKey(official)) {
+				Class<?> clazz = Class.forName(COMMAND_PATHS.getString(official));
+				return (CommandInterface) clazz.newInstance();
+			} else
+				throw new ClassNotFoundException(official);
 		} catch (ClassNotFoundException ex) {
-			 throw new UnrecognizedCommandException(command);
+			throw new UnrecognizedCommandException(official);
 		} catch (InstantiationException | IllegalAccessException ex) {
-			throw new InitializationException(command);
+			throw new InitializationException(official);
 		}
 	}
-	
+
 	public int getNumParam(String command) throws UnrecognizedCommandException {
 
 		String official = mParser.getSymbol(command);
