@@ -17,6 +17,7 @@ import back_end.exceptions.UnrecognizedCommandException;
  */
 public class Oxygen<T> implements NodeIntermediateInteface<T> {
 	private String mType;
+	private CommandFactory mCommandLib;
 
 	private T mContent;
 	private String mSubContent;
@@ -24,6 +25,7 @@ public class Oxygen<T> implements NodeIntermediateInteface<T> {
 
 	public Oxygen(String language, String type) {
 		mType = type;
+		mCommandLib = new CommandFactory(language);
 	}
 
 	public void convertLight(String light) throws CommandException {
