@@ -10,7 +10,7 @@ import back_end.model.scene.Model;
 public abstract class TwoParameterCommand extends SimpleParameterCommand implements CommandInterface{
   
     public void checkParams() throws NotEnoughParameterException{
-    	if((getParameterValue().size() % 2)!=0){
+    	if((getParameters().size() % 2)!=0){
     		throw new NotEnoughParameterException(2);
     	}
     }

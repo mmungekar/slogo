@@ -8,7 +8,7 @@ public class Cosine extends SimpleParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model state) {
 		
-		return Math.cos(Math.toRadians(getParameterValue().get(0)));
+		return Math.cos(Math.toRadians(getParameters().get(0)));
 	}
 
 }

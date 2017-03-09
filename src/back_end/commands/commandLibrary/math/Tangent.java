@@ -8,7 +8,7 @@ public class Tangent extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model state) {
-		return Math.tan(Math.toRadians(getParameterValue().get(0)));
+		return Math.tan(Math.toRadians(getParameters().get(0)));
 	}
 
 }

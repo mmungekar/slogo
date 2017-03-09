@@ -11,7 +11,7 @@ public class Not extends SimpleParameterCommand implements CommandInterface{
  */
 	@Override
 	public double Execute(Model state) { 
-		for(Double a:getParameterValue()){
+		for(Double a:getParameters()){
 			if(a!=0){
 				return 0;
 			}

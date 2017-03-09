@@ -8,7 +8,7 @@ public class ArcTangent extends SimpleParameterCommand implements CommandInterfa
 
 	@Override
 	public double Execute(Model state) {
-		return Math.toDegrees(Math.atan(getParameterValue().get(0)));
+		return Math.toDegrees(Math.atan(getParameters().get(0)));
 	}
 
 

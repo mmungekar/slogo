@@ -9,7 +9,7 @@ public class SetHeading extends SimpleParameterCommand implements CommandInterfa
 	public double Execute(Model model) {
 
 		Double returnVal = (double) 0;
-		for(Double a: getParameterValue()){
+		for(Double a: getParameters()){
 			returnVal += model.operateOnTurtle(turtle -> turtle.setAngle(-1 * a));
 		}
 		return returnVal;

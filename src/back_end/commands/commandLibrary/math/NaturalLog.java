@@ -7,7 +7,7 @@ public class NaturalLog extends SimpleParameterCommand implements CommandInterfa
 
 	@Override
 	public double Execute(Model state) {
-		return Math.log(getParameterValue().get(0));
+		return Math.log(getParameters().get(0));
 	}
 
 }

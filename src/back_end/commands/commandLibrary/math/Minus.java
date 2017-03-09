@@ -7,7 +7,7 @@ import back_end.model.scene.Model;
 public class Minus extends SimpleParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model state) {
-		return -(getParameterValue().get(0));
+		return -(getParameters().get(0));
 	}
 
 
