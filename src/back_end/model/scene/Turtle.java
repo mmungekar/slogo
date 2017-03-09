@@ -61,15 +61,15 @@ public class Turtle {
 		return penDown;
 	}
 	
-
+	public Point2D getRelativePosition(Point2D reference){
+		return this.centerPos.subtract(reference);
+	}
+	
+	
 	public Point2D getCenterPosition() {
 		return this.centerPos;
 	}
-
-	public Point2D getTopLeftPosition() {
-		return this.topLeftPos;
-	}
-	
+		
 	public Point2D getPrevCenterPosition() {
 		return this.prevCenterPos;
 	}
@@ -120,10 +120,6 @@ public class Turtle {
 		return myImageView.isVisible();
 	}
 
-	public double calcDistanceFromPos(Point2D pos) {
-		return Math.sqrt(Math.pow((pos.getX() - this.getCenterPosition().getX()), 2) + Math.pow((pos.getY() - this.getCenterPosition().getY()), 2)); 
-	}
-
 	public double setVisible(boolean b) {
 		myImageView.setVisible(b);
 		return 0;
@@ -134,11 +130,9 @@ public class Turtle {
 	}
 	
 	public double setTowards(double ox, double oy) {
-		double dx = (ox) - this.getCenterPosition().getX();
-	    double dy = (oy) - this.getCenterPosition().getY();
-	    System.out.println(new Point2D(dx, dy));
+		Point2D distanceVector = new Point2D(ox, oy).subtract(centerPos);
 	    double prevAngle = this.getAngle();
-	    double angle = Math.toDegrees(Math.atan2(dy, dx));
+	    double angle = Math.toDegrees(Math.atan2(distanceVector.getX(), distanceVector.getY()));
 	    this.setAngle(angle);
 	    return angle-prevAngle;
 	}
