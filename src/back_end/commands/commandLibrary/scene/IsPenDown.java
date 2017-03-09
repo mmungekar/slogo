@@ -1,16 +1,16 @@
 package back_end.commands.commandLibrary.scene;
 
-import back_end.commands.commandLibrary.SimpleParameterCommand;
+import java.util.function.Function;
+import back_end.commands.commandLibrary.CheckSupplierCommand;
 import back_end.interfaces.CommandInterface;
-import back_end.model.scene.Model;
+import back_end.model.scene.Turtle;
 
-public class IsPenDown extends SimpleParameterCommand implements CommandInterface{
+public class IsPenDown extends CheckSupplierCommand implements CommandInterface{
 
 	@Override
-	public double Execute(Model model) {
-		return model.operateOnTurtle(turtle -> {
-			 return (turtle.isPenDown() == true) ? 1.0 : 0.0;
-		});
+	protected Function<Turtle, Boolean> getBooleanCheck() {
+		return turtle -> turtle.isPenDown();
 	}
+
 
 }

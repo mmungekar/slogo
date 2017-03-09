@@ -1,14 +1,17 @@
 package back_end.commands.commandLibrary.math;
 
-import back_end.commands.commandLibrary.SimpleParameterCommand;
+import java.util.List;
+import java.util.function.Function;
+
+import back_end.commands.commandLibrary.FunctionCommand;
 import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 
-public class ArcTangent extends SimpleParameterCommand implements CommandInterface{
+public class ArcTangent extends FunctionCommand implements CommandInterface{
 
 	@Override
-	public double Execute(Model state) {
-		return Math.toDegrees(Math.atan(getParameterValue().get(0)));
+	protected Function<List<Double>, Double> supplyAction(Model model) {
+		return inputs -> Math.toDegrees(Math.atan(inputs.get(0)));
 	}
 
 

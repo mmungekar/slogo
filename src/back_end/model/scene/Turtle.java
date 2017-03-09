@@ -87,7 +87,7 @@ public class Turtle {
 	}
 
 	private void keepAngleWithin360() {
-		if (Math.abs(this.angle) >= 360){
+		while (Math.abs(this.angle) >= 360){
 			this.angle -= Math.signum(this.angle) * 360;
 		}
 	}
@@ -131,14 +131,6 @@ public class Turtle {
 
 	public Node getImageView() {
 		return myImageView;
-	}
-	
-	public double moveForward(double mag) {
-		double angle = this.getAngle();
-		double dx = Math.cos(Math.toRadians(angle)) * mag;
-		double dy = Math.sin(Math.toRadians(angle)) * mag;
-		this.setPosition(this.getCenterPosition().add(dx, dy));	
-		return mag;
 	}
 	
 	public double setTowards(double ox, double oy) {

@@ -1,21 +1,15 @@
 package back_end.commands.commandLibrary.scene;
 
 import back_end.commands.commandLibrary.SupplierCommand;
+import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 
-import java.util.List;
-import java.util.function.Function;
-
-import back_end.interfaces.CommandInterface;
-
-public class ShowTurtle extends SupplierCommand implements CommandInterface{
+public class Heading extends SupplierCommand implements CommandInterface{
 	
 	@Override
 	public double Execute(Model model) {
 		return model.operateOnTurtle(turtle -> {
-			turtle.setVisible(true);
-			return 1.0;
+			return -1 * turtle.getAngle();
 		});
 	}
-
 }

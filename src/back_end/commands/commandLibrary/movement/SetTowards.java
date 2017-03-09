@@ -1,21 +1,21 @@
 package back_end.commands.commandLibrary.movement;
 
-import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
 
-import back_end.commands.commandLibrary.TwoParameterCommand;
+import back_end.commands.commandLibrary.BiFunctionCommand;
 import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 
-public class SetTowards extends TwoParameterCommand implements CommandInterface{
+public class SetTowards extends BiFunctionCommand implements CommandInterface{
 
 	@Override
-	public double Execute(Model model) {
-	    Double degrees  = (double) 0;
-		Iterator<Double> iter = getParameterValue().iterator();
-		while(iter.hasNext()){
-			degrees+= model.operateOnTurtle(turtle -> turtle.setTowards(model.getHome().getX() + iter.next(), model.getHome().getY() - iter.next()));
-		}
-		return degrees;
+	protected Function<List<Double>, Double> supplyAction(Model model) {
+		return (inputs) -> model.operateOnTurtle(turtle -> {
+			double newX = model.getHome().getX() + inputs.get(0);
+			double newY = model.getHome().getY() - inputs.get(1);
+			return turtle.setTowards(newX, newY);
+		});
 	}
 
 }

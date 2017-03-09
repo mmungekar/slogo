@@ -1,18 +1,13 @@
 package back_end.commands.commandLibrary.math;
 
-import back_end.commands.commandLibrary.SimpleParameterCommand;
-import back_end.commands.commandLibrary.TwoParameterCommand;
-import back_end.commands.constant.Constant;
+import java.util.function.BiPredicate;
 import back_end.interfaces.CommandInterface;
-import back_end.model.expressiontree.ExpressionTree;
-import back_end.model.expressiontree.Oxygen;
-import back_end.model.scene.Model;
 
-public class LessThan extends SimpleParameterCommand implements CommandInterface{
+public class LessThan extends ComparisonCommand implements CommandInterface{
 
 	@Override
-	public double Execute(Model state) { 
-		return getParameterValue().get(0) < getParameterValue().get(1) ? 1 : 0;
+	protected BiPredicate<Double, Double> getComparison() {
+		return (input1, input2) -> input1 < input2;
 	}
 
 }

@@ -1,18 +1,15 @@
 package back_end.commands.commandLibrary.movement;
 
+import java.util.List;
+import java.util.function.Function;
+
 import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 
-public class Forward extends ForwardBackward implements CommandInterface{
+public class Forward extends DisplacementCommand implements CommandInterface{
 
 	@Override
-	public double Execute(Model model) {
-		Double returnVal = (double) 0;
-		for(Double a: getParameterValue()){
-		this.moveForward(model, a);
-		returnVal += a;
-		}
-		return returnVal;
+	protected Function<List<Double>, Double> supplyAction(Model model) {
+		return displaceTurtle(model, 1);
 	}
-
 }

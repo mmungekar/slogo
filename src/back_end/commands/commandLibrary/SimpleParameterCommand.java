@@ -2,7 +2,9 @@ package back_end.commands.commandLibrary;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 import back_end.exceptions.CommandException;
 import back_end.exceptions.NotEnoughParameterException;
@@ -57,10 +59,32 @@ public abstract class SimpleParameterCommand implements CommandInterface {
 		}
 	}
 
-	protected List<Double> getParameterValue() {
+	protected List<Double> getParameterValues() {
 		return Collections.unmodifiableList(myParams);
 	}
 
 	@Override
-	public abstract double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException;
+	public double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException {
+		Function<List<Double>, Double> action = this.supplyAction(model);
+		return scanThroughInputs(action, getInputNumber());
+	}
+	
+	
+	private double scanThroughInputs(Function<List<Double>, Double> action, int N){
+		Double returnVal = (double) 0;
+		ArrayList<Double> inputs = new ArrayList<Double>();
+		Iterator<Double> iter = getParameterValues().iterator();
+		while(iter.hasNext()){
+			for(int i = 0; i < N ; i++){
+				inputs.add(i, iter.next());
+			}
+			returnVal += action.apply(inputs);
+		}
+		return returnVal;
+	}
+	
+	protected abstract Function<List<Double>, Double> supplyAction(Model model);
+	
+	protected abstract int getInputNumber();
+		
 }

@@ -1,17 +1,19 @@
 package back_end.commands.commandLibrary.movement;
 
-import back_end.model.scene.Model;
-import back_end.interfaces.CommandInterface;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
-public class Backward extends ForwardBackward implements CommandInterface {
+import back_end.interfaces.CommandInterface;
+import back_end.model.scene.Model;
+import back_end.model.scene.Turtle;
+import javafx.geometry.Point2D;
+
+public class Backward extends DisplacementCommand implements CommandInterface{
+
 	@Override
-	public double Execute(Model model) {
-		Double returnVal = (double) 0;
-		for(Double a: getParameterValue()){
-		this.moveForward(model, -1*a);
-		returnVal += a;
-		}
-		return returnVal;
+	protected Function<List<Double>, Double> supplyAction(Model model) {
+		return displaceTurtle(model, -1);
 	}
 
 }
