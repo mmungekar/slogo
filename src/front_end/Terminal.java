@@ -1,12 +1,8 @@
 package front_end;
-
 //http://codereview.stackexchange.com/questions/52197/console-component-in-javafx
-
 ///http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
-
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
-
 import front_end.customJavaFxNodes.ActionButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,96 +13,67 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
-
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-
 public class Terminal extends VBox {
 	public static final int CONSOLE_WIDTH = 500;
-
 	private TextArea inputConsole;
 	private TextArea outputConsole;
 	private ListView<String> historyView = new ListView<String>();
-
 	protected int historyPointer = 0;
 	public static final ObservableList<String> history = FXCollections.observableArrayList();
 	public final static String EMPTY_STRING = "";
 	private Consumer<String> onMessageReceivedHandler;
-
 	// all objects that have titles
 	private Tab outputHolder;
 	private Tab historyHolder;
 	private Button submit;
 	private Button clear;
-
 	public Terminal() {
-		this.getChildren().addAll(createInputComponents(), createHistoryAndOutputComponents());
-	}
-
-	private Node createHistoryAndOutputComponents() {
-		TabPane tabPane = new TabPane();
-
+		initializeInput();
 		initializeOutput();
+		setupHistoryView();
+		clear = new ActionButton(event -> clearHistory());
+		submit = new ActionButton(event -> submitInput());
+		this.getChildren().addAll(createConsoleComponents(inputConsole, submit), createHistoryAndOutputComponents());
+	}
+	private Node createHistoryAndOutputComponents() {
+		TabPane tabPane = new TabPane();		
+		
 		outputHolder = new Tab();
-
 		outputHolder.setContent(outputConsole);
-
+		
 		historyHolder = new Tab();
-		historyHolder.setContent(createHistoryComponents());
-
+		historyHolder.setContent(createConsoleComponents(historyView, clear));
 		tabPane.getTabs().addAll(outputHolder, historyHolder);
-
 		tabPane.setPrefHeight(inputConsole.getPrefHeight());
-
 		tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
 		return tabPane;
 	}
-
 	private void initializeOutput() {
 		outputConsole = new TextArea();
 		outputConsole.setEditable(false);
 	}
-
-	private HBox createInputComponents() {
-		HBox inputComponents = new HBox();
-
-		initializeInput();
-
-		submit = new ActionButton(event -> submitInput());
-		submit.setPrefHeight(inputConsole.getPrefHeight());
-
-		inputComponents.getChildren().addAll(inputConsole, submit);
-		inputComponents.setSpacing(15);
-		return inputComponents;
+	private HBox createConsoleComponents(Region mainConsole, Button button) {
+		HBox consoleComponents = new HBox();
+		button.setPrefHeight(mainConsole.getPrefHeight());
+		consoleComponents.getChildren().addAll(mainConsole, button);
+		consoleComponents.setSpacing(15);
+		return consoleComponents;
 	}
-
-	private HBox createHistoryComponents() {
-		HBox historyComponents = new HBox();
-
-		setupHistoryView();
-
-		clear = new ActionButton(event -> clearHistory());
-		clear.setPrefHeight(historyView.getPrefHeight());
-
-		historyComponents.getChildren().addAll(historyView, clear);
-		historyComponents.setSpacing(15);
-		return historyComponents;
-	}
-
+	
+	
 	private void clearHistory() {
 		history.clear();
 	}
-
 	private void setupHistoryView() {
 		historyView.setItems(history);
 		historyView.setPrefWidth(CONSOLE_WIDTH);
 		setMouseActionOnListView();
-
 	}
-
 	private void setMouseActionOnListView() {
 		// http://stackoverflow.com/questions/23622703/deselect-an-item-on-an-javafx-listview-on-click
 		historyView.setCellFactory(lv -> {
@@ -127,7 +94,6 @@ public class Terminal extends VBox {
 			return cell;
 		});
 	}
-
 	private void initializeInput() {
 		inputConsole = new TextArea();
 		inputConsole.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
@@ -144,16 +110,14 @@ public class Terminal extends VBox {
 				}
 				historyPointer--;
 				loadHistoryIntoTextInput();
-
 				break;
 			case DOWN:
-				if (historyPointer == history.size() - 1) {
+				if (historyPointer >= history.size() - 1) {
 					inputConsole.clear();
 					break;
 				}
 				historyPointer++;
 				loadHistoryIntoTextInput();
-
 				break;
 			default:
 				break;
@@ -162,7 +126,6 @@ public class Terminal extends VBox {
 		inputConsole.setPrefWidth(CONSOLE_WIDTH);
 		inputConsole.setPrefHeight(150);
 	}
-
 	private void loadHistoryIntoTextInput() {
 		inputConsole.setText(history.get(historyPointer));
 		inputConsole.selectAll();
@@ -173,7 +136,6 @@ public class Terminal extends VBox {
 		inputConsole.setText(in);
 		submitInput();
 	}
-
 	void submitInput() {
 		String text = inputConsole.getText();
 		historyView.scrollTo(history.size() - 1);
@@ -185,38 +147,28 @@ public class Terminal extends VBox {
 				onMessageReceivedHandler.accept(text);
 			}
 			inputConsole.clear();
-
 		}
 	}
-
 	void setEnterListener(final Consumer<String> action) {
 		this.onMessageReceivedHandler = action;
-
 	}
-
 	void setText(String in) {
 		inputConsole.setText(in);
 	}
-
 	String getText() {
 		return inputConsole.getText();
 	}
-
 	void setOutputText(String output2) {
 		outputConsole.setText(output2);
-
 	}
-
 	void printToOutput(Exception e) {
 		outputConsole.setText(e.getMessage());
 	}
-
 	void refreshGUITitles(ResourceBundle resource) {
 		this.clearHistory();
 		historyHolder.setText(resource.getString("History"));
 		outputHolder.setText(resource.getString("Output"));
 		clear.setText(resource.getString("Clear"));
 		submit.setText(resource.getString("Submit"));
-
 	}
 }
