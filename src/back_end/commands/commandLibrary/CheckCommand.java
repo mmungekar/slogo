@@ -5,7 +5,7 @@ import java.util.function.Function;
 import back_end.model.scene.Model;
 import back_end.model.scene.Turtle;
 
-public abstract class CheckSupplierCommand extends SupplierCommand{
+public abstract class CheckCommand extends NoInputCommand{
 
 	@Override
 	public double Execute(Model model) {
