@@ -57,7 +57,7 @@ public abstract class SimpleParameterCommand implements CommandInterface {
 		}
 	}
 
-	protected List<Double> getParameterValue() {
+	protected List<Double> getParameters() {
 		return Collections.unmodifiableList(myParams);
 	}
 

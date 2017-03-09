@@ -11,7 +11,7 @@ public class Random extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model state) {
-		return new java.util.Random().nextDouble() * getParameterValue().get(0);
+		return new java.util.Random().nextDouble() * getParameters().get(0);
 	}
 
 }

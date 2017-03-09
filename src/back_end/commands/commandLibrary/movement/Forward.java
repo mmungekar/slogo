@@ -8,7 +8,7 @@ public class Forward extends ForwardBackward implements CommandInterface{
 	@Override
 	public double Execute(Model model) {
 		Double returnVal = (double) 0;
-		for(Double a: getParameterValue()){
+		for(Double a: getParameters()){
 		this.moveForward(model, a);
 		returnVal += a;
 		}

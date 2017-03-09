@@ -11,7 +11,7 @@ public class SetTowards extends TwoParameterCommand implements CommandInterface{
 	@Override
 	public double Execute(Model model) {
 	    Double degrees  = (double) 0;
-		Iterator<Double> iter = getParameterValue().iterator();
+		Iterator<Double> iter = getParameters().iterator();
 		while(iter.hasNext()){
 			degrees+= model.operateOnTurtle(turtle -> turtle.setTowards(model.getHome().getX() + iter.next(), model.getHome().getY() - iter.next()));
 		}

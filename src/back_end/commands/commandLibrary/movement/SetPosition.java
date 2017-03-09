@@ -14,7 +14,7 @@ public class SetPosition extends TwoParameterCommand implements CommandInterface
 	public double Execute(Model model) {
 
 		Double distance  = (double) 0;
-		Iterator<Double> iter = getParameterValue().iterator();
+		Iterator<Double> iter = getParameters().iterator();
 		while(iter.hasNext()){
 			Point2D newPosition = new Point2D(model.getHome().getX() + iter.next(), model.getHome().getY() - iter.next());
 			distance += model.operateOnTurtle(turtle -> turtle.setPosition(newPosition));

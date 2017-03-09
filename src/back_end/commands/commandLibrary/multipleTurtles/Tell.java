@@ -12,7 +12,7 @@ public class Tell extends SimpleParameterCommand implements CommandInterface, Co
 
 	@Override
 	public double Execute(Model model) {
-		List<Double> parametersDouble = this.getParameterValue();
+		List<Double> parametersDouble = this.getParameters();
 		
 		List<Integer> parametersInteger = parametersDouble.stream()
 		        .filter(elt -> elt != null)

@@ -12,7 +12,7 @@ public class Sine extends SimpleParameterCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model state) {
-		return Math.sin(Math.toRadians(getParameterValue().get(0)));
+		return Math.sin(Math.toRadians(getParameters().get(0)));
 	}
 
 }

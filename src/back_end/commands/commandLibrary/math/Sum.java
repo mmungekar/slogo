@@ -1,5 +1,7 @@
 package back_end.commands.commandLibrary.math;
 
+import java.util.function.BinaryOperator;
+
 import back_end.commands.commandLibrary.SimpleParameterCommand;
 import back_end.commands.commandLibrary.TwoParameterCommand;
 import back_end.commands.constant.Constant;
@@ -8,14 +10,11 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
 
-public class Sum extends SimpleParameterCommand implements CommandInterface{
+public class Sum extends TwoInputMathCommand implements CommandInterface{
+
 	@Override
-	public double Execute(Model state) {
-		double sum = 0;
-		for(Double a : getParameterValue()){
-			sum += a;
-		}
-		return sum;
+	protected BinaryOperator<Double> getOperation() {
+		return (a,b) -> a + b;
 	}
 
 }
