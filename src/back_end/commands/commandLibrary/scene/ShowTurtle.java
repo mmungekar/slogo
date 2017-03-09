@@ -9,10 +9,8 @@ public class ShowTurtle extends NoInputCommand implements CommandInterface{
 	
 	@Override
 	public double Execute(Model model) {
-		return model.operateOnTurtle(turtle -> {
-			turtle.setVisible(true);
-			return 1.0;
-		});
+		model.operateOnTurtle(turtle -> turtle.setVisible(true));
+		return 1.0;
 	}
 
 }

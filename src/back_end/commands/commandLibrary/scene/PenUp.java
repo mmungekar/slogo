@@ -8,9 +8,7 @@ public class PenUp extends NoInputCommand implements CommandInterface{
 	
 	@Override
 	public double Execute(Model model) {
-		return model.operateOnTurtle(turtle -> {
-			turtle.setPen(false);
-			return 0.0;
-		});
+		model.operateOnTurtle(turtle -> turtle.setPen(false));
+		return 0.0;
 	}
 }
