@@ -5,11 +5,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import back_end.commands.commandLibrary.SimpleParameterCommand;
+import back_end.commands.commandLibrary.SupplierCommand;
 import back_end.commands.constant.Constant;
 import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 
-public class Tell extends SimpleParameterCommand implements CommandInterface, Constant{
+public class Tell extends SupplierCommand implements CommandInterface, Constant{
 
 	@Override
 	public double Execute(Model model) {
@@ -24,15 +25,4 @@ public class Tell extends SimpleParameterCommand implements CommandInterface, Co
 		return parametersInteger.get(parametersInteger.size() - 1);
 	}
 
-	@Override
-	protected Function<List<Double>, Double> supplyAction(Model model) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	protected int getInputNumber() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 }

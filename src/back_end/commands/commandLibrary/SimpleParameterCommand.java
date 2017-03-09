@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import back_end.exceptions.CommandException;
@@ -65,12 +66,12 @@ public abstract class SimpleParameterCommand implements CommandInterface {
 
 	@Override
 	public double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException {
-		Function<List<Double>, Double> action = this.supplyAction(model);
+		BiFunction<List<Double>, Double, Double> action = this.supplyAction(model);
 		return scanThroughInputs(action, getInputNumber());
 	}
 	
 	
-	private double scanThroughInputs(Function<List<Double>, Double> action, int N){
+	private double scanThroughInputs(BiFunction<List<Double>, Double, Double> action, int N){
 		Double returnVal = (double) 0;
 		ArrayList<Double> inputs = new ArrayList<Double>();
 		Iterator<Double> iter = getParameterValues().iterator();
@@ -78,12 +79,12 @@ public abstract class SimpleParameterCommand implements CommandInterface {
 			for(int i = 0; i < N ; i++){
 				inputs.add(i, iter.next());
 			}
-			returnVal += action.apply(inputs);
+			returnVal = action.apply(inputs, returnVal);
 		}
 		return returnVal;
 	}
 	
-	protected abstract Function<List<Double>, Double> supplyAction(Model model);
+	protected abstract BiFunction<List<Double>, Double, Double> supplyAction(Model model);
 	
 	protected abstract int getInputNumber();
 		
