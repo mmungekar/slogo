@@ -3,11 +3,11 @@ package back_end.commands.commandLibrary.movement;
 import java.util.List;
 import java.util.function.Function;
 
-import back_end.commands.commandLibrary.BiFunctionCommand;
+import back_end.commands.commandLibrary.TwoInputCommand;
 import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 
-public class SetPosition extends BiFunctionCommand implements CommandInterface{
+public class SetPosition extends TwoInputCommand implements CommandInterface{
 
 	@Override
 	protected Function<List<Double>, Double> supplyAction(Model model) {
