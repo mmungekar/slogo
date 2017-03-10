@@ -9,7 +9,10 @@ import javafx.scene.paint.Color;
 public class Turtle {
 	public static final String IMAGE_DIRECTORY = "resources/images/";
 	public static final String DEFAULT_TURTLE = "turtle.gif";
-	public static final Double DEFAULT_PEN_SIZE = 5.0;
+	public static final Double DEFAULT_PEN_SIZE = 2.0;
+	public static final Color DEFAULT_PEN_COLOR = Color.BLACK;
+	public static final String PRINT_STATUS_FORMAT = "Location: (%1$f, %2$f) Heading: (%3$f) PenDown: (%4$f)";
+	
 	private ImageView myImageView;
 	
 	private Point2D topLeftPos;
@@ -18,7 +21,7 @@ public class Turtle {
 	private boolean penDown;
 	private double[] halfDems = new double[2];
 	private double angle;
-	private Color penColor = Color.BLACK;
+	private Color penColor;
 	private double penSize;
 
 	Turtle(Point2D initPos) {		
@@ -27,7 +30,9 @@ public class Turtle {
 		calcHalfDems();
 		setAngle(-90);
 		setPosition(initPos);
+		penColor = DEFAULT_PEN_COLOR;
 		penDown = true;
+		penSize = DEFAULT_PEN_SIZE;
 	}
 
 	private void calcHalfDems() {
@@ -179,9 +184,7 @@ public class Turtle {
 	}
 
 	public String printStatus(Point2D home) {
-		String toFormat = "Location: (%1$f, %2$f) Heading: (%3$f) PenDown: (%4$f)";
-		
-		return String.format(toFormat, 
+		return String.format(PRINT_STATUS_FORMAT, 
 				this.centerPos.subtract(home).getX(),
 				-this.centerPos.subtract(home).getY(), 
 				-this.getAngle(), 
