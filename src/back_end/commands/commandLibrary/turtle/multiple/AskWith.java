@@ -29,8 +29,8 @@ public class AskWith implements CommandInterface{
 		myTree = tree;
 		 iter = myTree.getRootNode().getChildren().iterator();
 		ExpressionTreeNode firstChild = iter.next();
-		for(Integer id: model.getTurtleIDs()){
-			model.tellTemps(Collections.singletonList(id));
+		for(Integer id: model.getTurtleMaster().getAllTurtleIDs()){
+			model.getTurtleMaster().setTempActiveTurtles(Collections.singletonList(id));
 			myTree.traverseKid(firstChild,model);
 			if(firstChild.getOxygen().getReturnValue()!=0){
 				validTurtles.add(id);
@@ -44,10 +44,10 @@ public class AskWith implements CommandInterface{
  */
 	@Override
 	public double Execute(Model model) throws VariableNotFoundException, CommandException {
-		model.tellTemps(validTurtles);
+		model.getTurtleMaster().setTempActiveTurtles(validTurtles);
 		ExpressionTreeNode secondChild = iter.next();
 		myTree.traverseKid(secondChild,model);
-		model.revertActiveTurtles();
+		model.getTurtleMaster().revertActiveTurtles();
 		return secondChild.getOxygen().getReturnValue();
 	}
 

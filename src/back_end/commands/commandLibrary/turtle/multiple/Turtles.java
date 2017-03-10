@@ -9,6 +9,6 @@ public class Turtles extends SimpleParameterCommand implements CommandInterface,
 
 	@Override
 	public double Execute(Model model) {
-		return model.getTurtleCount();
+		return model.getTurtleMaster().getAllTurtleIDs().size();
 	}
 }

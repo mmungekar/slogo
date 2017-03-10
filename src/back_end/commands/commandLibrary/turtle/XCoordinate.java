@@ -8,7 +8,7 @@ public class XCoordinate extends SimpleParameterCommand implements CommandInterf
 
 	@Override
 	public double Execute(Model model) {
-		return model.getCoordinate(0);
+		return model.getTurtleMaster().getCoordinate(0);
 	}
 
 }

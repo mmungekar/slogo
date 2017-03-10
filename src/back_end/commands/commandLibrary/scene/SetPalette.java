@@ -15,7 +15,7 @@ public class SetPalette extends SimpleParameterCommand implements CommandInterfa
 	public double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException {
 		List<Integer> parameters = this.getParameters().stream() .filter(elt -> elt != null)
 				.map(elt -> elt.intValue()).collect(Collectors.toList());
-		model.setColorRGB(parameters.get(0), parameters.get(1), parameters.get(2), parameters.get(3));
+		model.getDrawer().setColorRGB(parameters.get(0), parameters.get(1), parameters.get(2), parameters.get(3));
 		return this.getParameters().get(0);
 	}
 

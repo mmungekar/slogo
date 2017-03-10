@@ -116,8 +116,8 @@ public class UserDefinedEntries extends TabPane implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		if (myModel == o) {
-			customVariables = FXCollections.observableArrayList(myModel.getUserDefinedVariables());
-			customCommands = FXCollections.observableArrayList(myModel.getUserDefinedCommands());
+			customVariables = FXCollections.observableArrayList(myModel.getCustomMaster().getUserDefinedVariables());
+			customCommands = FXCollections.observableArrayList(myModel.getCustomMaster().getUserDefinedCommands());
 			updateVisualLibraries();
 		}
 
