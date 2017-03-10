@@ -11,12 +11,14 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import back_end.commands.custom.CustomCommand;
 import back_end.commands.custom.CustomVariable;
+import back_end.exceptions.NotInMapException;
 import back_end.exceptions.VariableNotFoundException;
 import back_end.commands.custom.CustomVariable;
 import back_end.commands.custom.CustomCommand;
 import back_end.libraries.CustomCommandLibrary;
 import back_end.libraries.VariableLibrary;
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 public class Model extends Observable {
 	public static final String DEFAULT_LANGUAGE = "English";
@@ -32,15 +34,25 @@ public class Model extends Observable {
 	private VariableLibrary mLocalVariableLibrary;
 	private CustomCommandLibrary mCustomCommandLibrary;
 	private HashMap<Integer, Color> colorContainer;
+	private HashMap<Integer, Image> shapeContainer;
 	private TurtleMaster myTurtleMaster;
 	public Model() {
 		myTurtleMaster = new TurtleMaster();
 		setBackgroundColor(Color.WHITE);
+		createDefaultColors();
+		createDefaultShapes();
 		mGlobalVariableLibrary = new VariableLibrary();
 		mLocalVariableLibrary = new VariableLibrary();
 		mCustomCommandLibrary = new CustomCommandLibrary();
 	}
 	
+	private void createDefaultShapes() {
+		shapeContainer = new HashMap<Integer, Image>();
+		for (int i = 0; i < DEFAULT_COLOR_HTML_NAMES.size(); i++) {
+			//shapeContainer.put(i, Color.web(DEFAULT_COLOR_HTML_NAMES.get(i)));
+		}
+	}
+
 	private void setChangedAndNotifyObservers() {
 		setChanged();
 		notifyObservers();
@@ -74,6 +86,8 @@ public class Model extends Observable {
 	public void setColorRGB(int index, int r, int g, int b) {
 		colorContainer.put(index, Color.rgb(r, g, b));
 	}
+	
+	
 	public void setClear(boolean clear) {
 		this.clear = clear;
 	}
@@ -114,7 +128,7 @@ public class Model extends Observable {
 		for (int i = 0; i < DEFAULT_COLOR_HTML_NAMES.size(); i++) {
 			colorContainer.put(i, Color.web(DEFAULT_COLOR_HTML_NAMES.get(i)));
 		}
-		backgroundColor = colorContainer.get(DEFAULT_BACKGROUND_COLOR_INDEX);
+		this.setBackgroundColor(colorContainer.get(DEFAULT_BACKGROUND_COLOR_INDEX));
 	}
 	
 	public CustomCommandLibrary getCustomCommandLibrary() {
@@ -197,5 +211,33 @@ public class Model extends Observable {
 	
 	public double getActiveTurtleID() {
 		return myTurtleMaster.getActiveTurtleID();
+	}
+
+	
+	public Double getIndexFromColor(Color penColor) throws NotInMapException {
+		return getKeyFromValue(colorContainer, penColor).doubleValue();
+	}
+
+	private static <K, V> K getKeyFromValue(HashMap<K, V> map, V value) throws NotInMapException {
+		for(K k : map.keySet()){
+			if (map.get(k).equals(value)){
+				return k;
+			}
+		}
+		throw new NotInMapException(value.toString());
+	}
+
+	public void sendError(Exception e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Color getColorFromIndex(Integer index) {
+		return colorContainer.get(index);
+	}
+
+	public Image getShapeFromIndex(Integer index) {
+		return shapeContainer.get(index);
 	}	
+	
 }

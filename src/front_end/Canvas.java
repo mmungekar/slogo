@@ -70,6 +70,7 @@ public class Canvas implements Observer {
 		line.setEndX(endPos.getX());
 		line.setEndY(endPos.getY());
 		line.setStroke(turtle.getPenColor());
+		line.setStrokeWidth(turtle.getPenSize());
 		myRoot.getChildren().add(line);
 	}
 
