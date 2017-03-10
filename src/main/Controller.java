@@ -20,6 +20,7 @@ public class Controller {
 	public void start(Tab tab) {
 		model = new Model();
 		view = new View(tab, model);
+		model.setView(view);
 		mInterpreter = new Interpreter();
 		
 		view.setEnterListener((String rawUserInput) -> {

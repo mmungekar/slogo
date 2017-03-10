@@ -177,4 +177,15 @@ public class Turtle {
 		calcHalfDems();
 		setPosition(this.centerPos);		
 	}
+
+	public String printStatus(Point2D home) {
+		String toFormat = "Location: (%1$f, %2$f) Heading: (%3$f) PenDown: (%4$f)";
+		
+		return String.format(toFormat, 
+				this.centerPos.subtract(home).getX(),
+				-this.centerPos.subtract(home).getY(), 
+				-this.getAngle(), 
+				this.penDown? 1.0 : 0.0); 
+
+	}
 }

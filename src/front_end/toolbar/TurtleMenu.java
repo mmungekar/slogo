@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import back_end.model.scene.Model;
 import front_end.View;
@@ -45,71 +47,39 @@ public class TurtleMenu extends Menu implements Observer{
 	private Menu penColorOptions;
 	private Menu penStatusOption;
 	
-	/*
-	private ComboBox<Integer> turtleIDs;
-	
-	private ComboBox<String> penColors;
-	private RadioButton penUp;
-	private RadioButton penDown;
-	private Button sendHome;
-	private Button fileChoose;
-	*/
-	
-	
+	private MenuOptionsList turtleStatus;
+		
 	public TurtleMenu(String title, Model model){
 		super(title);
 		this.model = model;
 		model.addObserver(this);
 		
-		MenuItem addTurtle = new MenuItem("Add New Turtle");
-		addTurtle.setOnAction(e -> model.getTurtleMaster().breedTurtle(-1));
-		
-		MenuItem activeMessage = new MenuItem("The following only effect active turtles");
-		activeMessage.setDisable(true);
-		
-		MenuItem sendHome = new MenuItem("Send to Home");
-		
-		sendHome.setOnAction(e -> {
-			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setPosition(model.getHome()));
+		MenuItem addTurtle = addTurtle(model);
+		turtleStatus = turtleStatus(model);
+		MenuItem activeMessage = activeMessage();
+		MenuItem sendHome = sendHome(model);
+		MenuItem clear = clear(model);
+		MenuItem remove = remove(model);
+		Menu visibility = visibility(model);
+		Menu penProperties = penProperties(model);
+		MenuItem image = image(model);
+
+		this.getItems().addAll(addTurtle, turtleStatus, activeMessage, sendHome, clear, remove, visibility, penProperties, image);
+	}
+
+	private MenuOptionsList turtleStatus(Model model) {
+		ObservableList<String> turtleIDs = createTurtleIdObservable(model);
+		return new MenuOptionsList("Print Turtle Status", turtleIDs, null, turtleIDasString -> {
+			model.getTurtleMaster().printStatus(Integer.parseInt(turtleIDasString));	
 		});
-		
-		MenuItem clear = new MenuItem("Clear");
-		clear.setOnAction(e -> {
-			model.getTurtleMaster().operateOnTurtle(turtle -> {
-				turtle.dontDrawLine();
-				return turtle.setPosition(model.getHome());
-			});
-		});
-		
-		
-		MenuItem remove = new MenuItem("Remove from screen");
-		
-		remove.setOnAction(e -> {
-			model.getTurtleMaster().removeActiveTurtles();
-		});
-		
-		
-		Menu visibility = new Menu("Visibility");
-		
-		MenuItem show = new MenuItem("Show");
-		
-		show.setOnAction(e -> {
-			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setVisible(true));
-		});
-		
-		MenuItem hide = new MenuItem("Hide");
-		
-		hide.setOnAction(e -> {
-			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setVisible(false));
-		});
-		
-		
-		visibility.getItems().addAll(show, hide);
-		
-		
-		Menu penProperties = new Menu("Pen Properties");
-		
-		
+	}
+
+	private ObservableList<String> createTurtleIdObservable(Model model) {
+		ObservableList<String> turtleIDs = FXCollections.observableArrayList(model.getTurtleMaster().getAllTurtleIDs().stream().map( e -> e.toString() ).collect( Collectors.toList() ) );
+		return turtleIDs;
+	}
+
+	private MenuItem image(Model model) {
 		MenuItem image = new MenuItem("Select New Turtle Image");
 		
 		image.setOnAction(e -> {
@@ -120,8 +90,11 @@ public class TurtleMenu extends Menu implements Observer{
 				//myView.setOutput(String.format(PLEASE_SELECT_PROPER_IMG_FILE, IMAGE_EXTENSION));
 			}
 		});
-		
-		
+		return image;
+	}
+
+	private Menu penProperties(Model model) {
+		Menu penProperties = new Menu("Pen Properties");
 		penColorOptions = new MenuOptionsList("Set Pen Color", colors, "Black", color -> {
 			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setPenColor(Color.web(color)));
 			});
@@ -132,14 +105,63 @@ public class TurtleMenu extends Menu implements Observer{
 				model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setPen(false));
 			}
 		});
-		
-		
 		penProperties.getItems().addAll(penStatusOption, penColorOptions);
-		//MenuItem imageChoose = createTurtleImageChoose();
-		//MenuItem sendHome = createSendHomeButton();
-		//MenuItem penControls = createPenToggle();
+		return penProperties;
+	}
 
-		this.getItems().addAll(addTurtle, activeMessage, sendHome, clear, remove, visibility, penProperties, image);
+	private Menu visibility(Model model) {
+		Menu visibility = new Menu("Visibility");
+		
+		MenuItem show = new MenuItem("Show");
+		show.setOnAction(e -> {
+			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setVisible(true));
+		});
+		
+		MenuItem hide = new MenuItem("Hide");
+		hide.setOnAction(e -> {
+			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setVisible(false));
+		});
+		visibility.getItems().addAll(show, hide);
+		return visibility;
+	}
+
+	private MenuItem remove(Model model) {
+		MenuItem remove = new MenuItem("Remove from screen");
+		remove.setOnAction(e -> {
+			model.getTurtleMaster().removeActiveTurtles();
+		});
+		return remove;
+	}
+
+	private MenuItem clear(Model model) {
+		MenuItem clear = new MenuItem("Clear");
+		clear.setOnAction(e -> {
+			model.getTurtleMaster().operateOnTurtle(turtle -> {
+				turtle.dontDrawLine();
+				return turtle.setPosition(model.getHome());
+			});
+		});
+		return clear;
+	}
+
+	private MenuItem sendHome(Model model) {
+		MenuItem sendHome = new MenuItem("Send to Home");
+		sendHome.setOnAction(e -> {
+			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setPosition(model.getHome()));
+		});
+		return sendHome;
+	}
+
+	private MenuItem activeMessage() {
+		MenuItem activeMessage = new MenuItem("The following only effect active turtles");
+		activeMessage.setDisable(true);
+		return activeMessage;
+	}
+
+	private MenuItem addTurtle(Model model) {
+		MenuItem addTurtle = new MenuItem("Add New Turtle");
+		addTurtle.setOnAction(e -> model.getTurtleMaster().breedTurtle(-1));
+		return addTurtle;
 	}
 	
 	private File chooseFile() {
@@ -158,136 +180,15 @@ public class TurtleMenu extends Menu implements Observer{
 		return null;
 	}
 	
-	/*
-	private VBox createPenToggle() {
-		VBox penControls = new VBox();
-
-		HBox penSwitch = createPenSwitch();
-		ComboBox<String> penColorSelectionTool = createPenColorSelectionTool();
-
-		penControls.getChildren().addAll(penColorSelectionTool, penSwitch);
-		penControls.setSpacing(myView.getDefaultSpacing() / 3);
-
-		return penControls;
-	}
-
-	private ComboBox<String> createPenColorSelectionTool() {
-		penColors = new ColorComboBox(colors);
-
-		penColors.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
-				if (turtleIDs.getSelectionModel().getSelectedItem() != null) {
-					model.getTurtleContainer().get(turtleIDs.getSelectionModel().getSelectedItem())
-							.changePenColor(Color.web(new_val));
-				}
-			}
-		});
-
-		return penColors;
-	}
-	
-	private HBox createPenSwitch() {
-		HBox penSwitch = new HBox();
-		ToggleGroup penSwitchGroup = new ToggleGroup();
-		penDown = new RadioButton();
-		penDown.setToggleGroup(penSwitchGroup);
-		penUp = new RadioButton();
-		penUp.setToggleGroup(penSwitchGroup);
-		penSwitchGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-			public void changed(ObservableValue<? extends Toggle> ov, Toggle old_toggle, Toggle new_toggle) {
-				if (turtleIDs.getSelectionModel().getSelectedItem() != null
-						&& penSwitchGroup.getSelectedToggle() != null) {
-					if (penSwitchGroup.getSelectedToggle().equals(penUp)) {
-						model.setPenUp(turtleIDs.getSelectionModel().getSelectedItem());
-					} else {
-						model.setPenDown(turtleIDs.getSelectionModel().getSelectedItem());
-					}
-				} else {
-					askForSelection();
-				}
-			}
-		});
-
-		penSwitch.getChildren().addAll(penDown, penUp);
-		turtleIDs.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
-			public void changed(ObservableValue<? extends Integer> ov, Integer old_val, Integer new_val) {
-				if (model.getTurtleContainer().get(new_val).isPenDown()) {
-					penSwitchGroup.selectToggle(penDown);
-				} else {
-					penSwitchGroup.selectToggle(penUp);
-				}
-			}
-		});
-		return penSwitch;
-	}
-
-	private Button createSendHomeButton() {
-		sendHome = new ActionButton(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				if (turtleIDs.getSelectionModel().getSelectedItem() != null) {
-					model.sendTurtleHome(turtleIDs.getSelectionModel().getSelectedItem());
-				} else {
-					askForSelection();
-				}
-			}
-		});
-		return sendHome;
-	}
-
-	protected void askForSelection() {
-		myView.setOutput(PLEASE_SELECT_A_TURTLE);
-		
-	}
-
-	private Button createTurtleImageChoose(Stage s) {
-		fileChoose = new ActionButton(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				if (turtleIDs.getSelectionModel().getSelectedItem() != null) {
-					File newImageFile = chooseFile(s);
-					if (newImageFile != null) {
-						model.changeTurtleImage(turtleIDs.getSelectionModel().getSelectedItem(), newImageFile);
-					} else {
-						myView.setOutput(String.format(PLEASE_SELECT_PROPER_IMG_FILE, IMAGE_EXTENSION));
-					}
-				} else {
-					askForSelection();
-				}
-			}
-		});
-		return fileChoose;
-	}
-
-	private void createTurtleIDSelector() {
-		turtleIDs = new ComboBox<Integer>();
-		turtleIDs.getItems().addAll(model.getTurtleContainer().keySet());
-	}
-
-	
-	
-	private void updateTurtleSelection() {
-		for (Integer ID : model.getTurtleContainer().keySet()) {
-			if (!turtleIDs.getItems().contains(ID)) {
-				turtleIDs.getItems().add(ID);
-			}
-		}
-	}
-	
-	void refreshGUITitles(ResourceBundle resource){
-		turtleIDs.setPromptText(resource.getString("TurtleIDs"));
-		fileChoose.setText(resource.getString("ChooseTurtleImage"));
-		penColors.setPromptText("Select Pen Color");
-		penDown.setText("Pen Down");
-		penUp.setText("Pen Up");
-		sendHome.setText("Send Home");
-	}
-	*/
 	@Override
 	public void update(Observable obs, Object obj) {
 		if (obs == model) {
-			//supdateTurtleSelection();
+			updateTurtleSelection();
 		}
+	}
+
+	private void updateTurtleSelection() {
+		turtleStatus.refreshOptions(createTurtleIdObservable(model));
 	}
 	
 	

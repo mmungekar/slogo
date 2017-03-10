@@ -20,7 +20,7 @@ public class GetPenColor extends OneInputTurtleCommand implements CommandInterfa
 			try {
 				return model.getDrawer().getIndexFromColor(turtle.getPenColor());
 			} catch (NotInMapException e) {
-				model.sendError(e);
+				model.sendToOutput(e.getMessage());
 				return -1.0;
 			}
 		};
