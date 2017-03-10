@@ -21,7 +21,7 @@ public abstract class TurtleCommand extends SimpleParameterCommand implements Co
 		
 		while(iter.hasNext()){
 			List<Double> inputs = createInputs(iter);
-			returnValue += model.operateOnTurtle(applyInputs(model, inputs));
+			returnValue += model.getTurtleMaster().operateOnTurtle(applyInputs(model, inputs));
 		}
 		return returnValue;
 	}

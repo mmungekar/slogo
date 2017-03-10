@@ -14,11 +14,11 @@ public class EditMenu extends Menu{
 		
 		MenuItem clearVariables = new MenuItem("Clear Custom Variables");
 		
-		clearVariables.setOnAction(e -> model.clearVariables());
+		clearVariables.setOnAction(e -> model.getCustomMaster().clearVariables());
 		
 		MenuItem clearCommands = new MenuItem("Clear Custom Commands");
 		
-		clearCommands.setOnAction(e -> model.clearCommands());
+		clearCommands.setOnAction(e -> model.getCustomMaster().clearCommands());
 		
 		
 		this.getItems().addAll(clearCommands, clearVariables);

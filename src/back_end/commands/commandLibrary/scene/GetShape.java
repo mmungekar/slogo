@@ -8,13 +8,12 @@ import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 import back_end.model.scene.Turtle;
 
-public class SetPenColor extends OneInputTurtleCommand implements CommandInterface{
+public class GetShape extends OneInputTurtleCommand implements CommandInterface{
 
 	@Override
 	protected BiFunction<Turtle, List<Double>, Double> supplyAction(Model model) {
 		return (turtle, inputs) -> {
-			turtle.setPenColor(model.getDrawer().getColorFromIndex(inputs.get(0).intValue())); 
-			return inputs.get(0);
+			return turtle.getShape();
 			};
 	}
 

@@ -29,10 +29,12 @@ public class Ask extends MultipleTurtleCommand implements CommandInterface{
 		List<Integer> myParamValues = getFirstChild().getChildren().stream().filter(elt -> elt != null)
 										.map(elt -> elt.getOxygen().getReturnValue().intValue())
 										.collect(Collectors.toList());
-		model.tellTemps(myParamValues);
+		model.getTurtleMaster().setTempActiveTurtles(myParamValues);
 		ExpressionTreeNode secondChild = getIterator().next();
 		getTree().traverseKid(secondChild,model);
-		model.revertActiveTurtles();
+		model.getTurtleMaster().revertActiveTurtles();
 		return secondChild.getOxygen().getReturnValue();
+		
+		
 	}
 }

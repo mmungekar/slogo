@@ -135,7 +135,7 @@ public class ExpressionTree {
 	}
 
 	private boolean isVariableStored(Input i, Model m) {
-		return m.isVariableStored(i.getParameter());
+		return m.getCustomMaster().isVariableStored(i.getParameter());
 	}
 
 	private boolean isListStart(Input i) {
@@ -198,7 +198,7 @@ public class ExpressionTree {
 	}
 
 	private Double retriveVariable(Model state, String nodeName) {
-		return state.retrieveVariable(nodeName);
+		return state.getCustomMaster().retrieveVariable(nodeName);
 	}
 
 	private void nodeExecute(ExpressionTreeNode node, Model state, CommandInterface command)
@@ -214,13 +214,13 @@ public class ExpressionTree {
 		try {
 			command = mCommandLib.getCommand(node.getInput().getParameter());
 		} catch (CommandException e) {
-			if (state.getCustomCommandLibrary().containsKey(node.getInput().getParameter())) {
-				command = state.getCustomCommandLibrary().get(node.getInput().getParameter());
+			if (state.getCustomMaster().getCustomCommandLibrary().containsKey(node.getInput().getParameter())) {
+				command = state.getCustomMaster().getCustomCommandLibrary().get(node.getInput().getParameter());
 			} else {
 				throw new UnrecognizedCommandException(node.getInput().getParameter());
 			}
 		}
-		command.setParameters(state, new ExpressionTree(node, this.getLanguage(), state.getCustomCommandLibrary()));
+		command.setParameters(state, new ExpressionTree(node, this.getLanguage(), state.getCustomMaster().getCustomCommandLibrary()));
 		return command;
 
 	}

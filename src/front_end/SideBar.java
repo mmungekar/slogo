@@ -112,7 +112,7 @@ public class SideBar extends VBox implements Observer{
 
 	private Button addTurtleButton() {
 		turtleCreation = new ActionButton(event -> {
-			model.createTurtle(-1);
+			model.getTurtleMaster().breedTurtle(-1);
 		});
 		return turtleCreation;
 	}
@@ -122,7 +122,7 @@ public class SideBar extends VBox implements Observer{
 
 		backgroundColors.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			public void changed(ObservableValue<? extends String> ov, String old_val, String new_val) {
-				model.setBackgroundColor(Color.web(new_val));
+				model.getDrawer().setBackgroundColor(Color.web(new_val));
 			}
 		});
 

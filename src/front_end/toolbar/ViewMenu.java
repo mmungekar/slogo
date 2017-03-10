@@ -20,7 +20,7 @@ public class ViewMenu extends Menu {
 		super(title);
 		this.myModel = model;
 		
-		backgroundOptions = new MenuOptionsList("Set Background Color", colors, "White", color -> model.setBackgroundColor(Color.web(color)));
+		backgroundOptions = new MenuOptionsList("Set Background Color", colors, "White", color -> model.getDrawer().setBackgroundColor(Color.web(color)));
 		
 		this.getItems().add(backgroundOptions);
 		
