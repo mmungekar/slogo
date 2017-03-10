@@ -43,7 +43,7 @@ public class CommandFactory {
 
 	public CommandInterface getCommand(String command) throws CommandException {
 		try {
-			String official = mParser.getSymbol(command);
+			String official = mParser.getSymbol(command);			
 			Class<?> clazz = Class.forName(COMMAND_PATHS.getString(official));
 			return (CommandInterface) clazz.newInstance();
 		} catch (ClassNotFoundException ex) {
@@ -54,7 +54,6 @@ public class CommandFactory {
 	}
 	
 	public int getNumParam(String command) throws UnrecognizedCommandException {
-
 		String official = mParser.getSymbol(command);
 		return Integer.parseInt(presource.getString(official));
 	}
