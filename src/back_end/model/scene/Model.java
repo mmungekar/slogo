@@ -18,6 +18,7 @@ import back_end.commands.custom.CustomVariable;
 import back_end.commands.custom.CustomCommand;
 import back_end.libraries.CustomCommandLibrary;
 import back_end.libraries.VariableLibrary;
+import front_end.View;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -29,6 +30,8 @@ public class Model extends Observable {
 
 	private Point2D home;
 	private boolean clear;
+	
+	private View myView;
 
 	private TurtleMaster myTurtleMaster;
 	private Artist myArtist;
@@ -82,9 +85,12 @@ public class Model extends Observable {
 		this.clear = clear;
 	}
 
-	public void sendError(Exception e) {
-		// TODO Auto-generated method stub
+	public void sendToOutput(String output){
+		myView.setOutput(output);
+	}
 
+	public void setView(View view) {
+		this.myView = view;
 	}
 
 }

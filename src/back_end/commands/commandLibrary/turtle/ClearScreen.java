@@ -5,17 +5,20 @@ import back_end.model.scene.Turtle;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
+import back_end.commands.commandLibrary.SimpleParameterCommand;
 import back_end.interfaces.CommandInterface;
 
-public class ClearScreen extends OneInputTurtleCommand implements CommandInterface{
-	
+public class ClearScreen extends NoInputTurtleCommand implements CommandInterface{	
 	@Override
-	protected BiFunction<Turtle, List<Double>, Double> supplyAction(Model model) {
-		return (turtle, inputs) -> {
+	protected Function<Turtle, Double> supplyAction(Model model) {
+		return turtle -> {
 			double result = turtle.setPosition(model.getHome());
 			turtle.dontDrawLine();
 			return result;
-			};
+		};
 	}
+
+
 }

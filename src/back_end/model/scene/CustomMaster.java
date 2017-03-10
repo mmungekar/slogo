@@ -67,6 +67,7 @@ public class CustomMaster {
 
 	public void clearCommands() {
 		mCustomCommandLibrary = new CustomCommandLibrary();
+		notifyModel();
 	}
 
 	public boolean isVariableStored(String parameter) {

@@ -132,4 +132,8 @@ public class TurtleMaster {
 		return turtleContainer.values().iterator();
 	}
 
+	public void printStatus(int index) {
+		myModel.sendToOutput(turtleContainer.get(index).printStatus(home));
+	}
+
 }

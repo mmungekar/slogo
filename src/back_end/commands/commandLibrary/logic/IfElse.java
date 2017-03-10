@@ -11,25 +11,17 @@ import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
 
-public class IfElse implements CommandInterface {
-	private ExpressionTree myTree;
-	
-	@Override
-	public void setParameters(Model model, ExpressionTree tree) throws NotEnoughParameterException {
-			myTree = tree;
-		
-	}
+public class IfElse extends Conditional implements CommandInterface {
 
 	@Override
-	public double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException {
-		Iterator<ExpressionTreeNode> iter = myTree.getRootNode().getChildren().iterator();
-		ExpressionTreeNode firstChild = iter.next();
-		myTree.traverseKid(firstChild,model);
-		if(firstChild.getOxygen().getReturnValue()==0){
-			iter.next();
+	protected Double processConditional(Model model, ExpressionTree myTree2, ExpressionTreeNode firstChild2,
+			Iterator<ExpressionTreeNode> iter2) throws VariableNotFoundException, CommandException {
+		myTree2.traverseKid(firstChild2,model);
+		if(firstChild2.getOxygen().getReturnValue()==0){
+			iter2.next();
 		}
-		ExpressionTreeNode toBeExecuted = iter.next();
-		myTree.traverseKid(toBeExecuted,model);
+		ExpressionTreeNode toBeExecuted = iter2.next();
+		myTree2.traverseKid(toBeExecuted,model);
 		return toBeExecuted.getOxygen().getReturnValue();	
 	}
 

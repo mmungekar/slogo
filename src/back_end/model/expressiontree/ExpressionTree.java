@@ -66,25 +66,19 @@ public class ExpressionTree {
 	}
 
 	// Turn a full list of commands into a sub tree
-	public ExpressionTreeNode constructTree(List<Input> inputs) {
-		if (inputs.size() == 0)
-			return null;
-		try {
-			Input rootInput = new Input(null, Constant.ROOT_TYPE);
-			mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
-			ExpressionTreeNode currentNode = mRootNode;
-			for (Input input : inputs) {
-				System.out.println();
-				System.out.println("Input: " + input.getParameter());
-				currentNode = addLeaf(input, currentNode);
-			//	System.out.println("Parent: " + currentNode.getParent().getInput().getParameter());
-				System.out.println();
-			}
-			return mRootNode;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+	public ExpressionTreeNode constructTree(List<Input> inputs) throws CommandException {
+		if (inputs.size() == 0) return null;
+
+		Input rootInput = new Input(null, Constant.ROOT_TYPE);
+		mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
+		ExpressionTreeNode currentNode = mRootNode;
+		for (Input input : inputs) {
+			//System.out.println();
+			currentNode = addLeaf(input, currentNode);
+			System.out.println("Input: " + input.getParameter() + " -> Type: " + input.getType() + " -> Parent: " + currentNode.getParent().getInput().getParameter());
+			//System.out.println();
 		}
+		return mRootNode;
 
 	}
 
@@ -205,7 +199,7 @@ public class ExpressionTree {
 			throws CommandException, VariableNotFoundException {
 		Double value = command.Execute(state);
 		node.getOxygen().putReturnValue(value);
-		System.out.println(node.getOxygen().getReturnValue());
+		System.out.println("Node Execute Value: " + node.getOxygen().getReturnValue());
 	}
 
 	private CommandInterface libraryLookUp(ExpressionTreeNode node, Model state)
@@ -230,7 +224,7 @@ public class ExpressionTree {
 		if (isListStart(node.getInput())) {
 			for (ExpressionTreeNode kid : node.getChildren()) {
 				traverseKid(kid, model);
-				System.out.println(kid.getInput().getParameter());
+				System.out.println("In List: " + kid.getInput().getParameter());
 			}
 			Double value = createFinalOutput(node);
 			node.getOxygen().putReturnValue(value);

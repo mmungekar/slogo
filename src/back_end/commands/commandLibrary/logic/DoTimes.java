@@ -11,20 +11,18 @@ import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
 public class DoTimes extends Iteration implements CommandInterface{
-	private ExpressionTree mTree;
 	private ExpressionTreeNode mCommandNode;
 	private double limit;
 	private String variable;
+	public static final Double start = 1d;
+	public static final Double increment = 1d;
 	
 	@Override
 	public void setParameters(Model model, ExpressionTree tree)
 			throws NotEnoughParameterException, VariableNotFoundException, CommandException {
-		// TODO Auto-generated method stub
-		mTree = tree;
-		ExpressionTreeNode root = mTree.getRootNode();
-		Iterator<ExpressionTreeNode> iter1 = root.getChildren().iterator();
-		ExpressionTreeNode listStart = iter1.next();
-		Iterator<ExpressionTreeNode> iterVar = listStart.getChildren().iterator();
+		extractIterators(tree);
+		Iterator<ExpressionTreeNode> iter1 = getIter1();
+		Iterator<ExpressionTreeNode> iterVar = getIterVar();
 		variable = (String)iterVar.next().getOxygen().getContent();
 		limit = (Double)iterVar.next().getOxygen().getContent();
 		mCommandNode = iter1.next();
@@ -32,11 +30,7 @@ public class DoTimes extends Iteration implements CommandInterface{
 
 	@Override
 	public double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException {
-		for(Double count = 1d; count < limit + 1; count++){
-			assignLocalVariable(model, variable, count);
-			repeat(model, mTree, mCommandNode);
-		}
-		return mCommandNode.getOxygen().getReturnValue();
+		return this.sendToForLoop(model, start, limit + 1, increment, variable, getTree(), mCommandNode);
 	}
 	
 	

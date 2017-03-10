@@ -38,7 +38,7 @@ public class Interpreter {
 		while (cScanner.hasNext()) {
 			String in = cScanner.next().trim().toLowerCase();
 			String type = mParser.getSymbol(in);
-			System.out.println("Type: " + type);
+			//System.out.println("" + in + " -> Type: " + type);
 			if (type.equals(Constant.COMMENT_TYPE)) {
 				cScanner.nextLine();
 				continue;
