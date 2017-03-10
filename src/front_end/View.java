@@ -66,8 +66,7 @@ public class View implements ViewInterface {
 			}
 			catch (FileNotFoundException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				terminal.setOutputText("File Not Found");
 			}
 		});
 	}

@@ -23,7 +23,7 @@ public class Terminal extends VBox {
 	private TextArea inputConsole;
 	private TextArea outputConsole;
 	private ListView<String> historyView = new ListView<String>();
-	protected int historyPointer = 0;
+	private int historyPointer = 0;
 	public static final ObservableList<String> history = FXCollections.observableArrayList();
 	public final static String EMPTY_STRING = "";
 	private Consumer<String> onMessageReceivedHandler;
