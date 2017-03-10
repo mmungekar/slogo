@@ -27,7 +27,7 @@ public class Animator extends Observable implements Observer {
     private Timeline mainTimeline; 
     private TurtleMaster myTurtleMaster;
     private List<Point2D> centerPositions;
-    public boolean isRunning;
+    public boolean running;
     private Queue<Function<Turtle, Double>> funcQueue;
     
     /**
@@ -35,7 +35,7 @@ public class Animator extends Observable implements Observer {
      */
     public Animator(TurtleMaster turtleMaster){
         myTurtleMaster = turtleMaster;
-        isRunning = false;
+        running = false;
         funcQueue = new LinkedList<Function<Turtle, Double>>();
     }
     
@@ -47,8 +47,8 @@ public class Animator extends Observable implements Observer {
     /**
      * @return returns if the animator is running
      */
-    public boolean getIsRunning(){
-    	return isRunning;
+    public boolean isRunning(){
+    	return running;
     }
     /**
      * @return returns the queue of commands received by the animator
@@ -57,21 +57,22 @@ public class Animator extends Observable implements Observer {
     	return funcQueue;
     }
     
+    
     /**
      * @return returns the model the animator is simulating
      */
+    /*
     public TurtleMaster getTurtleMaster(){
         return this.myTurtleMaster;
     }
+    */
+    
     /**
      * Initializes and plays animation with default parameters
      */
     public void initialize(double magnitude){
-    	isRunning = true;
-    	centerPositions = new ArrayList<Point2D>();
-    	myTurtleMaster.getTurtleContainer().keySet().stream().forEach(id -> {
-    		centerPositions.add(myTurtleMaster.getTurtleContainer().get(id).getCenterPosition());
-    	});
+    	running = true;
+    	centerPositions = myTurtleMaster.getCenterPositions();
     	this.mainTimeline = new Timeline();
         this.mainTimeline.setCycleCount(Timeline.INDEFINITE);
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
@@ -84,14 +85,14 @@ public class Animator extends Observable implements Observer {
      */
     public void play(){
         this.mainTimeline.play();
-        isRunning = true;
+        running = true;
     }
     /**
      * Stops animation
      */
     public void stop(){
         this.mainTimeline.pause();
-        isRunning = false;
+        running = false;
     }
     /**
      * Sets the rate of animation
@@ -141,14 +142,14 @@ public class Animator extends Observable implements Observer {
 		List<Double> results = new ArrayList<Double>();
 		 myTurtleMaster.getListeningTurtleIDs().stream().filter(elt -> elt != null).forEach(id -> {
 			//activeTurtleID = id;
-			Turtle turtle = myTurtleMaster.getTurtleContainer().get(id);
+			Turtle turtle = myTurtleMaster.getTurtle(id);
 			updateTurtle(turtle,id, magnitude, elapsedTime);
 		});
 	}
     
     private boolean checkQueue(){
     	while(funcQueue.size()!=0){
-    		if(isRunning) {return false;}
+    		if(running) {return false;}
     		System.out.print("Here");
     		myTurtleMaster.operateOnTurtle(funcQueue.remove());
     	}
@@ -161,7 +162,7 @@ public class Animator extends Observable implements Observer {
     
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if(!isRunning){
+		if(!running){
 			initialize(((Turtle) arg0).getMagnitude());
 		}
 	}

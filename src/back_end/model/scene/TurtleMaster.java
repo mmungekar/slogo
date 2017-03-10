@@ -31,13 +31,16 @@ public class TurtleMaster {
 		myAnimator = new Animator(this);
 	}
 	
+	
 	public Animator getAnimator(){
 		return myAnimator;
 	}
 	
-	public Map<Integer,Turtle> getTurtleContainer(){
-		return turtleContainer;
+	
+	public Turtle getTurtle(Integer id){
+		return turtleContainer.get(id);
 	}
+	
 	
 	private void notifyModel() {
 		myModel.setChangedAndNotifyObservers();
@@ -52,7 +55,7 @@ public class TurtleMaster {
 	}
 
 	private double cycleThroughActive(List<Integer> turtleIDs, Function<Turtle, Double> action) {
-		if(myAnimator.getIsRunning()){
+		if(myAnimator.isRunning()){
 			myAnimator.getQueue().add(action);
 			return 12;
 		}
@@ -151,6 +154,14 @@ public class TurtleMaster {
 
 	public Iterator<Turtle> getTurtleIterator() {
 		return turtleContainer.values().iterator();
+	}
+
+	public List<Point2D> getCenterPositions() {
+		List<Point2D> centerPositions = new ArrayList<Point2D>();
+		this.getAllTurtleIDs().stream().forEach(id -> {
+    		centerPositions.add(this.turtleContainer.get(id).getCenterPosition());
+    	});
+		return centerPositions;
 	}
 
 }

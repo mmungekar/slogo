@@ -56,6 +56,7 @@ public class Canvas implements Observer {
 					line.setStroke(Color.BLACK);
 					line.setStrokeWidth(1.0);
 					myRoot.getChildren().add(line);
+					
 
 					//drawLine(turtle, turtle.getPrevCenterPosition(), turtle.getCenterPosition());
 					//turtle.dontDrawLine();

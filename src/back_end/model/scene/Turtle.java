@@ -162,7 +162,7 @@ public class Turtle extends Observable {
 		return 0;
 	}
 
-	public Node getImageView() {
+	public ImageView getImageView() {
 		return myImageView;
 	}
 	
