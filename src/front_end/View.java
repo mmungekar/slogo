@@ -105,16 +105,8 @@ public class View implements ViewInterface {
 
 	private void refreshGUITitles(ResourceBundle resource) {
 		terminal.refreshGUITitles(resource);
-		//((SideBar) sideBar).refreshGUITitles(resource);
 		((UserDefinedEntries) userDefinedEntries).refreshGUITitles(resource);
 	}
-
-	/*
-	public void setLanguageChangeListener(final Consumer<String> action) {
-		this.languageHandler = action;
-
-	}
-	*/
 
 
 	public void setOutput(String message) {
