@@ -23,7 +23,7 @@ public class Tell extends MultipleTurtleCommand implements CommandInterface{
 		List<Integer> myParamValues = getFirstChild().getChildren().stream() .filter(elt -> elt != null)
 				.map(elt -> elt.getOxygen().getReturnValue().intValue()).collect(Collectors.toList());
 		model.getTurtleMaster().setActiveTurtles(myParamValues);
-		System.out.println(myParamValues.size());
+		//System.out.println(myParamValues.size());
 		return myParamValues.get(myParamValues.size() - 1);
 	}
 }
