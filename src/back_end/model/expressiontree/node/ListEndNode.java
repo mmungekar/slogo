@@ -23,8 +23,6 @@ public class ListEndNode extends TreeNode{
 	 */
 	@Override 
 	public TreeNode appendTo(TreeNode parent){
-		parent.addChild(this);
-		this.setParent(parent);
 		return parent.getParent();
 	}
 

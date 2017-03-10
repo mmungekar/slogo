@@ -25,10 +25,13 @@ public class IfElse implements CommandInterface {
 		Iterator<TreeNode> iter = myTree.getRootNode().getChildren().iterator();
 		TreeNode firstChild = iter.next();
 		myTree.traverseKid(firstChild,model);
-		if(firstChild.getValue()==0){
+		System.out.println(firstChild.getValue());
+		if(firstChild.getValue().equals(0)){
 			iter.next();
 		}
 		TreeNode toBeExecuted = iter.next();
+		Iterator<TreeNode> iter2 =  toBeExecuted.getChildren().iterator();
+		System.out.println(iter2.next().getName());
 		myTree.traverseKid(toBeExecuted,model);
 		return toBeExecuted.getValue();	
 	}

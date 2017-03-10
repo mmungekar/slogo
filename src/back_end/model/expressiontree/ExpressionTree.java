@@ -80,7 +80,7 @@ public class ExpressionTree {
 				TreeNode inputNode = mNodeFactory.getTreeNode(input);
 				System.out.println("Input: " + inputNode.getName());
 				currentNode = addLeaf(inputNode, currentNode);
-				System.out.println("Parent: " + currentNode.getParent().getName());
+				if(currentNode.getParent() != null) System.out.println("Parent: " + currentNode.getParent().getName());
 				System.out.println();
 			}
 			return mRootNode;
@@ -105,7 +105,6 @@ public class ExpressionTree {
 			if (currNode == mRootNode)
 				return mRootNode;
 			currNode = currNode.getParent();
-			System.out.println("Children Full? " + currNode.getName());
 		}
 		// currNode = checkFinishedList(currNode, inputNode);
 		currNode = inputNode.appendTo(currNode);

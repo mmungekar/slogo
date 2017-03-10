@@ -19,21 +19,21 @@ public class GroupStartNode extends TreeNode{
 	@Override
 	public boolean isChildrenFull(CustomCommandLibrary ccl) {
 		// TODO Auto-generated method stub
-		if(getLastChild() == null)
-		    return false;
-		if(getLastChild().getType().equals(Constant.GROUPEND_TYPE))
-			return true;
+//		if(getLastChild() == null)
+//		    return false;
+//		if(getLastChild().getType().equals(Constant.GROUPEND_TYPE))
+//			return true;
 		return false;
 	}
 	
-	private TreeNode getLastChild(){
+	/*private TreeNode getLastChild(){
 		Iterator<TreeNode> childIter = getChildren().iterator();
 		TreeNode lastChild = null;
 		while(childIter.hasNext()){
 			lastChild = childIter.next();
 		}
 		return lastChild;
-	}
+	}*/
 
 	@Override
 	public double traverse(Model state) throws CommandException, VariableNotFoundException {
