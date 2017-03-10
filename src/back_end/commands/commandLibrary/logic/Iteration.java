@@ -15,7 +15,7 @@ public abstract class Iteration {
 	}
 
 	protected void assignLocalVariable(Model state, String name, Double value){
-		VariableLibrary mLocalVarLib = state.getLocalVariableLibrary();
+		VariableLibrary mLocalVarLib = state.getCustomMaster().getLocalVariableLibrary();
 		if(mLocalVarLib.containsKey(name)){
 			mLocalVarLib.remove(name);
 		}

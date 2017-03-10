@@ -13,7 +13,7 @@ public class SetPenColor extends OneInputTurtleCommand implements CommandInterfa
 	@Override
 	protected BiFunction<Turtle, List<Double>, Double> supplyAction(Model model) {
 		return (turtle, inputs) -> {
-			turtle.setPenColor(model.getColorFromIndex(inputs.get(0).intValue())); 
+			turtle.setPenColor(model.getDrawer().getColorFromIndex(inputs.get(0).intValue())); 
 			return inputs.get(0);
 			};
 	}

@@ -9,7 +9,7 @@ public class YCoordinate extends SimpleParameterCommand implements CommandInterf
 
 	@Override
 	public double Execute(Model model) {
-		return model.getCoordinate(1);
+		return model.getTurtleMaster().getCoordinate(1);
 	}
 
 }

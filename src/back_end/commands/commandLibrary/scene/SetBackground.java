@@ -10,7 +10,7 @@ public class SetBackground extends SimpleParameterCommand implements CommandInte
 
 	@Override
 	public double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException {
-		model.setBackgroundColor(this.getParameters().get(0).intValue());
+		model.getDrawer().setBackgroundColor(this.getParameters().get(0).intValue());
 		return this.getParameters().get(0);
 	}
 

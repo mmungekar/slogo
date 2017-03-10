@@ -62,7 +62,7 @@ public class TurtleMenu extends Menu implements Observer{
 		model.addObserver(this);
 		
 		MenuItem addTurtle = new MenuItem("Add New Turtle");
-		addTurtle.setOnAction(e -> model.createTurtle(-1));
+		addTurtle.setOnAction(e -> model.getTurtleMaster().breedTurtle(-1));
 		
 		MenuItem activeMessage = new MenuItem("The following only effect active turtles");
 		activeMessage.setDisable(true);
@@ -70,12 +70,12 @@ public class TurtleMenu extends Menu implements Observer{
 		MenuItem sendHome = new MenuItem("Send to Home");
 		
 		sendHome.setOnAction(e -> {
-			model.operateOnTurtle(turtle -> turtle.setPosition(model.getHome()));
+			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setPosition(model.getHome()));
 		});
 		
 		MenuItem clear = new MenuItem("Clear");
 		clear.setOnAction(e -> {
-			model.operateOnTurtle(turtle -> {
+			model.getTurtleMaster().operateOnTurtle(turtle -> {
 				turtle.dontDrawLine();
 				return turtle.setPosition(model.getHome());
 			});
@@ -85,7 +85,7 @@ public class TurtleMenu extends Menu implements Observer{
 		MenuItem remove = new MenuItem("Remove from screen");
 		
 		remove.setOnAction(e -> {
-			model.removeActiveTurtles();
+			model.getTurtleMaster().removeActiveTurtles();
 		});
 		
 		
@@ -94,13 +94,13 @@ public class TurtleMenu extends Menu implements Observer{
 		MenuItem show = new MenuItem("Show");
 		
 		show.setOnAction(e -> {
-			model.operateOnTurtle(turtle -> turtle.setVisible(true));
+			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setVisible(true));
 		});
 		
 		MenuItem hide = new MenuItem("Hide");
 		
 		hide.setOnAction(e -> {
-			model.operateOnTurtle(turtle -> turtle.setVisible(false));
+			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setVisible(false));
 		});
 		
 		
@@ -115,7 +115,7 @@ public class TurtleMenu extends Menu implements Observer{
 		image.setOnAction(e -> {
 			File newImageFile = chooseFile();
 			if (newImageFile != null) {
-				model.operateOnTurtle(turtle -> turtle.changeImage(newImageFile.toString()));
+				model.getTurtleMaster().operateOnTurtle(turtle -> turtle.changeImage(newImageFile.toString()));
 			} else {
 				//myView.setOutput(String.format(PLEASE_SELECT_PROPER_IMG_FILE, IMAGE_EXTENSION));
 			}
@@ -123,13 +123,13 @@ public class TurtleMenu extends Menu implements Observer{
 		
 		
 		penColorOptions = new MenuOptionsList("Set Pen Color", colors, "Black", color -> {
-			model.operateOnTurtle(turtle -> turtle.setPenColor(Color.web(color)));
+			model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setPenColor(Color.web(color)));
 			});
 		penStatusOption = new MenuOptionsList("Set Pen", FXCollections.observableArrayList("Up", "Down"), "Down", selection -> {
 			if (selection.equals("Down")){
-				model.operateOnTurtle(turtle -> turtle.setPen(true));
+				model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setPen(true));
 			} else {
-				model.operateOnTurtle(turtle -> turtle.setPen(false));
+				model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setPen(false));
 			}
 		});
 		

@@ -13,7 +13,7 @@ public class SetShape extends OneInputTurtleCommand implements CommandInterface{
 	@Override
 	protected BiFunction<Turtle, List<Double>, Double> supplyAction(Model model) {
 		return (turtle, inputs) -> {
-			turtle.setShape(model.getShapeFromIndex(inputs.get(0).intValue())); 
+			turtle.setShape(model.getDrawer().getShapeFromIndex(inputs.get(0).intValue())); 
 			return inputs.get(0);
 			};
 	}

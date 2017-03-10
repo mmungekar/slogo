@@ -18,7 +18,7 @@ public class GetPenColor extends OneInputTurtleCommand implements CommandInterfa
 	protected BiFunction<Turtle, List<Double>, Double> supplyAction(Model model) {
 		return (turtle, inputs) -> {
 			try {
-				return model.getIndexFromColor(turtle.getPenColor());
+				return model.getDrawer().getIndexFromColor(turtle.getPenColor());
 			} catch (NotInMapException e) {
 				model.sendError(e);
 				return -1.0;

@@ -42,7 +42,7 @@ public class Canvas implements Observer {
 	public void update(Observable obs, Object obj) {
 		if (obs == observedModel) {
 			// update all parts of modelstate that canvas has
-			Iterator<Turtle> turtleIterator = observedModel.getTurtleIterator();
+			Iterator<Turtle> turtleIterator = observedModel.getTurtleMaster().getTurtleIterator();
 			while(turtleIterator.hasNext()) {
 				Turtle turtle = turtleIterator.next();
 				if(turtle.hasMoved() && turtle.isPenDown()){
@@ -60,7 +60,7 @@ public class Canvas implements Observer {
 
 	private void updateBackground()
 	{
-		rectangle.setFill(observedModel.getBackgroundColor());
+		rectangle.setFill(observedModel.getDrawer().getBackgroundColor());
 	}
 
 	private void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {

@@ -12,7 +12,7 @@ public class Home extends OneInputTurtleCommand implements CommandInterface{
 
 	@Override
 	public double Execute(Model model) {		
-		return model.operateOnTurtle(turtle -> turtle.setPosition(model.getHome()));
+		return model.getTurtleMaster().operateOnTurtle(turtle -> turtle.setPosition(model.getHome()));
 	}
 
 	@Override

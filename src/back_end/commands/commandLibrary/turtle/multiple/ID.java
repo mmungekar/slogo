@@ -9,6 +9,6 @@ public class ID extends SimpleParameterCommand implements CommandInterface, Cons
 
 	@Override
 	public double Execute(Model model) {
-		return model.getActiveTurtleID();
+		return model.getTurtleMaster().getActiveTurtleID();
 	}
 }
