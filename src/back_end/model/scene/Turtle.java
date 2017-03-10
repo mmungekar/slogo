@@ -172,7 +172,7 @@ public class Turtle {
 	}
 
 
-	public Double getShape() {
+	public Image getShape() {
 		// TODO Auto-generated method stub
 		return null;
 	}

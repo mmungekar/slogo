@@ -5,18 +5,21 @@ import back_end.model.scene.Turtle;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import back_end.interfaces.CommandInterface;
 
-public class ShowTurtle extends OneInputTurtleCommand implements CommandInterface{
+public class ShowTurtle extends NoInputTurtleCommand implements CommandInterface{
 
 	@Override
-	protected BiFunction<Turtle, List<Double>, Double> supplyAction(Model model) {
-		return (turtle, inputs) -> {
+	protected Function<Turtle, Double> supplyAction(Model model) {
+		return turtle -> {
 			turtle.setVisible(true); 
 			return 1.0;
 			};
 	}
+	
+	
 	
 
 }
