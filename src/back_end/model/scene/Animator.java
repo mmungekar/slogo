@@ -7,9 +7,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Line;
 import javafx.util.Duration;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 /**
@@ -26,18 +28,34 @@ public class Animator extends Observable implements Observer {
     private TurtleMaster myTurtleMaster;
     private List<Point2D> centerPositions;
     public boolean isRunning;
+    private Queue<Function<Turtle, Double>> funcQueue;
+    
     /**
      * @param Model
      */
     public Animator(TurtleMaster turtleMaster){
         myTurtleMaster = turtleMaster;
         isRunning = false;
+        funcQueue = new LinkedList<Function<Turtle, Double>>();
     }
     
     private void setChangedAndNotifyObservers() {
 		setChanged();
 		notifyObservers();
 	}
+    
+    /**
+     * @return returns if the animator is running
+     */
+    public boolean getIsRunning(){
+    	return isRunning;
+    }
+    /**
+     * @return returns the queue of commands received by the animator
+     */
+    public Queue<Function<Turtle, Double>> getQueue(){
+    	return funcQueue;
+    }
     
     /**
      * @return returns the model the animator is simulating
@@ -83,12 +101,31 @@ public class Animator extends Observable implements Observer {
             this.mainTimeline.setRate(rate);
     }
     
+    private double getSign(double d){
+    	return (d>0)? 1:-1;
+    }
+    
     private void updateTurtle(Turtle myTurtle, int id,double mag, double elapsedTime){
-    	myTurtle.setXSpeed(100*Math.cos(Math.toRadians(myTurtle.getAngle())));
-    	myTurtle.setYSpeed(100*Math.sin(Math.toRadians(myTurtle.getAngle())));
+    	ImageView turtle = setMovementParams(myTurtle, mag, elapsedTime);
+		setPositions(myTurtle, turtle);
+		System.out.println(funcQueue.size());
+		setChangedAndNotifyObservers();
+		if(checkPositionHit(myTurtle, id, mag)){
+			this.stop();
+			checkQueue();
+			}
+    }
+
+	private ImageView setMovementParams(Turtle myTurtle, double mag, double elapsedTime) {
+		myTurtle.setXSpeed(100*getSign(mag)*Math.cos(Math.toRadians(myTurtle.getAngle())));
+    	myTurtle.setYSpeed(100*getSign(mag)*Math.sin(Math.toRadians(myTurtle.getAngle())));
     	ImageView turtle = (ImageView)myTurtle.getImageView();
     	turtle.setX(turtle.getX() + myTurtle.getXSpeed()* elapsedTime);
 		turtle.setY(turtle.getY() + myTurtle.getYSpeed()* elapsedTime);
+		return turtle;
+	}
+
+	private void setPositions(Turtle myTurtle, ImageView turtle) {
 		Point2D newPos = new Point2D(turtle.getX()+(turtle.getImage().getWidth() / 2.0), 
 				turtle.getY()+(turtle.getImage().getHeight() / 2.0));
 		if (myTurtle.getCenterPosition() != null) {
@@ -97,12 +134,8 @@ public class Animator extends Observable implements Observer {
 			myTurtle.setPrevCenterPosition(newPos);
 		} 
 		myTurtle.setCenterPosition(newPos);
-		setChangedAndNotifyObservers();
-		if(checkPositionHit(myTurtle, id, mag)){
-			this.stop();
-			}
 		myTurtle.setTopLeftPosition(new Point2D(turtle.getX(), turtle.getY()));
-    }
+	}
     
     private void step(double magnitude, double elapsedTime) {
 		List<Double> results = new ArrayList<Double>();
@@ -113,11 +146,17 @@ public class Animator extends Observable implements Observer {
 		});
 	}
     
+    private boolean checkQueue(){
+    	while(funcQueue.size()!=0){
+    		if(isRunning) {return false;}
+    		System.out.print("Here");
+    		myTurtleMaster.operateOnTurtle(funcQueue.remove());
+    	}
+    	return true;
+    }
+    
     private boolean checkPositionHit(Turtle turtle, int id, double mag){
-    	System.out.println(turtle.calcDistanceFromPos(centerPositions.get(id)));
-    	System.out.println(mag);
-    	System.out.println(turtle.calcDistanceFromPos(centerPositions.get(id))>=mag);
-    	return turtle.calcDistanceFromPos(centerPositions.get(id))>=mag;
+    	return turtle.calcDistanceFromPos(centerPositions.get(id))>=Math.abs(mag);
     }
     
 	@Override

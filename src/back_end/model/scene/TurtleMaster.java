@@ -52,6 +52,11 @@ public class TurtleMaster {
 	}
 
 	private double cycleThroughActive(List<Integer> turtleIDs, Function<Turtle, Double> action) {
+		if(myAnimator.getIsRunning()){
+			myAnimator.getQueue().add(action);
+			return 12;
+		}
+		else{
 		List<Double> results = new ArrayList<Double>();
 		turtleIDs.stream().filter(elt -> elt != null).forEach(id -> {
 			activeTurtleID = id;
@@ -60,6 +65,7 @@ public class TurtleMaster {
 		});
 		notifyModel();
 		return results.get(results.size() - 1);
+		}
 	}
 
 	public List<Integer> getListeningTurtleIDs() {

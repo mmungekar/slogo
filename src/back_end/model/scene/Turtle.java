@@ -30,7 +30,7 @@ public class Turtle extends Observable {
 		this.setAngle(0);
 		calcHalfDems();
 		setAngle(-90);
-		place(initPos);
+		setPosition(initPos);
 		penDown = true;
 	}
 
@@ -72,26 +72,13 @@ public class Turtle extends Observable {
 		return magnitude;
 	}
 
-	public double setPosition(Point2D newPos) {
-		magnitude = calcDistanceFromPos(newPos);
+	public double setPosition(double mag) {
+		magnitude = mag;
 		setChangedAndNotifyObservers();
 		return magnitude;
-	/*	double displacement = 0;
-		if (this.centerPos != null) {
-			this.prevCenterPos = this.centerPos;
-			displacement = this.centerPos.distance(newPos);
-		} else {
-			this.prevCenterPos = newPos;
-		}
-		
-		this.centerPos = newPos;
-		myImageView.setX(this.centerPos.getX() - halfDems[0]);
-		myImageView.setY(this.centerPos.getY() - halfDems[1]);
-		this.topLeftPos = new Point2D(myImageView.getX(), myImageView.getY());
-		return displacement; */
 	}
 	
-	public double place(Point2D newPos) {
+	public double setPosition(Point2D newPos) {
 		double displacement = 0;
 		if (this.centerPos != null) {
 			this.prevCenterPos = this.centerPos;
