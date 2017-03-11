@@ -22,8 +22,9 @@ public class CustomCommand implements CommandInterface {
 	}
 
 	@Override
-	public void setParameters(Model model, ExpressionTree tree) throws NotEnoughParameterException {
+	public void setParameters(Model model, ExpressionTree tree) throws CommandException, VariableNotFoundException {
 		TreeNode root = tree.getRootNode();
+		prepareChildren(root, model);
 		Iterator<TreeNode> valIter = root.getChildren().iterator();
 		Iterator<String> nameIter = mCustomVarLib.keySet().iterator();
 		while (valIter.hasNext()) {
@@ -33,6 +34,12 @@ public class CustomCommand implements CommandInterface {
 			throw new NotEnoughParameterException("Missing parameters for the custom command: " + mName, 
 					mCustomVarLib.keySet().size(), root.getChildren().size());
 
+	}
+	
+	private void prepareChildren(TreeNode root, Model model) throws CommandException, VariableNotFoundException{
+		for(TreeNode node : root.getChildren()){
+			node.traverse(model);
+		}
 	}
 	
 	public String getName(){

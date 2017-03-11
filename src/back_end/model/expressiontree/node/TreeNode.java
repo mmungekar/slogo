@@ -23,7 +23,7 @@ public abstract class TreeNode{
 	private List<TreeNode> myChildren;
 	private String mType;
 	private String mName;
-	private Double mValue;
+	private double mValue;
 	private Input mInput;
 	
 	/**
@@ -74,7 +74,7 @@ public abstract class TreeNode{
 	 * @param parent
 	 * @return
 	 */
-	public TreeNode appendTo(TreeNode parent){
+	public TreeNode appendTo(TreeNode parent, Model state){
 		parent.addChild(this);
 		this.setParent(parent);
 		return this;

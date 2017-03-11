@@ -26,8 +26,9 @@ public class If implements CommandInterface {
 		myTree.traverseKid(firstChild,model);
 		TreeNode commandNode = iter.next();
 		if(firstChild.getValue() != 0){
-			myTree.traverseKid(commandNode, model);
+			commandNode.traverse(model);
 		}
+		System.out.println("Command is null: " + (commandNode == null) + " if value: " + commandNode.getValue());
 		return commandNode.getValue();	
 	}
 

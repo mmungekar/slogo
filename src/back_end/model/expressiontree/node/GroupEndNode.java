@@ -23,7 +23,7 @@ public class GroupEndNode extends TreeNode{
 	 * the group start node and move the cursor up to the group start
 	 */
 	@Override 
-	public TreeNode appendTo(TreeNode parent){
+	public TreeNode appendTo(TreeNode parent, Model state){
 		return parent.getParent().getParent();
 	}
 

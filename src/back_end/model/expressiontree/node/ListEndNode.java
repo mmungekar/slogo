@@ -22,7 +22,7 @@ public class ListEndNode extends TreeNode{
 	 * list start and move the cursor to the list start node
 	 */
 	@Override 
-	public TreeNode appendTo(TreeNode parent){
+	public TreeNode appendTo(TreeNode parent, Model state){
 		return parent.getParent();
 	}
 

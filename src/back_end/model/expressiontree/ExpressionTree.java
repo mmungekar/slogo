@@ -1,6 +1,7 @@
 package back_end.model.expressiontree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import back_end.commands.constant.Constant;
@@ -68,9 +69,9 @@ public class ExpressionTree {
 	}
 
 	// Turn a full list of commands into a sub tree
-	public TreeNode constructTree(List<Input> inputs) {
+	public double constructAndExecuteTree(List<Input> inputs, Model state) {
 		if (inputs.size() == 0)
-			return null;
+			return 0;
 		try {
 			Input rootInput = new Input(Constant.ROOT_TYPE, Constant.ROOT_TYPE);
 			mRootNode = mNodeFactory.getTreeNode(rootInput);
@@ -78,17 +79,27 @@ public class ExpressionTree {
 			for (Input input : inputs) {
 				System.out.println();
 				TreeNode inputNode = mNodeFactory.getTreeNode(input);
+				currentNode = addLeafAndExecute(inputNode, currentNode, state);
 				System.out.println("Input: " + inputNode.getName());
-				currentNode = addLeaf(inputNode, currentNode);
-				if(currentNode.getParent() != null) System.out.println("Parent: " + currentNode.getParent().getName());
+				if(currentNode.getParent() != null)
+					System.out.println("Parent: " + currentNode.getParent().getName());
 				System.out.println();
 			}
-			return mRootNode;
+			double ret = traverseKid(getLastChild(mRootNode), state);
+			mRootNode.setValue(ret);
+			return mRootNode.getValue();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return 0;
 		}
 
+	}
+
+	private TreeNode getLastChild(TreeNode node) {
+		List<TreeNode> children = new ArrayList<>(node.getChildren());
+		if (children.size() == 0)
+			return null;
+		return children.get(children.size() - 1);
 	}
 
 	/**
@@ -99,22 +110,26 @@ public class ExpressionTree {
 	 * @param currNode
 	 * @return
 	 * @throws CommandException
+	 * @throws VariableNotFoundException 
 	 */
-	private TreeNode addLeaf(TreeNode inputNode, TreeNode currNode) throws CommandException {
+	private TreeNode addLeafAndExecute(TreeNode inputNode, TreeNode currNode, Model state) throws CommandException, VariableNotFoundException {
 		while (currNode.isChildrenFull(mCustomCommandLib)) {
-			if (currNode == mRootNode)
-				return mRootNode;
+			// if (currNode == mRootNode)
+			// return mRootNode;
+			System.out.println(currNode.getName() + " is full.");
 			currNode = currNode.getParent();
 		}
-		// currNode = checkFinishedList(currNode, inputNode);
-		currNode = inputNode.appendTo(currNode);
+		// Execute the last added child to the root node
+		if(currNode == mRootNode){
+			traverseKid(getLastChild(mRootNode), state);
+		}
+		currNode = inputNode.appendTo(currNode, state);
 		return currNode;
 	}
 
 	public double traverseKid(TreeNode node, Model state) throws VariableNotFoundException, CommandException {
-		if (node == null) {
+		if (node == null)
 			return 0;
-		}
 		return node.traverse(state);
 	}
 

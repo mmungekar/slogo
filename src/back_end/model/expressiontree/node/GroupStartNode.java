@@ -15,7 +15,7 @@ public class GroupStartNode extends TreeNode{
 		super(x);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
 	public boolean isChildrenFull(CustomCommandLibrary ccl) {
 		// TODO Auto-generated method stub

@@ -27,8 +27,8 @@ public class Interpreter {
 	public double execute(Model model, String command) throws CommandException, VariableNotFoundException {
         List<Input> inputs = translate(command);
 		mTree = new ExpressionTree(null, model.getCurrentLanguage(), model.getCustomCommandLibrary());
-		mTree.constructTree(inputs);
-		return mTree.traverse(model);
+		return mTree.constructAndExecuteTree(inputs, model);
+		//return mTree.traverse(model);
 	}
 
 	public List<Input> translate(String commandString) throws UnrecognizedCommandException {

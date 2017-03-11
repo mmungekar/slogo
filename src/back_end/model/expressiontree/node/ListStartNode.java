@@ -3,9 +3,12 @@ package back_end.model.expressiontree.node;
 import java.util.Iterator;
 
 import back_end.commands.constant.Constant;
+import back_end.commands.custom.CustomCommand;
+import back_end.commands.custom.CustomVariable;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.VariableNotFoundException;
 import back_end.libraries.CustomCommandLibrary;
+import back_end.libraries.VariableLibrary;
 import back_end.model.container.Input;
 import back_end.model.scene.Model;
 
@@ -16,6 +19,30 @@ public class ListStartNode extends TreeNode{
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override 
+	public TreeNode appendTo(TreeNode parent, Model state){
+		if(parent.getName().equals("MakeUserInstruction") && parent.getChildren().size() == 2){
+			Iterator<TreeNode> iter = parent.getChildren().iterator();
+			String commandName = iter.next().getName();
+			VariableLibrary varLib = getCustomVarLib(iter.next());
+			CustomCommand command = new CustomCommand(commandName, varLib, null);
+			state.getCustomCommandLibrary().put(commandName, command);
+		}
+		parent.addChild(this);
+		this.setParent(parent);
+		return this;
+	}
+	
+	private VariableLibrary getCustomVarLib(TreeNode node) {
+		VariableLibrary mVarLib = new VariableLibrary();
+		for (TreeNode varNode : node.getChildren()) {
+			if (!varNode.getType().equals(Constant.LISTEND_TYPE))
+				mVarLib.put((String) varNode.getName(), new CustomVariable((String) varNode.getName(), 0d));
+		}
+		return mVarLib;
+
+	}
+	
 	@Override
 	public boolean isChildrenFull(CustomCommandLibrary ccl) {
 //		if(getLastChild() == null)

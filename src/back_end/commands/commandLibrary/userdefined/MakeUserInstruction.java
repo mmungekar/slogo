@@ -25,28 +25,34 @@ public class MakeUserInstruction implements CommandInterface {
 		Iterator<TreeNode> iter = mRootNode.getChildren().iterator();
 		commandName = (String) iter.next().getName();
 		customVarLib = getCustomVarLib(iter.next());
-		ExpressionTree commandTree = new ExpressionTree(iter.next(), mTree.getLanguage(), model.getCustomCommandLibrary());
+		ExpressionTree commandTree = new ExpressionTree(iter.next(), mTree.getLanguage(),
+				model.getCustomCommandLibrary());
 		mVarTreePair = new Pair<>(customVarLib, commandTree);
+		// Move from execute to setParameters
+		CustomCommand command = new CustomCommand(commandName, mVarTreePair.getA(), mVarTreePair.getB());
+		if (model.getCustomCommandLibrary().contains(commandName))
+			model.getCustomCommandLibrary().remove(commandName);
+		model.getCustomCommandLibrary().put(commandName, command);
 	}
-	
-	private VariableLibrary getCustomVarLib(TreeNode node){
+
+	private VariableLibrary getCustomVarLib(TreeNode node) {
 		VariableLibrary mVarLib = new VariableLibrary();
-	    for(TreeNode varNode : node.getChildren()){
-	    	if(!varNode.getType().equals(Constant.LISTEND_TYPE))
-	    		mVarLib.put((String)varNode.getName(), new CustomVariable((String)varNode.getName(),0d));
-	    }
-	    return mVarLib;
-		
+		for (TreeNode varNode : node.getChildren()) {
+			if (!varNode.getType().equals(Constant.LISTEND_TYPE))
+				mVarLib.put((String) varNode.getName(), new CustomVariable((String) varNode.getName(), 0d));
+		}
+		return mVarLib;
+
 	}
 
 	/**
 	 * Add the new Custom Command to the CustomCommandLibrary in the model
 	 */
 	public double Execute(Model model) {
-		CustomCommand command = new CustomCommand(commandName, mVarTreePair.getA(), mVarTreePair.getB());
-		model.getCustomCommandLibrary().put(commandName, command);
-//		System.out.println("Put new command: " + command + "into the CustomCommandLib.");
-//		System.out.println("Needs " + command.getNumParams() + " parameters.");
-		return 1d;
+		if (model.getCustomCommandLibrary().contains(commandName)) {
+			System.out.println("Put new command: " + commandName + " into the CustomCommandLib.");
+			return 1;
+		}
+		return 0;
 	}
 }

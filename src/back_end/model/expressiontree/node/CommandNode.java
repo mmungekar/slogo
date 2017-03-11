@@ -20,28 +20,29 @@ public class CommandNode extends TreeNode {
 	private ResourceBundle presource;
 	private CommandInterface mCommand;
 	private CommandFactory mCommandLib;
-	
 
 	public CommandNode(Input x) throws CommandException {
 		super(x);
 		presource = ResourceBundle.getBundle(PARAMETER_DIRECTORY + "Parameter");
-		
+
 	}
 
 	@Override
 	public boolean isChildrenFull(CustomCommandLibrary ccl) {
 		String formal = getName();
-		System.out.println("Name " + formal); 
 		if (this.getParent().getType().equals(Constant.GROUPSTART_TYPE))
 			return false;
 		if (hasDefaultCommand(formal)) {
 			return this.getChildren().size() == getChildrenNum(formal);
-		} else if (hasDefinedCommand(formal, ccl))
+		} else if (hasDefinedCommand(formal, ccl)) {
+			System.out.println("Custom Defined Command Found: " + formal);
 			try {
 				return ccl.getCustomCommand(formal).getNumParams() == this.getChildren().size();
 			} catch (UnrecognizedCommandException e) {
 				return true;
 			}
+		}
+		System.out.println("Command has not been defined: " + formal);
 		return true;
 	}
 
@@ -78,6 +79,7 @@ public class CommandNode extends TreeNode {
 				throw new UnrecognizedCommandException(formal);
 			}
 		}
+		System.out.println("Fetch new Command: " + formal);
 		Command.setParameters(state,
 				new ExpressionTree(this, state.getCurrentLanguage(), state.getCustomCommandLibrary()));
 		return Command;
