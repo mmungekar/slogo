@@ -35,6 +35,10 @@ public class Terminal extends VBox {
 	private Button submit;
 	private Button clear;
 
+	/**
+	 * Creates terminal
+	 * Holds input, history, and output
+	 */
 	public Terminal() {
 		initializeInput();
 		initializeOutput();
@@ -140,6 +144,11 @@ public class Terminal extends VBox {
 		inputConsole.selectAll();
 	}
 
+	/**
+	 * shortcut to submit a string to the Model
+	 * 
+	 * @param in
+	 */
 	public void submitInput(String in) {
 		inputConsole.setText(in);
 		submitInput();
@@ -179,6 +188,11 @@ public class Terminal extends VBox {
 		outputConsole.setText(e.getMessage());
 	}
 
+	/**
+	 * Updates the titles of the buttons, tabs and such to the language specified by the resource file.
+	 * 
+	 * @param resource - where the gui titles are stored
+	 */
 	public void refreshGUITitles(ResourceBundle resource) {
 		this.clearHistory();
 		historyHolder.setText(resource.getString("History"));
