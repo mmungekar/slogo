@@ -12,8 +12,8 @@ Miguel Anderson, Yuansong Feng, Mina Mungekar, and Juan Philippe
 
 
 * Miguel worked on developing the front-end and controller classes as well as the refactoring and writing of commands. Feng contributed
-to the interpreter and parser and assisted in developing custom and variable commands. Mina, developing the back-end as well, worked on 
-the parsing, interpreting, and writing of commands. Juan designed the overall command library, worked on the project's structure, and wrote commands.
+to the interpreter and parser and assisted in developing custom and variable commands. Mina worked on 
+the parsing, interpreting, and contributed to the writing of commands. Juan designed the overall command library, worked on the project's structure, and wrote commands.
 All contributed to extension work.
 
 
