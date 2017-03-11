@@ -6,5 +6,7 @@ public interface ViewInterface {
 	
 	public void setEnterListener(Consumer<String> action);
 	
-	//public void setLanguageChangeListener(final Consumer<String> action);
+	public void setOutput(String message);
+	
+	public void submitInput(String input);
 }
