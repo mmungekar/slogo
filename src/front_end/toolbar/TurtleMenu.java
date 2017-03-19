@@ -1,12 +1,10 @@
 package front_end.toolbar;
-
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
 import back_end.model.scene.Model;
 import front_end.View;
 import front_end.customJavaFxNodes.ActionButton;
@@ -30,7 +28,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 public class TurtleMenu extends Menu implements Observer{
 	public static final String IMAGE_FILE_DIRECTORY = "src/resources/images/";
 	public static final String IMAGE_EXTENSION = ".gif";
@@ -39,7 +36,6 @@ public class TurtleMenu extends Menu implements Observer{
 	
 	private ObservableList<String> colors = FXCollections.observableArrayList("white", "black", "chocolate", "salmon", "gold", "coral",
 			"darkorchid", "darkgoldenrod", "lightsalmon", "rosybrown", "blue", "blueviolet", "brown");
-
 	
 	
 	private Model model;
@@ -63,22 +59,18 @@ public class TurtleMenu extends Menu implements Observer{
 		Menu visibility = visibility(model);
 		Menu penProperties = penProperties(model);
 		MenuItem image = image(model);
-
 		this.getItems().addAll(addTurtle, turtleStatus, activeMessage, sendHome, clear, remove, visibility, penProperties, image);
 	}
-
 	private MenuOptionsList turtleStatus(Model model) {
 		ObservableList<String> turtleIDs = createTurtleIdObservable(model);
 		return new MenuOptionsList("Print Turtle Status", turtleIDs, null, turtleIDasString -> {
 			model.getTurtleMaster().printStatus(Integer.parseInt(turtleIDasString));	
 		});
 	}
-
 	private ObservableList<String> createTurtleIdObservable(Model model) {
 		ObservableList<String> turtleIDs = FXCollections.observableArrayList(model.getTurtleMaster().getAllTurtleIDs().stream().map( e -> e.toString() ).collect( Collectors.toList() ) );
 		return turtleIDs;
 	}
-
 	private MenuItem image(Model model) {
 		MenuItem image = new MenuItem("Select New Turtle Image");
 		
@@ -92,7 +84,6 @@ public class TurtleMenu extends Menu implements Observer{
 		});
 		return image;
 	}
-
 	private Menu penProperties(Model model) {
 		Menu penProperties = new Menu("Pen Properties");
 		penColorOptions = new MenuOptionsList("Set Pen Color", colors, "Black", color -> {
@@ -108,7 +99,6 @@ public class TurtleMenu extends Menu implements Observer{
 		penProperties.getItems().addAll(penStatusOption, penColorOptions);
 		return penProperties;
 	}
-
 	private Menu visibility(Model model) {
 		Menu visibility = new Menu("Visibility");
 		
@@ -124,7 +114,6 @@ public class TurtleMenu extends Menu implements Observer{
 		visibility.getItems().addAll(show, hide);
 		return visibility;
 	}
-
 	private MenuItem remove(Model model) {
 		MenuItem remove = new MenuItem("Remove from screen");
 		remove.setOnAction(e -> {
@@ -132,7 +121,6 @@ public class TurtleMenu extends Menu implements Observer{
 		});
 		return remove;
 	}
-
 	private MenuItem clear(Model model) {
 		MenuItem clear = new MenuItem("Clear");
 		clear.setOnAction(e -> {
@@ -143,7 +131,6 @@ public class TurtleMenu extends Menu implements Observer{
 		});
 		return clear;
 	}
-
 	private MenuItem sendHome(Model model) {
 		MenuItem sendHome = new MenuItem("Send to Home");
 		sendHome.setOnAction(e -> {
@@ -151,13 +138,11 @@ public class TurtleMenu extends Menu implements Observer{
 		});
 		return sendHome;
 	}
-
 	private MenuItem activeMessage() {
 		MenuItem activeMessage = new MenuItem("The following only effect active turtles");
 		activeMessage.setDisable(true);
 		return activeMessage;
 	}
-
 	private MenuItem addTurtle(Model model) {
 		MenuItem addTurtle = new MenuItem("Add New Turtle");
 		addTurtle.setOnAction(e -> model.getTurtleMaster().breedTurtle(-1));
@@ -186,11 +171,9 @@ public class TurtleMenu extends Menu implements Observer{
 			updateTurtleSelection();
 		}
 	}
-
 	private void updateTurtleSelection() {
 		turtleStatus.refreshOptions(createTurtleIdObservable(model));
 	}
 	
 	
-
 }

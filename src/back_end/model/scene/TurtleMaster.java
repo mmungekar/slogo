@@ -17,7 +17,8 @@ public class TurtleMaster {
 	private List<Integer> tempActiveTurtleIDs;
 	private boolean tempActiveTurtles;
 	private Integer activeTurtleID;
-
+	private Animator myAnimator;
+	private Turtle currTurtle;
 	private Model myModel;
 
 	public TurtleMaster(Model model) {
@@ -27,6 +28,17 @@ public class TurtleMaster {
 		tempActiveTurtleIDs = new ArrayList<Integer>();
 		tempActiveTurtles = false;
 		activeTurtleID = 0;
+		myAnimator = new Animator(this);
+	}
+	
+	
+	public Animator getAnimator(){
+		return myAnimator;
+	}
+	
+	
+	public Turtle getTurtle(Integer id){
+		return turtleContainer.get(id);
 	}
 
 	private void notifyModel() {
@@ -42,6 +54,16 @@ public class TurtleMaster {
 	}
 
 	private double cycleThroughActive(List<Integer> turtleIDs, Function<Turtle, Double> action) {
+		if(myAnimator.isRunning()){
+			myAnimator.getQueue().add(action);
+			List<Double> results = new ArrayList<Double>();
+			results.add(action.apply(currTurtle));
+			notifyModel();
+			return results.get(results.size() - 1);
+			//return 12;
+		}
+		
+		else{
 		List<Double> results = new ArrayList<Double>();
 		turtleIDs.stream().filter(elt -> elt != null).forEach(id -> {
 			activeTurtleID = id;
@@ -50,9 +72,10 @@ public class TurtleMaster {
 		});
 		notifyModel();
 		return results.get(results.size() - 1);
+		}
 	}
 
-	private List<Integer> getListeningTurtleIDs() {
+	public List<Integer> getListeningTurtleIDs() {
 		if (tempActiveTurtles) {
 			return Collections.unmodifiableList(tempActiveTurtleIDs);
 		} else {
@@ -86,6 +109,10 @@ public class TurtleMaster {
 			newTurtleID = findLowestIDnotTaken();
 		}
 		turtleContainer.put(newTurtleID, new Turtle(home));
+		Turtle t = new Turtle(home);
+		currTurtle = new Turtle(home);
+		t.addObserver(myAnimator);
+		turtleContainer.put(newTurtleID, t);
 		notifyModel();
 	}
 
@@ -132,8 +159,17 @@ public class TurtleMaster {
 		return turtleContainer.values().iterator();
 	}
 
+
 	public void printStatus(int index) {
 		myModel.sendToOutput(turtleContainer.get(index).printStatus(home));
+	}
+	
+	public List<Point2D> getCenterPositions() {
+		List<Point2D> centerPositions = new ArrayList<Point2D>();
+		this.getAllTurtleIDs().stream().forEach(id -> {
+    		centerPositions.add(this.turtleContainer.get(id).getCenterPosition());
+    	});
+		return centerPositions;
 	}
 
 }

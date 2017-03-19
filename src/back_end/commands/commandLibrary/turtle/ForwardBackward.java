@@ -13,17 +13,18 @@ public abstract class ForwardBackward extends OneInputTurtleCommand implements C
 	
 	@Override
 	protected BiFunction<Turtle, List<Double>, Double> supplyAction(Model model) {
-		BiFunction<Turtle, Double, Point2D> displacementFunction = (turtle, mag) -> moveForward(turtle, getDirection() * mag);
+		BiFunction<Turtle, Double, Double> displacementFunction = (turtle, mag) -> moveForward(turtle, getDirection() * mag);
 		return (turtle, inputs) -> turtle.setPosition(displacementFunction.apply(turtle, inputs.get(0)));
 	}
 
 	protected abstract Double getDirection();
 	
-	protected Point2D moveForward(Turtle turtle, double mag){
-		double angle = turtle.getAngle();
+	protected double moveForward(Turtle turtle, double mag){
+		return mag;
+		/*double angle = turtle.getAngle();
 		double dx = Math.cos(Math.toRadians(angle)) * mag;
 		double dy = Math.sin(Math.toRadians(angle)) * mag;
-		return turtle.getCenterPosition().add(dx, dy);	
+		return turtle.getCenterPosition().add(dx, dy); */	
 	}
 
 }

@@ -85,7 +85,6 @@ public class Artist {
 	public Color getBackgroundColor() {
 		return backgroundColor;
 	}
-
 	public Double getIndexFromShape(Image shape) throws NotInMapException {
 		return getKeyFromValue(shapeContainer, shape).doubleValue();
 	}

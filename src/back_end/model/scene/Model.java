@@ -29,13 +29,12 @@ public class Model extends Observable {
 	private String currentLanguage = DEFAULT_LANGUAGE;
 
 	private Point2D home;
-	private boolean clear;
-	
+	private boolean clear;	
 	private View myView;
-
 	private TurtleMaster myTurtleMaster;
 	private Artist myArtist;
 	private CustomMaster myCustomMaster;
+	private Animator myAnimator;
 
 	public Model() {
 		myTurtleMaster = new TurtleMaster(this);
