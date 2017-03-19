@@ -29,7 +29,7 @@ public class Animator extends Observable implements Observer {
     private List<Point2D> centerPositions;
     public boolean running;
     private Queue<Function<Turtle, Double>> funcQueue;
-    
+     
     /**
      * @param Model
      */

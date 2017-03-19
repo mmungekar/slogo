@@ -18,6 +18,9 @@ public class TurtleMaster {
 	private boolean tempActiveTurtles;
 	private Integer activeTurtleID;
 	private Animator myAnimator;
+	private double currTime;
+	private Turtle currTurtle;
+	
 
 	private Model myModel;
 
@@ -57,8 +60,13 @@ public class TurtleMaster {
 	private double cycleThroughActive(List<Integer> turtleIDs, Function<Turtle, Double> action) {
 		if(myAnimator.isRunning()){
 			myAnimator.getQueue().add(action);
-			return 12;
+			List<Double> results = new ArrayList<Double>();
+			results.add(action.apply(currTurtle));
+			notifyModel();
+			return results.get(results.size() - 1);
+			//return 12;
 		}
+		
 		else{
 		List<Double> results = new ArrayList<Double>();
 		turtleIDs.stream().filter(elt -> elt != null).forEach(id -> {
@@ -105,9 +113,7 @@ public class TurtleMaster {
 			newTurtleID = findLowestIDnotTaken();
 		}
 		Turtle t = new Turtle(home);
-		if(myAnimator==null){
-			System.out.println(("Initialize pls"));
-		}
+		currTurtle = new Turtle(home);
 		t.addObserver(myAnimator);
 		turtleContainer.put(newTurtleID, t);
 		notifyModel();
