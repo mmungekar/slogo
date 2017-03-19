@@ -17,7 +17,6 @@ import java.util.function.Function;
 public class Animator extends Observable implements Observer {
 	private final String ANIMATOR_FILEPATH = "resources.parameters/Animator";
    private ResourceBundle AnimatorProperties = ResourceBundle.getBundle(this.ANIMATOR_FILEPATH);
-	private double turtleXSpeed, turtleYSpeed;
 	private int DEFAULT_SPEED = Integer.parseInt(AnimatorProperties.getString("DefaultSpeed"));
     private final int FRAMES_PER_SECOND = Integer.parseInt(AnimatorProperties.getString("FramesPerSecond"));
     private final int MILLISECOND_DELAY = Integer.parseInt(AnimatorProperties.getString("MilliDelayFactor")) / FRAMES_PER_SECOND;
@@ -107,10 +106,10 @@ public class Animator extends Observable implements Observer {
     private void updateTurtle(Turtle myTurtle, int id,double mag, double elapsedTime){
     	ImageView turtle = setMovementParams(myTurtle, mag, elapsedTime);
 		setPositions(myTurtle, turtle);
-		System.out.println(funcQueue.size());
 		setChangedAndNotifyObservers();
 		if(checkPositionHit(myTurtle, id, mag)){
 			this.stop();
+			myTurtleMaster.revertActiveTurtles();
 			checkQueue();
 			}
     }
@@ -149,7 +148,6 @@ public class Animator extends Observable implements Observer {
     		if(running){
     			return false;
     			}
-    		System.out.print("Here");
     		myTurtleMaster.operateOnTurtle(funcQueue.remove());
     	}
     	return true;

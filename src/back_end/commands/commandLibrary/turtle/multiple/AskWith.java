@@ -47,7 +47,7 @@ public class AskWith implements CommandInterface{
 		model.getTurtleMaster().setTempActiveTurtles(validTurtles);
 		ExpressionTreeNode secondChild = iter.next();
 		myTree.traverseKid(secondChild,model);
-		model.getTurtleMaster().revertActiveTurtles();
+		//model.getTurtleMaster().revertActiveTurtles();
 		return secondChild.getOxygen().getReturnValue();
 	}
 

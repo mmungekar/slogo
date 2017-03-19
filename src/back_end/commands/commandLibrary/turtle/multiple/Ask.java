@@ -32,9 +32,7 @@ public class Ask extends MultipleTurtleCommand implements CommandInterface{
 		model.getTurtleMaster().setTempActiveTurtles(myParamValues);
 		ExpressionTreeNode secondChild = getIterator().next();
 		getTree().traverseKid(secondChild,model);
-		model.getTurtleMaster().revertActiveTurtles();
+		//model.getTurtleMaster().revertActiveTurtles();
 		return secondChild.getOxygen().getReturnValue();
-		
-		
 	}
 }

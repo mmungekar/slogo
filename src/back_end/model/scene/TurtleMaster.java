@@ -128,19 +128,29 @@ public class TurtleMaster {
 	}
 
 	public void setActiveTurtles(List<Integer> newActives) {
+		addNeededTurtles(newActives);
+		this.activeTurtleIDs = newActives;
+		notifyModel();
+	}
+
+
+	private void addNeededTurtles(List<Integer> newActives) {
 		newActives.stream().forEach(id -> {
 			if (!turtleContainer.containsKey(id)) {
 				this.breedTurtle(id);
 			}
 		});
-		this.activeTurtleIDs = newActives;
-		notifyModel();
 	}
 
 	public void setTempActiveTurtles(List<Integer> newTempActives) {
+		addNeededTurtles(newTempActives);
 		this.tempActiveTurtles = true;
 		this.tempActiveTurtleIDs = newTempActives;
 		notifyModel();
+	}
+	
+	public List getTurtles(){
+		return tempActiveTurtleIDs;
 	}
 
 	public void revertActiveTurtles() {
