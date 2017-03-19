@@ -111,13 +111,8 @@ public class Model extends Observable {
 		setChangedAndNotifyObservers();
 	}
 
-	public Collection<CustomVariable> getUserDefinedVariables() {
-		List<CustomVariable> vars = new ArrayList<>();
-		for (String key : mGlobalVariableLibrary.keySet()) {
-			vars.add(mGlobalVariableLibrary.get(key));
-			
-		}
-		return vars;
+	public VariableLibrary getUserDefinedVariables() {
+		return mGlobalVariableLibrary;
 	}
 
 	public Collection<String> getUserDefinedCommands() {
@@ -192,9 +187,9 @@ public class Model extends Observable {
 
 	public Double retrieveVariable(String nodeName) {
 		if(this.mGlobalVariableLibrary.hasVariable(nodeName)){
-			return this.mGlobalVariableLibrary.get(nodeName).getValue();
+			return this.mGlobalVariableLibrary.get(nodeName);
 		} else if (this.mLocalVariableLibrary.hasVariable(nodeName)){
-			return this.mLocalVariableLibrary.get(nodeName).getValue();
+			return this.mLocalVariableLibrary.get(nodeName);
 		} return 0d;
 	}
 

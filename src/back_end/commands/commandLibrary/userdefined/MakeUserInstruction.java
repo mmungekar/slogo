@@ -39,7 +39,7 @@ public class MakeUserInstruction implements CommandInterface {
 		VariableLibrary mVarLib = new VariableLibrary();
 		for (TreeNode varNode : node.getChildren()) {
 			if (!varNode.getType().equals(Constant.LISTEND_TYPE))
-				mVarLib.put((String) varNode.getName(), new CustomVariable((String) varNode.getName(), 0d));
+				mVarLib.put((String) varNode.getName(),0d);
 		}
 		return mVarLib;
 

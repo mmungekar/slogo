@@ -1,10 +1,13 @@
 package front_end;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
 import back_end.commands.custom.CustomVariable;
+import back_end.libraries.VariableLibrary;
 import back_end.model.scene.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -116,11 +119,21 @@ public class UserDefinedEntries extends TabPane implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		if (myModel == o) {
-			customVariables = FXCollections.observableArrayList(myModel.getUserDefinedVariables());
+			List<CustomVariable> vars = getCustomVarLib(myModel.getUserDefinedVariables());
+			customVariables = FXCollections.observableArrayList(vars);
 			customCommands = FXCollections.observableArrayList(myModel.getUserDefinedCommands());
 			updateVisualLibraries();
 		}
 
+	}
+	
+	private List<CustomVariable> getCustomVarLib(VariableLibrary varLib){
+		List<CustomVariable> list = new ArrayList<>();
+		for(String key : varLib.keySet()){
+			CustomVariable var = new CustomVariable(key, varLib.get(key));
+			list.add(var);
+		}
+		return list;
 	}
 
 	private void updateVisualLibraries() {

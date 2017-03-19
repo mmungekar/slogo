@@ -6,7 +6,13 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
+import back_end.exceptions.XMLException;
+import back_end.libraries.CustomCommandLibrary;
+import back_end.libraries.VariableLibrary;
 import back_end.model.scene.Model;
+import back_end.model.xml.XMLInterface;
+import back_end.model.xml.XMLReader;
+import back_end.model.xml.XMLWriter;
 import front_end.toolbar.ToolBarController;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -67,6 +73,47 @@ public class View implements ViewInterface {
 			catch (FileNotFoundException e)
 			{
 				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		toolBar.setStoreVarButton((VariableLibrary varLib) -> {
+			XMLWriter mWriter = new XMLWriter();
+			try {
+				mWriter.writeCustomObject("CustomVarLib.xml", varLib);
+			} catch (XMLException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		toolBar.setLoadVarButton((VariableLibrary varLib) -> {
+			XMLReader mReader = new XMLReader();
+			try{
+				VariableLibrary addedLib = mReader.readCustomObject("CustomVarLib.xml", varLib.getClass());
+				for(String varName : addedLib.keySet()){
+					varLib.updateVariable(varName, addedLib.get(varName));
+				}
+			} catch(XMLException e){
+				e.printStackTrace();
+			}
+		});
+		
+		toolBar.setLoadCmdBtn((CustomCommandLibrary cmdLib) -> {
+			XMLReader mReader = new XMLReader();
+			try{
+				CustomCommandLibrary addedCmd = mReader.readCustomObject("CustomCommandLibrary.xml", cmdLib.getClass());
+				for(String varName : addedCmd.keySet()){
+					cmdLib.put(varName, addedCmd.get(varName));
+				}
+			} catch(XMLException e){
+				e.printStackTrace();
+			}
+		});
+		
+		toolBar.setStoreCmdBtn((CustomCommandLibrary cmdLib) -> {
+			XMLWriter mWriter = new XMLWriter();
+			try{
+				mWriter.writeCustomObject("CustomCommandLibrary.xml", cmdLib);
+			} catch(XMLException e){
 				e.printStackTrace();
 			}
 		});

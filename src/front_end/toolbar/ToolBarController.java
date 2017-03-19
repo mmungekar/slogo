@@ -3,6 +3,8 @@ package front_end.toolbar;
 import java.io.File;
 import java.util.function.Consumer;
 
+import back_end.libraries.CustomCommandLibrary;
+import back_end.libraries.VariableLibrary;
 import back_end.model.scene.Model;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
@@ -37,8 +39,22 @@ public class ToolBarController
 		
 		inRoot.setTop(toolBar);
 	}
-
-
+	
+	public void setStoreVarButton(Consumer<VariableLibrary> r){
+		file.setStoreVarButton(r);
+	}
+	
+	public void setLoadVarButton(Consumer<VariableLibrary> r){
+		file.setLoadVarButton(r);
+	}
+	
+	public void setStoreCmdBtn(Consumer<CustomCommandLibrary> r){
+		file.setStoreCommandBtn(r);
+	}
+	
+	public void setLoadCmdBtn(Consumer<CustomCommandLibrary> r){
+		file.setLoadCommandBtn(r);
+	}
 
 	public void setFileButton(Consumer<File> r) {
 		file.setFileButton(r);
