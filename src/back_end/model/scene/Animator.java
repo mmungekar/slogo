@@ -2,11 +2,8 @@ package back_end.model.scene;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
-import javafx.scene.chart.LineChart;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Line;
 import javafx.util.Duration;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observable;
@@ -18,12 +15,13 @@ import java.util.function.Function;
  * ANIMATES TURTLES YAY
  */
 public class Animator extends Observable implements Observer {
-  // private final String UITAGS_FILEPATH = "src.ui.property/UITags";
-   // private ResourceBundle AnimatorProperties = ResourceBundle.getBundle(this.UITAGS_FILEPATH);
+	private final String ANIMATOR_FILEPATH = "resources.parameters/Animator";
+   private ResourceBundle AnimatorProperties = ResourceBundle.getBundle(this.ANIMATOR_FILEPATH);
 	private double turtleXSpeed, turtleYSpeed;
-    private final int FRAMES_PER_SECOND = 60;//Integer.parseInt(AnimatorProperties.getString("FramesPerSecond"));
-    private final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    private final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+	private int DEFAULT_SPEED = Integer.parseInt(AnimatorProperties.getString("DefaultSpeed"));
+    private final int FRAMES_PER_SECOND = Integer.parseInt(AnimatorProperties.getString("FramesPerSecond"));
+    private final int MILLISECOND_DELAY = Integer.parseInt(AnimatorProperties.getString("MilliDelayFactor")) / FRAMES_PER_SECOND;
+    private final double SECOND_DELAY = Double.parseDouble(AnimatorProperties.getString("SecondDelayFactor"))  / FRAMES_PER_SECOND;
     private Timeline mainTimeline; 
     private TurtleMaster myTurtleMaster;
     private List<Point2D> centerPositions;
@@ -118,8 +116,8 @@ public class Animator extends Observable implements Observer {
     }
 
 	private ImageView setMovementParams(Turtle myTurtle, double mag, double elapsedTime) {
-		myTurtle.setXSpeed(100*getSign(mag)*Math.cos(Math.toRadians(myTurtle.getAngle())));
-    	myTurtle.setYSpeed(100*getSign(mag)*Math.sin(Math.toRadians(myTurtle.getAngle())));
+		myTurtle.setXSpeed(DEFAULT_SPEED*getSign(mag)*Math.cos(Math.toRadians(myTurtle.getAngle())));
+    	myTurtle.setYSpeed(DEFAULT_SPEED*getSign(mag)*Math.sin(Math.toRadians(myTurtle.getAngle())));
     	ImageView turtle = (ImageView)myTurtle.getImageView();
     	turtle.setX(turtle.getX() + myTurtle.getXSpeed()* elapsedTime);
 		turtle.setY(turtle.getY() + myTurtle.getYSpeed()* elapsedTime);
@@ -139,9 +137,8 @@ public class Animator extends Observable implements Observer {
 	}
     
     private void step(double magnitude, double elapsedTime) {
-		List<Double> results = new ArrayList<Double>();
 		 myTurtleMaster.getListeningTurtleIDs().stream().filter(elt -> elt != null).forEach(id -> {
-			//activeTurtleID = id;
+			 myTurtleMaster.setActiveTurtleID(id);
 			Turtle turtle = myTurtleMaster.getTurtle(id);
 			updateTurtle(turtle,id, magnitude, elapsedTime);
 		});
@@ -149,7 +146,9 @@ public class Animator extends Observable implements Observer {
     
     private boolean checkQueue(){
     	while(funcQueue.size()!=0){
-    		if(running) {return false;}
+    		if(running){
+    			return false;
+    			}
     		System.out.print("Here");
     		myTurtleMaster.operateOnTurtle(funcQueue.remove());
     	}

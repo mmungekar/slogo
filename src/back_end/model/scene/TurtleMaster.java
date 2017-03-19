@@ -40,6 +40,10 @@ public class TurtleMaster {
 	public Turtle getTurtle(Integer id){
 		return turtleContainer.get(id);
 	}
+	
+	public void setActiveTurtleID(int ID){
+		activeTurtleID = ID ;
+	}
 
 	private void notifyModel() {
 		myModel.setChangedAndNotifyObservers();
@@ -60,7 +64,6 @@ public class TurtleMaster {
 			results.add(action.apply(currTurtle));
 			notifyModel();
 			return results.get(results.size() - 1);
-			//return 12;
 		}
 		
 		else{
@@ -135,8 +138,8 @@ public class TurtleMaster {
 	}
 
 	public void setTempActiveTurtles(List<Integer> newTempActives) {
-		this.tempActiveTurtleIDs = newTempActives;
 		this.tempActiveTurtles = true;
+		this.tempActiveTurtleIDs = newTempActives;
 		notifyModel();
 	}
 

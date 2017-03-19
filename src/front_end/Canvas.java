@@ -48,18 +48,8 @@ public class Canvas implements Observer {
 			while(turtleIterator.hasNext()) {
 				Turtle turtle = turtleIterator.next();
 				if(turtle.hasMoved() && turtle.isPenDown()){
-					Line line = new Line();
-					line.setStartX(turtle.getPrevCenterPosition().getX());
-					line.setStartY(turtle.getPrevCenterPosition().getY());
-					line.setEndX(turtle.getCenterPosition().getX());
-					line.setEndY(turtle.getCenterPosition().getY());
-					line.setStroke(Color.BLACK);
-					line.setStrokeWidth(1.0);
-					myRoot.getChildren().add(line);
-					
-
-					//drawLine(turtle, turtle.getPrevCenterPosition(), turtle.getCenterPosition());
-					//turtle.dontDrawLine();
+					drawLine(turtle, turtle.getPrevCenterPosition(), turtle.getCenterPosition());
+					turtle.dontDrawLine();
 				}
 				if (!myRoot.getChildren().contains(turtle.getImageView())) {
 					myRoot.getChildren().add(turtle.getImageView());
