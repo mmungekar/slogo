@@ -2,7 +2,9 @@ package back_end.commands.commandLibrary.userdefined;
 
 import java.util.Iterator;
 
+import back_end.exceptions.CommandException;
 import back_end.exceptions.NotEnoughParameterException;
+import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
 import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
@@ -14,7 +16,7 @@ public class MakeVariable implements CommandInterface {
 	private double value;
 
 	@Override
-	public void setParameters(Model model, ExpressionTree tree) throws NotEnoughParameterException {
+	public void setParameters(Model model, ExpressionTree tree) throws VariableNotFoundException, CommandException {
 		ExpressionTreeNode mRoot = tree.getRootNode();
 		Iterator<ExpressionTreeNode> iter = mRoot.getChildren().iterator();
 		Oxygen oxygen = iter.next().getOxygen();
@@ -23,7 +25,10 @@ public class MakeVariable implements CommandInterface {
 		} catch (ClassCastException ex) {
 			name = oxygen.getSubContent();
 		}
-		value = (Double) iter.next().getOxygen().getContent();
+		ExpressionTreeNode eval = iter.next();
+		tree.traverseKid(eval,model);
+		value = (Double)eval.getOxygen().getReturnValue();
+		//value = (Double) iter.next().getOxygen().getContent();
 	}
 
 	@Override
