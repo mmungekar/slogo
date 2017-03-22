@@ -1,6 +1,7 @@
 package back_end.model.scene;
 
 import java.util.Observable;
+import java.util.ResourceBundle;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -9,6 +10,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 public class Turtle extends Observable {
+	private final String ANIMATOR_FILEPATH = "resources.parameters/Animator";
+	private final ResourceBundle AnimatorProperties = ResourceBundle.getBundle(this.ANIMATOR_FILEPATH);
+	private final int xMax = Integer.parseInt(AnimatorProperties.getString("RelativeXMax"));
+	private final int yMax = Integer.parseInt(AnimatorProperties.getString("RelativeYMax"));
 	public static final String IMAGE_DIRECTORY = "resources/images/";
 	public static final String DEFAULT_TURTLE = "turtle.gif";
 	public static final Double DEFAULT_PEN_SIZE = 2.0;
@@ -70,6 +75,10 @@ public class Turtle extends Observable {
 	}
 
 	public double setPosition(double inX, double inY) {
+		if(inX<-xMax||inX>xMax||inY<-yMax||inY>yMax){
+    		return 0;
+		}
+		setPenUp();
 		return setPosition(new Point2D(inX, inY));
 	}
 	

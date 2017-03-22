@@ -107,6 +107,7 @@ public class Animator extends Observable implements Observer {
     	ImageView turtle = setMovementParams(myTurtle, mag, elapsedTime);
 		setPositions(myTurtle, turtle);
 		setChangedAndNotifyObservers();
+		checkValidPosition(myTurtle);
 		if(checkPositionHit(myTurtle, id, mag)){
 			this.stop();
 			myTurtleMaster.revertActiveTurtles();
@@ -155,6 +156,16 @@ public class Animator extends Observable implements Observer {
     
     private boolean checkPositionHit(Turtle turtle, int id, double mag){
     	return turtle.calcDistanceFromPos(centerPositions.get(id))>=Math.abs(mag);
+    }
+    
+    public void checkValidPosition(Turtle turtle){
+    	ImageView turtleView = (ImageView)turtle.getImageView();
+    	int xMax = Integer.parseInt(AnimatorProperties.getString("CanvasXMax"));
+    	int yMax = Integer.parseInt(AnimatorProperties.getString("CanvasYMax"));
+    	if(turtleView.getX()<0||turtleView.getX()>xMax|turtleView.getY()<0||turtleView.getY()>yMax){
+    		this.stop();
+    		funcQueue.clear();
+    	}
     }
     
 	@Override
