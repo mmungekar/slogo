@@ -61,6 +61,7 @@ public class View implements ViewInterface {
 		Insets xPadding = new Insets(10,10,10,10);
 		VBox v= configureAnimationSliderBox (xPadding, root);
 		configureMainBox(ud, v, xPadding, root);
+		configureRightBox(xPadding, root);
 	}
 	//TODO: HANDLE EXCEPTION HERE
 	private void createToolBar(Model model, BorderPane root)
@@ -93,13 +94,13 @@ public class View implements ViewInterface {
 		canvas = new Canvas(model);
 		canvas.setWidth(CANVAS_WIDTH);
 		canvas.setHeight(CANVAS_HEIGHT);
-		root.setCenter(canvas.getRoot());
+		//root.setCenter(canvas.getRoot());
 	}
 
 	private void createTerminal(BorderPane root) {
 		terminal = new Terminal();
-		BorderPane.setAlignment(terminal, Pos.BOTTOM_RIGHT);
-		root.setBottom(terminal);
+		BorderPane.setAlignment(terminal, Pos.BOTTOM_LEFT);
+		//root.setBottom(terminal);
 	}
 	
 	public void setEnterListener(Consumer<String> action) {
@@ -167,6 +168,14 @@ public class View implements ViewInterface {
 	        // setMargin(anim, xPadding); 
 		}};
 		root.setRight(mainBox);
+	}
+	private void configureRightBox(Insets xPadding, BorderPane root){
+		VBox mainBox = new VBox(){{
+			 getChildren().addAll(canvas.getRoot(), terminal);
+			setMargin(terminal, xPadding);
+	        // setMargin(anim, xPadding); 
+		}};
+		root.setLeft(mainBox);
 	}
 	
 	public String getLanguage() {

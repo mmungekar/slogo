@@ -1,8 +1,12 @@
 package back_end.model.container;
-
+/**
+ * 
+ * @author Mina Mungekar
+ *
+ */
 public class Input {
+	
 	private String myParameter;
-	// Types that follow the naming in Syntax.properties
 	private String myType;
 	public Input(){
 		
