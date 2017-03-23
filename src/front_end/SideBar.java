@@ -41,7 +41,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-
+/**
+ * By Miguel Anderson
+ *
+ */
 public class SideBar extends VBox implements Observer{
 	public static final String PLEASE_SELECT_PROPER_IMG_FILE = "Please select a %s file for the image of the Turtle";
 	public static final String PLEASE_SELECT_A_TURTLE = "Please Select a Turtle";

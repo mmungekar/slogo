@@ -7,7 +7,9 @@ import java.util.List;
 import back_end.exceptions.NotInMapException;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-
+/**
+ * By Miguel Anderson
+ */
 public class Artist {
 	public static final int DEFAULT_BACKGROUND_COLOR_INDEX = 0;
 	public static final List<String> DEFAULT_COLOR_HTML_NAMES = Arrays.asList("white", "black", "blue", "red", "green",

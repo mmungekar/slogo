@@ -12,7 +12,8 @@ import java.util.Queue;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 /**
- * ANIMATES TURTLES YAY
+ * Animates turtles and sends information to the canvas
+ * Mina Mungekar
  */
 public class Animator extends Observable implements Observer {
 	private final String ANIMATOR_FILEPATH = "resources.parameters/Animator";

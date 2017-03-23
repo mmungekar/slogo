@@ -18,6 +18,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+/**
+ * By Miguel Anderson
+ *
+ */
 public class Terminal extends VBox {
 	public static final int CONSOLE_WIDTH = 500;
 	private TextArea inputConsole;

@@ -8,7 +8,10 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
-
+/**
+ * By Yuansong Feng
+ *
+ */
 public class MakeVariable implements CommandInterface {
 	private String name;
 	private double value;

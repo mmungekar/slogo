@@ -13,6 +13,10 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+/**
+ * By Miguel Anderson
+ *
+ */
 
 public class Canvas implements Observer {
 	public static final int arc = 25;

@@ -15,6 +15,7 @@ import back_end.exceptions.CommandException;
 import back_end.exceptions.UnrecognizedCommandException;
 
 /**
+ * By Yuansong Feng and Mina Mungekar
  * Constructs the nodes of the expression tree, which will contain either
  * commands, operators, or integer values (hence, type Object)
  */
@@ -30,13 +31,7 @@ public class ExpressionTreeNode {
 	 * If the parent node is specified, it is included in the constructor
 	 * @param string 
 	 * 
-	 * @param x
-	 *            specifies the contents of the node; parent specifies the
-	 *            parent node which operates upon the current node
-	 * @throws CommandException 
-	 * @throws ClassNotFoundException
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
+	 * @param x specifies the contents of the node; parent specifies the parent node which operates upon the current node
 	 */
 	public ExpressionTreeNode(String language, Input x, ExpressionTreeNode parent) throws CommandException {
 		myChildren = new ArrayList<ExpressionTreeNode>();
