@@ -1,14 +1,15 @@
 package back_end.commands.commandLibrary.math;
 
-import back_end.commands.commandLibrary.SimpleParameterCommand;
-import back_end.interfaces.CommandInterface;
-import back_end.model.scene.Model;
+import java.util.function.DoubleUnaryOperator;
 
-public class Tangent extends SimpleParameterCommand implements CommandInterface{
+import back_end.interfaces.CommandInterface;
+
+public class Tangent extends OneInputMathCommand implements CommandInterface{
 
 	@Override
-	public double Execute(Model state) {
-		return Math.tan(Math.toRadians(getParameters().get(0)));
+	protected DoubleUnaryOperator getOperation() {
+		return input -> Math.tan(Math.toRadians(input));
 	}
+
 
 }

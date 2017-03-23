@@ -36,6 +36,13 @@ public class UserDefinedEntries extends TabPane implements Observer {
 
 	private Model myModel;
 
+	/**
+	 * Constructor: initializes where user defined entries are displayed
+	 * They are stored in the CustomMaster
+	 * 
+	 * @param model - where the userdefined entries can be retrieved from
+	 * @param view - passed to allow user to click on command to execute
+	 */
 	public UserDefinedEntries(Model model, View view) {
 		this.myModel = model;
 		model.addObserver(this);
@@ -110,12 +117,23 @@ public class UserDefinedEntries extends TabPane implements Observer {
 		});
 	}
 
+	/**
+	 * Updates the titles of the buttons, tabs and such to the language specified by the resource file.
+	 * 
+	 * @param resource - where the gui titles are stored
+	 */
 	public void refreshGUITitles(ResourceBundle resource) {
 		tabVariables.setText(resource.getString("CustomVariables"));
 		tabCommands.setText(resource.getString("CustomCommands"));
 
 	}
 
+	/**
+	 * Has to update to see new user defined entries from the model
+	 *  
+	 *  (non-Javadoc)
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		if (myModel == o) {

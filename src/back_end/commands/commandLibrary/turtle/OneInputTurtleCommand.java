@@ -1,20 +1,16 @@
 package back_end.commands.commandLibrary.turtle;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import back_end.interfaces.CommandInterface;
 /**
  * By Miguel Anderson
  */
 public abstract class OneInputTurtleCommand extends TurtleCommand implements CommandInterface{
+	public static final Double FUNCTION_INPUT_NUMBER = 1d;
 
 	@Override
-	protected List<Double> createInputs(Iterator<Double> iterator) {
-		double param1 = iterator.next();
-		List<Double>inputs = new ArrayList<Double>();
-		inputs.add(param1);
-		return inputs;
+	protected Double getFunctionInputNumber() {
+		return FUNCTION_INPUT_NUMBER;
 	}
+
+
 }

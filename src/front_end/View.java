@@ -37,11 +37,21 @@ public class View implements ViewInterface {
 	private TabPane userDefinedEntries;
 	private String currentLanguage;
 
+	/**
+	 * Constructor: Initializes the borderpane used to organize the GUI
+	 * creates the visual components
+	 * Takes the language of the model to set the language
+	 * gives the Model the home pixel value in order to create a turtle at (0,0) which is the home
+	 * 
+	 * 
+	 * @param tab
+	 * @param model
+	 */
 	public View(Tab tab, Model model)
 	{
 		BorderPane root = new BorderPane();
 		createViewComponents(model, root);
-		setLanguage(model.getCurrentLanguage());
+		this.setLanguage(model.getCurrentLanguage());
 		
 		tab.setContent(root);
 		model.setHome(HOME); // also creates first turtle
@@ -79,7 +89,7 @@ public class View implements ViewInterface {
 			}
 			catch (FileNotFoundException e)
 			{
-				terminal.setOutputText("File Not Found");
+				terminal.setOutputText(e.getMessage());
 			}
 		});
 	}
@@ -102,16 +112,17 @@ public class View implements ViewInterface {
 		root.setBottom(terminal);
 	}
 	
+	/** 
+	 * sends the listener one more level down (to the terminal) to handle user input
+	 * (non-Javadoc)
+	 * @see front_end.ViewInterface#setEnterListener(java.util.function.Consumer)
+	 */
 	public void setEnterListener(Consumer<String> action) {
 		terminal.setEnterListener(action);
 
 	}
 
-	public String getLanguage() {
-		return this.currentLanguage;
-	}
-
-	void setLanguage(String language) {
+	private void setLanguage(String language) {
 		this.currentLanguage = language;
 		refreshGUITitles(ResourceBundle.getBundle(LANGUAGE_DIRECTORY + this.currentLanguage));
 	}
@@ -122,23 +133,32 @@ public class View implements ViewInterface {
 	}
 
 
+	/**
+	 * Sends output message to terminal
+	 * @param message
+	 */
 	public void setOutput(String message) {
 		terminal.setOutputText(message);
 	}
 	
-	double[] getCanvasDimensions(){
-		return new double[]{CANVAS_WIDTH, CANVAS_HEIGHT};
-	}
-	
-	double getDefaultSpacing(){
-		return DEFAULT_SPACING;
-	}
 
-	public void submitInput(String item) {
-		terminal.setText(item);
+	
+	/**
+	 * Internal shortcut to submitting an input
+	 * 
+	 * @param input - to be submitted
+	 */
+	public void submitInput(String input) {
+		terminal.setText(input);
 		terminal.submitInput();
 	}
 
+	
+	/**
+	 * Setting new tab button in the toolbar
+	 * 
+	 * @param r - action of the NewTabButton
+	 */
 	public void setNewTabButton(Runnable r)
 	{
 		toolBar.setNewTabButton(r);

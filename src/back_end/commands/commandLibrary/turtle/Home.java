@@ -7,17 +7,12 @@ import java.util.function.Function;
 
 import back_end.interfaces.CommandInterface;
 
-public class ShowTurtle extends NoInputTurtleCommand implements CommandInterface{
-
+public class Home extends NoInputTurtleCommand implements CommandInterface{
+	
 	@Override
 	protected Function<Turtle, Double> supplyAction(Model model) {
-		return turtle -> {
-			turtle.setVisible(true); 
-			return 1.0;
-			};
+		return turtle -> turtle.setPosition(model.getHome());
 	}
-	
-	
-	
+
 
 }
