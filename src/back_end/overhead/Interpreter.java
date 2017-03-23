@@ -14,6 +14,10 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
+/**
+ * By Mina Mungekar, Yuansong Feng, and Juan Philippe
+ *
+ */
 public class Interpreter {
 	private static final String SYNTAX = "resources/languages/Syntax";
 	private ExpressionTree mTree;	

@@ -15,9 +15,9 @@ import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
 /**
- * 
- * 
- *
+ * By Mina Mungekar
+ * This class takes in an Expression Tree, traverses its children, and extracts their final return values in order to 
+ * set parameters for a command
  */
 public abstract class SimpleParameterCommand implements CommandInterface {
 	private List<Double> myParams;

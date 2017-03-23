@@ -15,6 +15,9 @@ import back_end.model.container.Input;
 import back_end.model.scene.Model;
 
 /**
+ * Implementation by Yuansong Feng
+ * Design by Mina Mungekar
+ * 
  * Main language parsing structure, construct all commands and constants in a
  * tree structure. Main steps are as described below. 1. Input the ENTIRE
  * command string and parse it into Inputs 2. Construct the whole tree by

@@ -8,7 +8,10 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-
+/**
+ * By Miguel Anderson
+ * Modified by Mina Mungekar
+ */
 public class Turtle extends Observable {
 	private final String ANIMATOR_FILEPATH = "resources.parameters/Animator";
 	private final ResourceBundle AnimatorProperties = ResourceBundle.getBundle(this.ANIMATOR_FILEPATH);

@@ -15,6 +15,10 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
+/**
+ * By Miguel Anderson
+ *
+ */
 public class View implements ViewInterface {
 	public static final int WINDOW_HEIGHT = 800;
 	public static final int WINDOW_WIDTH = 1000;

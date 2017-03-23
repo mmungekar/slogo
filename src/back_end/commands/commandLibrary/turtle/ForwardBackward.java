@@ -8,6 +8,10 @@ import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 import back_end.model.scene.Turtle;
 import javafx.geometry.Point2D;
+/**
+ * By Miguel Anderson
+ * Modified by Mina Mungekar
+ */
 
 public abstract class ForwardBackward extends OneInputTurtleCommand implements CommandInterface{
 	
@@ -21,10 +25,6 @@ public abstract class ForwardBackward extends OneInputTurtleCommand implements C
 	
 	protected double moveForward(Turtle turtle, double mag){
 		return mag;
-		/*double angle = turtle.getAngle();
-		double dx = Math.cos(Math.toRadians(angle)) * mag;
-		double dy = Math.sin(Math.toRadians(angle)) * mag;
-		return turtle.getCenterPosition().add(dx, dy); */	
 	}
 
 }

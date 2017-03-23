@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import javafx.geometry.Point2D;
-
+/**
+ * By Miguel Anderson
+ * Modified by Mina Mungekar
+ */
 public class TurtleMaster {
 	private Point2D home;
 	private Map<Integer, Turtle> turtleContainer;

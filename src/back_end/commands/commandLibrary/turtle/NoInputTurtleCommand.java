@@ -10,7 +10,9 @@ import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
 import back_end.model.scene.Model;
 import back_end.model.scene.Turtle;
-
+/**
+ * By Miguel Anderson
+ */
 public abstract class NoInputTurtleCommand extends SimpleParameterCommand implements CommandInterface{
 
 	@Override

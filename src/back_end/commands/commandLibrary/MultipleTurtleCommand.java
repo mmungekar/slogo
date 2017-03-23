@@ -9,7 +9,8 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 /**
- *Traverses the first (bracketed) child of the expression tree to obtain its parameters
+ * By Mina Mungekar
+ * Traverses the first (bracketed) child of the expression tree to obtain its parameters
  */
 public abstract class MultipleTurtleCommand implements CommandInterface {
 	private ExpressionTree myTree;

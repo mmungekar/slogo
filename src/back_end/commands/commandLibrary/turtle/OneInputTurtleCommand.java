@@ -5,7 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import back_end.interfaces.CommandInterface;
-
+/**
+ * By Miguel Anderson
+ */
 public abstract class OneInputTurtleCommand extends TurtleCommand implements CommandInterface{
 
 	@Override
