@@ -1,5 +1,9 @@
 /**
  * This entire file is part of my code masterpiece
+ * 
+ * This abstract class encapsulates any command which specifies a list of turtle ID's. It demonstrates the role of the CommandInterface
+ * class within the command hierarchy and reduces repeated code in the actual command classes. This file was selected for the masterpiece 
+ * because it contains concise syntax and readable methods. The actual implementation of this interface can be found in Ask and Tell.
  */
 package back_end.commands.commandLibrary;
 

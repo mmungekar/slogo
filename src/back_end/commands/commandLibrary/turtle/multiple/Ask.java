@@ -1,5 +1,9 @@
 /**
  * This entire file is part of my code masterpiece
+ * 
+ * This file was selected for the masterpiece because it demonstrates the implementation of the MultipleTurtleCommand class.
+ * It displays the succinctness of the commands in general, while demonstrating how the Factory design pattern applies
+ * to the commands in general.
  */
 package back_end.commands.commandLibrary.turtle.multiple;
 
