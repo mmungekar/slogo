@@ -72,7 +72,7 @@ public class Canvas implements Observer {
 	}
 
 	private void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {
-		System.out.println("Making Line");
+		//System.out.println("Making Line");
 		Line line = new Line();
 		line.setStartX(startPos.getX());
 		line.setStartY(startPos.getY());
