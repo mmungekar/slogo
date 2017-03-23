@@ -22,6 +22,7 @@ public class Animator extends Observable implements Observer {
     private final int MILLISECOND_DELAY = Integer.parseInt(AnimatorProperties.getString("MilliDelayFactor")) / FRAMES_PER_SECOND;
     private final double SECOND_DELAY = Double.parseDouble(AnimatorProperties.getString("SecondDelayFactor"))  / FRAMES_PER_SECOND;
     private Timeline mainTimeline; 
+    private double myRate;
     private TurtleMaster myTurtleMaster;
     private List<Point2D> centerPositions;
     public boolean running;
@@ -33,6 +34,7 @@ public class Animator extends Observable implements Observer {
     public Animator(TurtleMaster turtleMaster){
         myTurtleMaster = turtleMaster;
         running = false;
+        myRate = 1.0;
         funcQueue = new LinkedList<Function<Turtle, Double>>();
     }
     
@@ -75,6 +77,7 @@ public class Animator extends Observable implements Observer {
         KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
                 g -> step(magnitude, SECOND_DELAY));
         this.mainTimeline.getKeyFrames().add(frame);
+        this.mainTimeline.setRate(myRate);
         this.mainTimeline.play();
     }
     /**
@@ -96,6 +99,7 @@ public class Animator extends Observable implements Observer {
      * @param rate
      */
     public void changeRate(double rate){
+    		myRate = rate;
             this.mainTimeline.setRate(rate);
     }
     

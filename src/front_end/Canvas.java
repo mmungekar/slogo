@@ -88,6 +88,10 @@ public class Canvas implements Observer {
 	{
 		rectangle.setHeight(canvasHeight);
 	}
+	
+	public Animator getAnimator(){
+		return observedAnimator;
+	}
 
 	public Node getRoot()
 	{
