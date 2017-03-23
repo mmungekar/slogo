@@ -22,7 +22,9 @@ public abstract class TurtleCommand extends SimpleParameterCommand implements Co
 	/* (non-Javadoc)
 	 * @see back_end.commands.commandLibrary.SimpleParameterCommand#Execute(back_end.model.scene.Model)
 	 * 
-	 * For turtle commands 
+	 * For turtle commands, we extract an iterator of parameters. Then we 
+	 * 
+	 * 
 	 */
 	@Override
 	public double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException {
@@ -35,6 +37,16 @@ public abstract class TurtleCommand extends SimpleParameterCommand implements Co
 		}
 		return returnValue;
 	}
+	
+	private List<Double> createInputs(Iterator<Double> iterator){
+		List<Double> inputs = new ArrayList<Double>();
+		for (int i = 0 ; i < getFunctionInputNumber(); i++){
+			inputs.add(iterator.next());
+		}
+		return inputs;	
+	}
+	
+	protected abstract Double getFunctionInputNumber();
 		
 	private Function<Turtle, Double> applyInputs(Model model, List<Double> inputs) {
 		BiFunction<Turtle, List<Double>, Double> action = supplyAction(model);
@@ -44,15 +56,8 @@ public abstract class TurtleCommand extends SimpleParameterCommand implements Co
 
 	protected abstract BiFunction<Turtle, List<Double>,Double> supplyAction(Model model);
 	
-	private List<Double> createInputs(Iterator<Double> iterator){
-		List<Double> inputs = new ArrayList<Double>();
-		for (int i = 0 ; i < getFunctionInputNumber(); i++){
-			inputs.add(iterator.next());
-		}
-		return inputs;
-		
-	}
 	
-	protected abstract Double getFunctionInputNumber();
+	
+	
 
 }
