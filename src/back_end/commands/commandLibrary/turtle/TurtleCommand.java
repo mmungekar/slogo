@@ -1,5 +1,9 @@
+// This entire file is part of my masterpiece.
+// MIGUEL ANDERSON
+
 package back_end.commands.commandLibrary.turtle;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -14,6 +18,12 @@ import back_end.model.scene.Turtle;
 
 public abstract class TurtleCommand extends SimpleParameterCommand implements CommandInterface{
 
+	
+	/* (non-Javadoc)
+	 * @see back_end.commands.commandLibrary.SimpleParameterCommand#Execute(back_end.model.scene.Model)
+	 * 
+	 * For turtle commands 
+	 */
 	@Override
 	public double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException {
 		Iterator<Double> iter = getParameters().iterator();
@@ -34,6 +44,15 @@ public abstract class TurtleCommand extends SimpleParameterCommand implements Co
 
 	protected abstract BiFunction<Turtle, List<Double>,Double> supplyAction(Model model);
 	
-	protected abstract List<Double> createInputs(Iterator<Double> iterator);
+	private List<Double> createInputs(Iterator<Double> iterator){
+		List<Double> inputs = new ArrayList<Double>();
+		for (int i = 0 ; i < getFunctionInputNumber(); i++){
+			inputs.add(iterator.next());
+		}
+		return inputs;
+		
+	}
+	
+	protected abstract Double getFunctionInputNumber();
 
 }
