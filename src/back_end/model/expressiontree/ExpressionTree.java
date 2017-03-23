@@ -15,6 +15,8 @@ import back_end.model.container.Input;
 import back_end.model.scene.Model;
 
 /**
+ * By Yuansong Feng
+ * 
  * Main language parsing structure, construct all commands and constants in a
  * tree structure. Main steps are as described below. 1. Input the ENTIRE
  * command string and parse it into Inputs 2. Construct the whole tree by
@@ -66,25 +68,25 @@ public class ExpressionTree {
 	}
 
 	// Turn a full list of commands into a sub tree
-	public ExpressionTreeNode constructTree(List<Input> inputs) {
-		if (inputs.size() == 0)
-			return null;
-		try {
-			Input rootInput = new Input(null, Constant.ROOT_TYPE);
-			mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
-			ExpressionTreeNode currentNode = mRootNode;
-			for (Input input : inputs) {
-				System.out.println();
-				System.out.println("Input: " + input.getParameter());
-				currentNode = addLeaf(input, currentNode);
-				System.out.println("Parent: " + currentNode.getParent().getInput().getParameter());
+	public ExpressionTreeNode constructTree(List<Input> inputs) throws CommandException {
+		if (inputs.size() == 0) return null;
+
+		Input rootInput = new Input(null, Constant.ROOT_TYPE);
+		mRootNode = new ExpressionTreeNode(this.currentLanguage, rootInput, null);
+		ExpressionTreeNode currentNode = mRootNode;
+		for (Input input : inputs) {
+			//System.out.println();
+			currentNode = addLeaf(input, currentNode);
+			/*
+			try{
+				System.out.println("Input: " + input.getParameter() + " -> Type: " + input.getType() + " -> Parent: " + currentNode.getParent().getInput().getParameter());
+			} catch (NullPointerException e){
 				System.out.println();
 			}
-			return mRootNode;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+			*/
+			//System.out.println();
 		}
+		return mRootNode;
 
 	}
 
@@ -97,17 +99,7 @@ public class ExpressionTree {
 			System.out.println("Children Full? " + currNode.getInput().getParameter());
 		}
 
-		currNode = placeNewNode(currNode, inputNode);
-		inputNode.setParent(currNode);
-		currNode.getChildren().add(inputNode);
-		currNode = inputNode;
-		return currNode;
-	}
-
-	private ExpressionTreeNode placeNewNode(ExpressionTreeNode currNode, ExpressionTreeNode newNode) {
-		if (isListEnd(newNode.getInput())) {
-			currNode = currNode.getParent();
-		}
+		currNode = checkFinishedList(currNode, inputNode);
 		return currNode;
 	}
 
@@ -116,11 +108,10 @@ public class ExpressionTree {
 		Input input = node.getInput();
 		if (isListStart(input))
 			return false;
-		if (isListEnd(input))
-			return true;
 		if (isCommand(input))
 			try {
-				return mCommandLib.getNumParam(input.getParameter()) == node.getChildren().size();
+				return mCommandLib.getNumParam(input.getParameter()) == node.getChildren().size()
+						&& !node.getParent().getInput().getType().equals(Constant.GROUPSTART_TYPE);
 			} catch (CommandException e) {
 				if (mCustomCommandLib.contains(input.getParameter())) {
 					System.out.println("Contains " + input.getParameter());
@@ -146,8 +137,7 @@ public class ExpressionTree {
 	}
 
 	private boolean isVariableStored(Input i, Model m) {
-		return m.mGlobalVariableLibrary.hasVariable(i.getParameter())
-				|| m.mLocalVariableLibrary.hasVariable(i.getParameter());
+		return m.getCustomMaster().isVariableStored(i.getParameter());
 	}
 
 	private boolean isListStart(Input i) {
@@ -192,11 +182,7 @@ public class ExpressionTree {
 			if (isVariableStored(currInput, state)) { // Turn a variable into a
 														// constant directly
 				Double value = 0d;
-				if (state.mGlobalVariableLibrary.hasVariable(nodeName)) {
-					value = state.mGlobalVariableLibrary.retrieveVariable(nodeName);
-				} else {
-					value = state.mLocalVariableLibrary.retrieveVariable(nodeName);
-				}
+				value = retriveVariable(state, nodeName);
 				Oxygen<Double> constantOxy = new Oxygen<>(this.currentLanguage, Constant.CONSTANT_TYPE);
 				constantOxy.convertLight(value.toString());
 				constantOxy.putReturnValue(value);
@@ -213,11 +199,15 @@ public class ExpressionTree {
 		}
 	}
 
+	private Double retriveVariable(Model state, String nodeName) {
+		return state.getCustomMaster().retrieveVariable(nodeName);
+	}
+
 	private void nodeExecute(ExpressionTreeNode node, Model state, CommandInterface command)
 			throws CommandException, VariableNotFoundException {
 		Double value = command.Execute(state);
 		node.getOxygen().putReturnValue(value);
-		System.out.println(node.getOxygen().getReturnValue());
+		System.out.println("Node Execute Value: " + node.getOxygen().getReturnValue());
 	}
 
 	private CommandInterface libraryLookUp(ExpressionTreeNode node, Model state)
@@ -226,13 +216,13 @@ public class ExpressionTree {
 		try {
 			command = mCommandLib.getCommand(node.getInput().getParameter());
 		} catch (CommandException e) {
-			if (state.getCustomCommandLibrary().containsKey(node.getInput().getParameter())) {
-				command = state.getCustomCommandLibrary().get(node.getInput().getParameter());
+			if (state.getCustomMaster().getCustomCommandLibrary().containsKey(node.getInput().getParameter())) {
+				command = state.getCustomMaster().getCustomCommandLibrary().get(node.getInput().getParameter());
 			} else {
 				throw new UnrecognizedCommandException(node.getInput().getParameter());
 			}
 		}
-		command.setParameters(state, new ExpressionTree(node, this.getLanguage(), state.mCustomCommandLibrary));
+		command.setParameters(state, new ExpressionTree(node, this.getLanguage(), state.getCustomMaster().getCustomCommandLibrary()));
 		return command;
 
 	}
@@ -242,28 +232,24 @@ public class ExpressionTree {
 		if (isListStart(node.getInput())) {
 			for (ExpressionTreeNode kid : node.getChildren()) {
 				traverseKid(kid, model);
-				System.out.println(kid.getInput().getParameter());
+				System.out.println("In List: " + kid.getInput().getParameter());
 			}
 			Double value = createFinalOutput(node);
 			node.getOxygen().putReturnValue(value);
 		}
 	}
-
-	/*
-	 * public static void main(String[] args) { ExpressionTree test = new
-	 * ExpressionTree("English"); String s = "MAKE :X 3"; String d = "FD :X";
-	 * try { test.constructTree(s); Model model = new Model();
-	 * test.traverse(model);
-	 * 
-	 * System.out.println("Try Variable: ");
-	 * 
-	 * test = new ExpressionTree("English"); test.constructTree(d);
-	 * test.traverse(model);
-	 * 
-	 * } catch (Exception e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); }
-	 * 
-	 * }
-	 */
-
+	
+	private ExpressionTreeNode checkFinishedList(ExpressionTreeNode currNode, ExpressionTreeNode inputNode) {
+		if (isListEnd(inputNode.getInput())) {
+			currNode = currNode.getParent();
+			if(inputNode.getInput().getType().equals(Constant.GROUPEND_TYPE)){
+				currNode = currNode.getParent();
+			}
+			return currNode;
+		}
+		inputNode.setParent(currNode);
+		currNode.getChildren().add(inputNode);
+		currNode = inputNode;
+		return currNode;
+	}
 }

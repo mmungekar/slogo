@@ -14,6 +14,10 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
+/**
+ * By Mina Mungekar, Yuansong Feng, and Juan Philippe
+ *
+ */
 public class Interpreter {
 	private static final String SYNTAX = "resources/languages/Syntax";
 	private ExpressionTree mTree;	
@@ -26,7 +30,7 @@ public class Interpreter {
 
 	public double execute(Model model, String command) throws CommandException, VariableNotFoundException {
         List<Input> inputs = translate(command);
-		mTree = new ExpressionTree(null, model.getCurrentLanguage(), model.mCustomCommandLibrary);
+		mTree = new ExpressionTree(null, model.getCurrentLanguage(), model.getCustomMaster().getCustomCommandLibrary());
 		mTree.constructTree(inputs);
 		return mTree.traverse(model);
 	}
@@ -38,7 +42,7 @@ public class Interpreter {
 		while (cScanner.hasNext()) {
 			String in = cScanner.next().trim().toLowerCase();
 			String type = mParser.getSymbol(in);
-			System.out.println("Type: " + type);
+			//System.out.println("" + in + " -> Type: " + type);
 			if (type.equals(Constant.COMMENT_TYPE)) {
 				cScanner.nextLine();
 				continue;

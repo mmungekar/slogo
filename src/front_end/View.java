@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.function.Consumer;
 
 import back_end.model.scene.Model;
+import front_end.toolbar.ToolBarController;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Tab;
@@ -14,6 +15,10 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
+/**
+ * By Miguel Anderson
+ *
+ */
 public class View implements ViewInterface {
 	public static final int WINDOW_HEIGHT = 800;
 	public static final int WINDOW_WIDTH = 1000;
@@ -74,8 +79,7 @@ public class View implements ViewInterface {
 			}
 			catch (FileNotFoundException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				terminal.setOutputText("File Not Found");
 			}
 		});
 	}
@@ -114,16 +118,8 @@ public class View implements ViewInterface {
 
 	private void refreshGUITitles(ResourceBundle resource) {
 		terminal.refreshGUITitles(resource);
-		//((SideBar) sideBar).refreshGUITitles(resource);
 		((UserDefinedEntries) userDefinedEntries).refreshGUITitles(resource);
 	}
-
-	/*
-	public void setLanguageChangeListener(final Consumer<String> action) {
-		this.languageHandler = action;
-
-	}
-	*/
 
 
 	public void setOutput(String message) {

@@ -1,19 +1,14 @@
 package back_end.commands.commandLibrary.math;
 
-import back_end.commands.commandLibrary.PresetCommand;
-import back_end.commands.constant.Constant;
+import java.util.function.BinaryOperator;
+
 import back_end.interfaces.CommandInterface;
-import back_end.model.expressiontree.ExpressionTree;
-import back_end.model.expressiontree.Oxygen;
-import back_end.model.scene.Model;
 
-public class Product extends TwoParamMath{
-
+public class Product extends TwoInputMathCommand implements CommandInterface{
 
 	@Override
-	public double Execute(Model state) {
-		getParams();
-		return B * A;
+	protected BinaryOperator<Double> getOperation() {
+		return (a,b) -> a * b;
 	}
 
 }

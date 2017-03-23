@@ -21,7 +21,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.util.converter.DoubleStringConverter;
-
+/**
+ * By Miguel Anderson
+ *
+ */
 public class UserDefinedEntries extends TabPane implements Observer {
 	private ObservableList<CustomVariable> customVariables = FXCollections.observableArrayList();
 	private ObservableList<String> customCommands = FXCollections.observableArrayList();
@@ -116,8 +119,8 @@ public class UserDefinedEntries extends TabPane implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		if (myModel == o) {
-			customVariables = FXCollections.observableArrayList(myModel.getUserDefinedVariables());
-			customCommands = FXCollections.observableArrayList(myModel.getUserDefinedCommands());
+			customVariables = FXCollections.observableArrayList(myModel.getCustomMaster().getUserDefinedVariables());
+			customCommands = FXCollections.observableArrayList(myModel.getCustomMaster().getUserDefinedCommands());
 			updateVisualLibraries();
 		}
 
@@ -127,5 +130,6 @@ public class UserDefinedEntries extends TabPane implements Observer {
 		
 		((ListView<String>) tabCommands.getContent()).setItems(customCommands);
 		tableVariables.setItems(customVariables);
+		//System.out.println(customVariables.toString());
 	}
 }

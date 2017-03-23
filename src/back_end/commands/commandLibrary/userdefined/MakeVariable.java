@@ -8,7 +8,10 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.expressiontree.Oxygen;
 import back_end.model.scene.Model;
-
+/**
+ * By Yuansong Feng
+ *
+ */
 public class MakeVariable implements CommandInterface {
 	private String name;
 	private double value;
@@ -21,14 +24,14 @@ public class MakeVariable implements CommandInterface {
 		try {
 			name = (String) oxygen.getContent();
 		} catch (ClassCastException ex) {
-			name = (String) oxygen.getSubContent();
+			name = oxygen.getSubContent();
 		}
 		value = (Double) iter.next().getOxygen().getContent();
 	}
 
 	@Override
 	public double Execute(Model model) {
-		model.updateVariable(name, value);
+		model.getCustomMaster().updateVariable(name, value);
 		System.out.println("New variable created: " + name + " : " + value);
 		return value;
 	}

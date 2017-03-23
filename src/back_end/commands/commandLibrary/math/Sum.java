@@ -1,18 +1,14 @@
 package back_end.commands.commandLibrary.math;
 
-import back_end.commands.commandLibrary.PresetCommand;
-import back_end.commands.constant.Constant;
-import back_end.interfaces.CommandInterface;
-import back_end.model.expressiontree.ExpressionTree;
-import back_end.model.expressiontree.Oxygen;
-import back_end.model.scene.Model;
+import java.util.function.BinaryOperator;
 
-public class Sum extends TwoParamMath{
+import back_end.interfaces.CommandInterface;
+
+public class Sum extends TwoInputMathCommand implements CommandInterface{
 
 	@Override
-	public double Execute(Model state) {
-		getParams();
-		return A + B;
+	protected BinaryOperator<Double> getOperation() {
+		return (a,b) -> a + b;
 	}
 
 }

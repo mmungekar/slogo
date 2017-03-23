@@ -8,5 +8,9 @@ public class NotEnoughParameterException extends CommandException {
 				"Error: Incorrect Number of Parameters\n Command : %1$s \n   Expected #: %2$d \n   Inputted #: %3$d",
 				incompleteCommand, expected, inputted));
 	}
+	
+	public NotEnoughParameterException(int paramNum){
+		super(String.format("Error: Number of Parameters Should be a Multiple of %1$d", paramNum));
+	}
 
 }

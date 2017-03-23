@@ -27,7 +27,7 @@ public class CustomCommand implements CommandInterface {
 		Iterator<ExpressionTreeNode> valIter = root.getChildren().iterator();
 		Iterator<String> nameIter = mCustomVarLib.keySet().iterator();
 		while (valIter.hasNext()) {
-			mCustomVarLib.replace(nameIter.next(), (Double) valIter.next().getOxygen().getContent());
+			mCustomVarLib.insertVariable(nameIter.next(), (Double) valIter.next().getOxygen().getContent());
 		}
 		if(nameIter.hasNext())
 			throw new NotEnoughParameterException("Missing parameters for the custom command: " + mName, 
@@ -45,9 +45,9 @@ public class CustomCommand implements CommandInterface {
 
 	@Override
 	public double Execute(Model model) throws CommandException, VariableNotFoundException {
-		model.mLocalVariableLibrary = mCustomVarLib;
+		model.getCustomMaster().setLocalVariableLibrary(mCustomVarLib);
 		double retVal = mCommandTree.traverse(model);
-		model.mLocalVariableLibrary = null;
+		model.getCustomMaster().setLocalVariableLibrary(null);
 		return retVal;
 
 	}

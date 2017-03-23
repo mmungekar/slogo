@@ -1,8 +1,10 @@
 package front_end;
 
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
+import back_end.model.scene.Animator;
 import back_end.model.scene.Model;
 import back_end.model.scene.Turtle;
 import javafx.geometry.Point2D;
@@ -11,11 +13,16 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+/**
+ * By Miguel Anderson
+ *
+ */
 
 public class Canvas implements Observer {
 	public static final int arc = 25;
 
 	private Model observedModel = null;
+	private Animator observedAnimator = null;
 	private Rectangle rectangle;
 	private Group myRoot;
 
@@ -39,15 +46,21 @@ public class Canvas implements Observer {
 
 	@Override
 	public void update(Observable obs, Object obj) {
-		if (obs == observedModel) {
+		if (obs == observedModel || obs == observedAnimator) {
 			// update all parts of modelstate that canvas has
-			for (Turtle turtle : observedModel.getTurtleContainer().values()){
+			Iterator<Turtle> turtleIterator = observedModel.getTurtleMaster().getTurtleIterator();
+			while(turtleIterator.hasNext()) {
+				Turtle turtle = turtleIterator.next();
 				if(turtle.hasMoved() && turtle.isPenDown()){
 					drawLine(turtle, turtle.getPrevCenterPosition(), turtle.getCenterPosition());
 					turtle.dontDrawLine();
 				}
+				if (!myRoot.getChildren().contains(turtle.getImageView())) {
+					myRoot.getChildren().add(turtle.getImageView());
+					observedAnimator = observedModel.getTurtleMaster().getAnimator();
+					observedModel.getTurtleMaster().getAnimator().addObserver(this);
+				}
 			}
-			addNewTurtles();
 			updateBackground();
 		}
 
@@ -55,26 +68,19 @@ public class Canvas implements Observer {
 
 	private void updateBackground()
 	{
-		rectangle.setFill(observedModel.getBackgroundColor());
+		rectangle.setFill(observedModel.getDrawer().getBackgroundColor());
 	}
 
 	private void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {
+		System.out.println("Making Line");
 		Line line = new Line();
 		line.setStartX(startPos.getX());
 		line.setStartY(startPos.getY());
 		line.setEndX(endPos.getX());
 		line.setEndY(endPos.getY());
 		line.setStroke(turtle.getPenColor());
+		line.setStrokeWidth(turtle.getPenSize());
 		myRoot.getChildren().add(line);
-	}
-
-	private void addNewTurtles() {
-		for (Turtle turtle : observedModel.getTurtleContainer().values()) {
-			if (!myRoot.getChildren().contains(turtle)) {
-				myRoot.getChildren().add(turtle);
-			}
-		}
-		
 	}
 
 	public void setWidth(int canvasWidth)
@@ -91,4 +97,5 @@ public class Canvas implements Observer {
 	{
 		return myRoot;
 	}
+
 }
