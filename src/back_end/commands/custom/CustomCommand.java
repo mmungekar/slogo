@@ -13,7 +13,7 @@ import back_end.model.scene.Model;
 
 /**
  * 
- * @author Juan Philippe
+ * @author Juan Philippe, Mina Mungekar
  *
  */
 public class CustomCommand implements CommandInterface {
