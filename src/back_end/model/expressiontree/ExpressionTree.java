@@ -15,8 +15,7 @@ import back_end.model.container.Input;
 import back_end.model.scene.Model;
 
 /**
- * Implementation by Yuansong Feng
- * Design by Mina Mungekar
+ * By Yuansong Feng
  * 
  * Main language parsing structure, construct all commands and constants in a
  * tree structure. Main steps are as described below. 1. Input the ENTIRE
@@ -247,23 +246,4 @@ public class ExpressionTree {
 		currNode = inputNode;
 		return currNode;
 	}
-
-
-	/*
-	 * public static void main(String[] args) { ExpressionTree test = new
-	 * ExpressionTree("English"); String s = "MAKE :X 3"; String d = "FD :X";
-	 * try { test.constructTree(s); Model model = new Model();
-	 * test.traverse(model);
-	 * 
-	 * System.out.println("Try Variable: ");
-	 * 
-	 * test = new ExpressionTree("English"); test.constructTree(d);
-	 * test.traverse(model);
-	 * 
-	 * } catch (Exception e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); }
-	 * 
-	 * }
-	 */
-
 }

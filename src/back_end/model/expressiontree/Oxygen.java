@@ -11,7 +11,7 @@ import back_end.exceptions.UnrecognizedCommandException;
  * intermediate product between tree nodes which can execute the current command
  * and pass information upwards in a flexible and packaged styles.
  * 
- * @author Feng
+ * By Yuansong Feng
  * Modified by Mina Mungekar
  * @param <T>
  */

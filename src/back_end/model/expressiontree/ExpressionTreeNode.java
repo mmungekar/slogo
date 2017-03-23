@@ -15,7 +15,7 @@ import back_end.exceptions.CommandException;
 import back_end.exceptions.UnrecognizedCommandException;
 
 /**
- * By Yuansong Feng and Mina Mungekar
+ * By Mina Mungekar and Yuansong Feng
  * Constructs the nodes of the expression tree, which will contain either
  * commands, operators, or integer values (hence, type Object)
  */
