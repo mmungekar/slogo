@@ -16,7 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
 /**
- * By Miguel Anderson
+ * By Miguel Anderson, Juan Philippe
  *
  */
 public class View implements ViewInterface {
@@ -64,9 +64,18 @@ public class View implements ViewInterface {
 			try
 			{
 				scan = new Scanner(f);
-				scan.useDelimiter("\\Z");  
-				String content = scan.next();
-				terminal.submitInput(content);
+				StringBuilder content = new StringBuilder();
+				while (scan.hasNextLine())
+				{
+					String s = scan.nextLine();
+					if (s.equals("")) continue;
+					
+					Scanner stringScanner = new Scanner(s);
+					if (!stringScanner.next().equals("#")) content.append(s + " ");
+					stringScanner.close();
+				}
+				
+				terminal.submitInput(content.toString());
 			}
 			catch (FileNotFoundException e)
 			{

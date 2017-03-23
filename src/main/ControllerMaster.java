@@ -9,6 +9,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Juan Philippe, Miguel Anderson
+ *
+ */
 public class ControllerMaster {
 
 	private static final String APP_TITLE = "SLogo Team 16";

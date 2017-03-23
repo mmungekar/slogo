@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.function.Function;
 import javafx.geometry.Point2D;
 /**
- * By Miguel Anderson
+ * By Miguel Anderson, Juan Philippe
  * Modified by Mina Mungekar
  */
 public class TurtleMaster {

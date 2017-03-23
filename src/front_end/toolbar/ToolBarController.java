@@ -7,7 +7,11 @@ import back_end.model.scene.Model;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 
-
+/**
+ * 
+ * @author Juan Philippe, Miguel Anderson
+ *
+ */
 public class ToolBarController
 {
 	private MenuBar toolBar;
