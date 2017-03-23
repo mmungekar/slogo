@@ -19,7 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 /**
- * By Miguel Anderson
+ * By Miguel Anderson, Juan Philippe
  *
  */
 public class Terminal extends VBox {

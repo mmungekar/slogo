@@ -16,7 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
 /**
- * By Miguel Anderson
+ * By Miguel Anderson, Juan Philippe
  *
  */
 public class View implements ViewInterface {

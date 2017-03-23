@@ -10,6 +10,11 @@ import javafx.scene.control.TabPane;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
+/**
+ * 
+ * @author Juan Philippe, Miguel Anderson
+ *
+ */
 public class PopUpHTML extends Stage{
 	public PopUpHTML(List<String> htmlFilePaths){
 		Group root = new Group();

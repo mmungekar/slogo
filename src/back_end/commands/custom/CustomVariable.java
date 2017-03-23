@@ -4,6 +4,11 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.util.Pair;
 
+/**
+ * 
+ * @author Yuansong Feng
+ *
+ */
 public class CustomVariable extends Pair<String,Double>{
 	private final SimpleStringProperty name;
 	private final SimpleDoubleProperty value;

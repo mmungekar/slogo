@@ -9,7 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 /**
- * By Miguel Anderson
+ * By Miguel Anderson, Juan Philippe
  * Modified by Mina Mungekar
  */
 public class Turtle extends Observable {

@@ -42,7 +42,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 /**
- * By Miguel Anderson
+ * By Miguel Anderson, Juan Philippe
  *
  */
 public class SideBar extends VBox implements Observer{
