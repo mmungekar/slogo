@@ -1,3 +1,6 @@
+/**
+ * This entire file is part of my code masterpiece
+ */
 package back_end.commands.commandLibrary.turtle.multiple;
 
 import java.util.ArrayList;
@@ -13,6 +16,7 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 /**
+ * Mina Mungekar
  * For all turtles, if the input expression is true, the given set of commands is executed
  */
 public class AskWith implements CommandInterface{
@@ -21,7 +25,7 @@ public class AskWith implements CommandInterface{
 	ExpressionTree myTree;
 /**
  * All turtles are set to being temporarily active, and the expression is evaluated for each one.
- * For any return value not equal to zero, the turtle is added to the List validTurtles
+ * For any return value not equal to zero, the turtle is added to the List validTurtles.
  */
 	@Override
 	public void setParameters(Model model, ExpressionTree tree)
@@ -29,13 +33,13 @@ public class AskWith implements CommandInterface{
 		myTree = tree;
 		 iter = myTree.getRootNode().getChildren().iterator();
 		ExpressionTreeNode firstChild = iter.next();
-		for(Integer id: model.getTurtleMaster().getAllTurtleIDs()){
+		model.getTurtleMaster().getAllTurtleIDs().stream().forEach(id -> {
 			model.getTurtleMaster().setTempActiveTurtles(Collections.singletonList(id));
 			myTree.traverseKid(firstChild,model);
 			if(firstChild.getOxygen().getReturnValue()!=0){
 				validTurtles.add(id);
 			}
-		}
+		});
 		
 	}
 /**

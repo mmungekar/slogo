@@ -1,3 +1,6 @@
+/**
+ * This entire file is part of my code masterpiece
+ */
 package back_end.commands.commandLibrary.turtle.multiple;
 
 import java.util.Iterator;
@@ -13,6 +16,7 @@ import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
 /**
+ * Mina Mungekar
  * For a select group of turtles designated by ID, a group of commands is executed
  */
 
@@ -26,10 +30,7 @@ public class Ask extends MultipleTurtleCommand implements CommandInterface{
 	
 	@Override
 	public double Execute(Model model) throws VariableNotFoundException, CommandException {
-		List<Integer> myParamValues = getFirstChild().getChildren().stream().filter(elt -> elt != null)
-										.map(elt -> elt.getOxygen().getReturnValue().intValue())
-										.collect(Collectors.toList());
-		model.getTurtleMaster().setTempActiveTurtles(myParamValues);
+		model.getTurtleMaster().setTempActiveTurtles(getMyParamValues());
 		ExpressionTreeNode secondChild = getIterator().next();
 		getTree().traverseKid(secondChild,model);
 		return secondChild.getOxygen().getReturnValue();

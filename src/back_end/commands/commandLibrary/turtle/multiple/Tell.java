@@ -1,3 +1,6 @@
+/**
+ * This entire file is part of my code masterpiece
+ */
 package back_end.commands.commandLibrary.turtle.multiple;
 
 import java.util.Iterator;
@@ -16,14 +19,12 @@ import back_end.model.scene.Model;
 
 public class Tell extends MultipleTurtleCommand implements CommandInterface{
 	/**
+	 * Mina Mungekar
 	 * A group of turtles, designated by ID, are set as active
 	 */
 	@Override
 	public double Execute(Model model) {
-		List<Integer> myParamValues = getFirstChild().getChildren().stream() .filter(elt -> elt != null)
-				.map(elt -> elt.getOxygen().getReturnValue().intValue()).collect(Collectors.toList());
-		model.getTurtleMaster().setActiveTurtles(myParamValues);
-		//System.out.println(myParamValues.size());
-		return myParamValues.get(myParamValues.size() - 1);
+		model.getTurtleMaster().setActiveTurtles(getMyParamValues());
+		return getMyParamValues().get(getMyParamValues().size() - 1);
 	}
 }
