@@ -12,6 +12,11 @@ import back_end.exceptions.CommandException;
 import back_end.exceptions.InitializationException;
 import back_end.exceptions.UnrecognizedCommandException;
 
+/**
+ * 
+ * @author Juan Philippe, Mina Mungekar
+ *
+ */
 public class CommandFactory {
 	private ResourceBundle resource;
 	private ResourceBundle presource;

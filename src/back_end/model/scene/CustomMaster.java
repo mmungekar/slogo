@@ -9,6 +9,11 @@ import back_end.commands.custom.CustomVariable;
 import back_end.libraries.CustomCommandLibrary;
 import back_end.libraries.VariableLibrary;
 
+/**
+ * 
+ * @author Miguel Anderson
+ *
+ */
 public class CustomMaster {
 
 	private VariableLibrary mGlobalVariableLibrary;
