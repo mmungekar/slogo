@@ -75,8 +75,6 @@ public class ExpressionTree {
 		for (Input input : inputs) {
 			//System.out.println();
 			currentNode = addLeaf(input, currentNode);
-			System.out.println("Input: " + input.getParameter() + " -> Type: " + input.getType() + " -> Parent: " + currentNode.getParent().getInput().getParameter());
-			//System.out.println();
 		}
 		return mRootNode;
 
@@ -88,7 +86,6 @@ public class ExpressionTree {
 			if (currNode == mRootNode)
 				return mRootNode;
 			currNode = currNode.getParent();
-			System.out.println("Children Full? " + currNode.getInput().getParameter());
 		}
 
 		currNode = checkFinishedList(currNode, inputNode);
