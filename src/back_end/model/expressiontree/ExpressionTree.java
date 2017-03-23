@@ -77,7 +77,13 @@ public class ExpressionTree {
 		for (Input input : inputs) {
 			//System.out.println();
 			currentNode = addLeaf(input, currentNode);
-			System.out.println("Input: " + input.getParameter() + " -> Type: " + input.getType() + " -> Parent: " + currentNode.getParent().getInput().getParameter());
+			/*
+			try{
+				System.out.println("Input: " + input.getParameter() + " -> Type: " + input.getType() + " -> Parent: " + currentNode.getParent().getInput().getParameter());
+			} catch (NullPointerException e){
+				System.out.println();
+			}
+			*/
 			//System.out.println();
 		}
 		return mRootNode;
