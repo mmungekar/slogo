@@ -1,6 +1,7 @@
 /**
  * This entire file is part of my code masterpiece
  * 
+ * 
  * This file displays the succinctness of the commands in general, while demonstrating how the Factory design pattern applies
  * to the commands in general. It does not extend MultipleTurtleCommand, although it does demonstrate the role of the overall
  * command interface in shaping commands. Methods are kept short, and newer Java8 syntax is used to shorten methods.

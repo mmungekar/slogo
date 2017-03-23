@@ -21,7 +21,7 @@ import back_end.model.scene.Model;
  * By Mina Mungekar
  * Traverses the first (bracketed) child of the expression tree to obtain its parameters
  */
-public abstract class MultipleTurtleCommand implements CommandInterface {
+public abstract class MultipleTurtleCommand implements CommandInterface{
 	private ExpressionTree myTree;
 	private Iterator<ExpressionTreeNode> iter;
 	private List<Integer> myParamValues;

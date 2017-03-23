@@ -1,9 +1,3 @@
-/**
- * This entire file is part of my code masterpiece
- * 
- * This is the most general framework used for any of the commands, and is the starting point from which all other abstract classes
- * are built.
- */
 package back_end.interfaces;
 
 import back_end.exceptions.CommandException;
