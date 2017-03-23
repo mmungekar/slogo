@@ -1,6 +1,5 @@
 package back_end.commands.commandLibrary.turtle.multiple;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,7 +7,6 @@ import back_end.commands.commandLibrary.MultipleTurtleCommand;
 import back_end.exceptions.CommandException;
 import back_end.exceptions.VariableNotFoundException;
 import back_end.interfaces.CommandInterface;
-import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
