@@ -1,13 +1,14 @@
 package back_end.commands.commandLibrary.math;
-import back_end.commands.commandLibrary.SimpleParameterCommand;
-import back_end.interfaces.CommandInterface;
-import back_end.model.scene.Model;
+import java.util.function.DoubleUnaryOperator;
 
-public class NaturalLog extends SimpleParameterCommand implements CommandInterface{
+import back_end.interfaces.CommandInterface;
+
+public class NaturalLog extends OneInputMathCommand implements CommandInterface{
 
 	@Override
-	public double Execute(Model state) {
-		return Math.log(getParameters().get(0));
+	protected DoubleUnaryOperator getOperation() {
+		return input -> Math.log(input);
 	}
+
 
 }
