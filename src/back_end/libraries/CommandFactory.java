@@ -1,6 +1,7 @@
-/**
- * This entire file is part of my code masterpiece
- * 
+//This entire file is part of my code masterpiece
+//Mina Mungekar
+
+/**  
  * This file was selected for the masterpiece because it demonstrates the use of reflection while instantiating commands. Methods
  * are concise and short; the code demonstrates how commands are checked for validity. This, in conjunction with the other command files
  * in the masterpiece, demonstrate how commands are created and structured.
