@@ -7,7 +7,7 @@ package back_end.commands.commandLibrary.logic;
  * This is just one of many examples of possible uses of the Iteration super class. 
  * Since most of the related functions are implemented in the Iteration class already,
  * For class is surprisingly small and succinct. 
- * /
+ */
 
 import java.util.Iterator;
 
