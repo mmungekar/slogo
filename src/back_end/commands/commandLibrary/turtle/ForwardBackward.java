@@ -9,7 +9,6 @@ import back_end.model.scene.Turtle;
 import javafx.geometry.Point2D;
 /**
  * By Miguel Anderson
- * Modified by Mina Mungekar
  */
 
 public abstract class ForwardBackward extends OneInputTurtleCommand implements CommandInterface{
