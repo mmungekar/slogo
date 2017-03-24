@@ -1,4 +1,5 @@
 package front_end;
+
 //http://codereview.stackexchange.com/questions/52197/console-component-in-javafx
 ///http://docs.oracle.com/javafx/2/ui_controls/list-view.htm
 import java.util.ResourceBundle;
@@ -18,8 +19,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+
 /**
- * By Miguel Anderson
+ * By Miguel Anderson, Juan Philippe
  *
  */
 public class Terminal extends VBox {
@@ -36,6 +38,11 @@ public class Terminal extends VBox {
 	private Tab historyHolder;
 	private Button submit;
 	private Button clear;
+
+	/**
+	 * Creates terminal
+	 * Holds input, history, and output
+	 */
 	public Terminal() {
 		initializeInput();
 		initializeOutput();
@@ -44,12 +51,13 @@ public class Terminal extends VBox {
 		submit = new ActionButton(event -> submitInput());
 		this.getChildren().addAll(createConsoleComponents(inputConsole, submit), createHistoryAndOutputComponents());
 	}
+
 	private Node createHistoryAndOutputComponents() {
-		TabPane tabPane = new TabPane();		
-		
+		TabPane tabPane = new TabPane();
+
 		outputHolder = new Tab();
 		outputHolder.setContent(outputConsole);
-		
+
 		historyHolder = new Tab();
 		historyHolder.setContent(createConsoleComponents(historyView, clear));
 		tabPane.getTabs().addAll(outputHolder, historyHolder);
@@ -57,10 +65,12 @@ public class Terminal extends VBox {
 		tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 		return tabPane;
 	}
+
 	private void initializeOutput() {
 		outputConsole = new TextArea();
 		outputConsole.setEditable(false);
 	}
+
 	private HBox createConsoleComponents(Region mainConsole, Button button) {
 		HBox consoleComponents = new HBox();
 		button.setPrefHeight(mainConsole.getPrefHeight());
@@ -68,16 +78,17 @@ public class Terminal extends VBox {
 		consoleComponents.setSpacing(15);
 		return consoleComponents;
 	}
-	
-	
+
 	private void clearHistory() {
 		history.clear();
 	}
+
 	private void setupHistoryView() {
 		historyView.setItems(history);
 		historyView.setPrefWidth(CONSOLE_WIDTH);
 		setMouseActionOnListView();
 	}
+
 	private void setMouseActionOnListView() {
 		// http://stackoverflow.com/questions/23622703/deselect-an-item-on-an-javafx-listview-on-click
 		historyView.setCellFactory(lv -> {
@@ -98,6 +109,7 @@ public class Terminal extends VBox {
 			return cell;
 		});
 	}
+
 	private void initializeInput() {
 		inputConsole = new TextArea();
 		inputConsole.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
@@ -130,17 +142,23 @@ public class Terminal extends VBox {
 		inputConsole.setPrefWidth(CONSOLE_WIDTH);
 		inputConsole.setPrefHeight(150);
 	}
+
 	private void loadHistoryIntoTextInput() {
 		inputConsole.setText(history.get(historyPointer));
 		inputConsole.selectAll();
 	}
-	
-	public void submitInput(String in)
-	{
+
+	/**
+	 * shortcut to submit a string to the Model
+	 * 
+	 * @param in
+	 */
+	public void submitInput(String in) {
 		inputConsole.setText(in);
 		submitInput();
 	}
-	void submitInput() {
+
+	public void submitInput() {
 		String text = inputConsole.getText();
 		historyView.scrollTo(history.size() - 1);
 		if (!text.equals(EMPTY_STRING)) {
@@ -153,22 +171,33 @@ public class Terminal extends VBox {
 			inputConsole.clear();
 		}
 	}
-	void setEnterListener(final Consumer<String> action) {
+
+	public void setEnterListener(final Consumer<String> action) {
 		this.onMessageReceivedHandler = action;
 	}
-	void setText(String in) {
+
+	public void setText(String in) {
 		inputConsole.setText(in);
 	}
-	String getText() {
+
+	public String getText() {
 		return inputConsole.getText();
 	}
-	void setOutputText(String output2) {
+
+	public void setOutputText(String output2) {
 		outputConsole.setText(output2);
 	}
-	void printToOutput(Exception e) {
+
+	public void printToOutput(Exception e) {
 		outputConsole.setText(e.getMessage());
 	}
-	void refreshGUITitles(ResourceBundle resource) {
+
+	/**
+	 * Updates the titles of the buttons, tabs and such to the language specified by the resource file.
+	 * 
+	 * @param resource - where the gui titles are stored
+	 */
+	public void refreshGUITitles(ResourceBundle resource) {
 		this.clearHistory();
 		historyHolder.setText(resource.getString("History"));
 		outputHolder.setText(resource.getString("Output"));

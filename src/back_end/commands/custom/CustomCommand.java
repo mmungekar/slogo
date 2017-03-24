@@ -11,6 +11,11 @@ import back_end.model.expressiontree.ExpressionTree;
 import back_end.model.expressiontree.ExpressionTreeNode;
 import back_end.model.scene.Model;
 
+/**
+ * 
+ * @author Juan Philippe, Mina Mungekar
+ *
+ */
 public class CustomCommand implements CommandInterface {
 	private String mName;
 	private VariableLibrary mCustomVarLib;

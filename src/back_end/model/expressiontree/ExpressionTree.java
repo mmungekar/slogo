@@ -77,7 +77,13 @@ public class ExpressionTree {
 		for (Input input : inputs) {
 			//System.out.println();
 			currentNode = addLeaf(input, currentNode);
-			System.out.println("Input: " + input.getParameter() + " -> Type: " + input.getType() + " -> Parent: " + currentNode.getParent().getInput().getParameter());
+			/*
+			try{
+				System.out.println("Input: " + input.getParameter() + " -> Type: " + input.getType() + " -> Parent: " + currentNode.getParent().getInput().getParameter());
+			} catch (NullPointerException e){
+				System.out.println();
+			}
+			*/
 			//System.out.println();
 		}
 		return mRootNode;
@@ -90,7 +96,7 @@ public class ExpressionTree {
 			if (currNode == mRootNode)
 				return mRootNode;
 			currNode = currNode.getParent();
-			System.out.println("Children Full? " + currNode.getInput().getParameter());
+			//System.out.println("Children Full? " + currNode.getInput().getParameter());
 		}
 
 		currNode = checkFinishedList(currNode, inputNode);
@@ -108,7 +114,7 @@ public class ExpressionTree {
 						&& !node.getParent().getInput().getType().equals(Constant.GROUPSTART_TYPE);
 			} catch (CommandException e) {
 				if (mCustomCommandLib.contains(input.getParameter())) {
-					System.out.println("Contains " + input.getParameter());
+					//System.out.println("Contains " + input.getParameter());
 					return mCustomCommandLib.getCustomCommand(input.getParameter()).getNumParams() == node.getChildren()
 							.size();
 				} else
@@ -201,7 +207,7 @@ public class ExpressionTree {
 			throws CommandException, VariableNotFoundException {
 		Double value = command.Execute(state);
 		node.getOxygen().putReturnValue(value);
-		System.out.println("Node Execute Value: " + node.getOxygen().getReturnValue());
+		//System.out.println("Node Execute Value: " + node.getOxygen().getReturnValue());
 	}
 
 	private CommandInterface libraryLookUp(ExpressionTreeNode node, Model state)
@@ -226,7 +232,7 @@ public class ExpressionTree {
 		if (isListStart(node.getInput())) {
 			for (ExpressionTreeNode kid : node.getChildren()) {
 				traverseKid(kid, model);
-				System.out.println("In List: " + kid.getInput().getParameter());
+				//System.out.println("In List: " + kid.getInput().getParameter());
 			}
 			Double value = createFinalOutput(node);
 			node.getOxygen().putReturnValue(value);

@@ -15,6 +15,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
 
+/**
+ * 
+ * @author Juan Philippe, Miguel Anderson
+ *
+ */
 public class FileMenu extends Menu{
 	
 	private Model myModel;

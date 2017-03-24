@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 /**
- * By Miguel Anderson
+ * By Miguel Anderson, Juan Philippe
  *
  */
 
@@ -72,7 +72,7 @@ public class Canvas implements Observer {
 	}
 
 	private void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {
-		System.out.println("Making Line");
+		//System.out.println("Making Line");
 		Line line = new Line();
 		line.setStartX(startPos.getX());
 		line.setStartY(startPos.getY());

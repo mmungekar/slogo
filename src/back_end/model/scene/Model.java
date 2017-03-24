@@ -23,6 +23,11 @@ import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
+/**
+ * 
+ * @author Juan Philippe, Miguel Anderson
+ *
+ */
 public class Model extends Observable {
 	public static final String DEFAULT_LANGUAGE = "English";
 

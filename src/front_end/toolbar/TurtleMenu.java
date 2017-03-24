@@ -77,7 +77,7 @@ public class TurtleMenu extends Menu implements Observer{
 		image.setOnAction(e -> {
 			File newImageFile = chooseFile();
 			if (newImageFile != null) {
-				model.getTurtleMaster().operateOnTurtle(turtle -> turtle.changeImage(newImageFile.toString()));
+				model.getTurtleMaster().operateOnTurtle(turtle -> turtle.changeImage(newImageFile.getName()));
 			} else {
 				//myView.setOutput(String.format(PLEASE_SELECT_PROPER_IMG_FILE, IMAGE_EXTENSION));
 			}

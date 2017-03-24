@@ -32,7 +32,7 @@ public class MakeVariable implements CommandInterface {
 	@Override
 	public double Execute(Model model) {
 		model.getCustomMaster().updateVariable(name, value);
-		System.out.println("New variable created: " + name + " : " + value);
+		//System.out.println("New variable created: " + name + " : " + value);
 		return value;
 	}
 
