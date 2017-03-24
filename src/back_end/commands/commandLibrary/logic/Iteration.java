@@ -1,6 +1,14 @@
 package back_end.commands.commandLibrary.logic;
 
 
+// This entire file is part of my masterpiece.
+// Yuansong Feng
+/**
+ * I think this part of the code is good because it is really easy to extend and make
+ * other useful functions including For loop, While loop and ForEach loop upon it. It extracts
+ * out all the useful functions regarding iteration and demonstrates the open-close principle
+ * of our program. 
+ **/
 import java.util.Iterator;
 
 import back_end.exceptions.CommandException;
