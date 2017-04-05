@@ -14,6 +14,7 @@ import javafx.stage.Stage;
  * @author Juan Philippe, Miguel Anderson
  *
  */
+//This entire file is in my masterpiece
 public class ControllerMaster {
 
 	private static final String APP_TITLE = "SLogo Team 16";

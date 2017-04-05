@@ -18,6 +18,7 @@ import javafx.scene.shape.Rectangle;
  *
  */
 
+//This entire file is in my masterpiece
 public class Canvas implements Observer {
 	public static final int arc = 25;
 
