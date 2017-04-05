@@ -14,6 +14,7 @@ import javafx.stage.Stage;
  * @author Juan Philippe
  *
  */
+//This entire file is in my masterpiece
 public class Controller {
 	public static final String RETURN_PREFIX = "Returns: %s";
 	public static final String OUTPUT_STRING_FORMAT = "User Input: %1$s\n\n%2$s";
