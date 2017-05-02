@@ -1,11 +1,15 @@
 package front_end.toolbar;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import back_end.model.scene.Model;
+import back_end.model.scene.Turtle;
 import front_end.View;
 import front_end.customJavaFxNodes.ActionButton;
 import front_end.customJavaFxNodes.ColorComboBox;
@@ -23,6 +27,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -44,11 +49,14 @@ public class TurtleMenu extends Menu implements Observer{
 	private Menu penStatusOption;
 	
 	private MenuOptionsList turtleStatus;
+	private Menu turtleImages;
 		
 	public TurtleMenu(String title, Model model){
 		super(title);
 		this.model = model;
 		model.addObserver(this);
+		turtleImages = new Menu("IMAGE EXTENSION");
+		updateTurtleImageExtension(model, turtleImages);
 		
 		MenuItem addTurtle = addTurtle(model);
 		turtleStatus = turtleStatus(model);
@@ -59,8 +67,36 @@ public class TurtleMenu extends Menu implements Observer{
 		Menu visibility = visibility(model);
 		Menu penProperties = penProperties(model);
 		MenuItem image = image(model);
-		this.getItems().addAll(addTurtle, turtleStatus, activeMessage, sendHome, clear, remove, visibility, penProperties, image);
+		this.getItems().addAll(turtleImages, addTurtle, turtleStatus, activeMessage, sendHome, clear, remove, visibility, penProperties, image);
 	}
+	
+	private void updateTurtleImageExtension(Model model2, Menu turtleImages2) {
+		turtleImages2.getItems().clear();
+		List<Integer> allTurtleIDs = model2.getTurtleMaster().getAllTurtleIDs();
+		for(Integer id : allTurtleIDs){
+			MenuItem menuItem = createImageMenuItem(model2, id);
+			turtleImages2.getItems().add(menuItem);
+		}
+	}
+
+	private MenuItem createImageMenuItem(Model model2, Integer id) {
+		Turtle currentTurtle = model2.getTurtleMaster().getTurtle(id);
+		ImageView imageView = new ImageView(currentTurtle.getImageView().getImage());
+		MenuItem menuItem = new MenuItem(id.toString(), imageView);
+		menuItem.setOnAction(e -> {
+			getAndSetNewImageOnTurtle(currentTurtle);
+			menuItem.setGraphic(new ImageView(currentTurtle.getImageView().getImage()));
+		});
+		return menuItem;
+	}
+	
+	private void getAndSetNewImageOnTurtle(Turtle turtle) {
+		File newImageFile = chooseFile();
+		if (newImageFile != null) {
+			turtle.changeImage(newImageFile.getName());
+		}
+	}
+
 	private MenuOptionsList turtleStatus(Model model) {
 		ObservableList<String> turtleIDs = createTurtleIdObservable(model);
 		return new MenuOptionsList("Print Turtle Status", turtleIDs, null, turtleIDasString -> {
@@ -173,6 +209,7 @@ public class TurtleMenu extends Menu implements Observer{
 	}
 	private void updateTurtleSelection() {
 		turtleStatus.refreshOptions(createTurtleIdObservable(model));
+		updateTurtleImageExtension(model, turtleImages);
 	}
 	
 	
