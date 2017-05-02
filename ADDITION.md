@@ -1,4 +1,4 @@
-SLogo addition
+SLogo addition (mra21 - Miguel Anderson)
 
 ###Estimation: before looking at the old code:
 
