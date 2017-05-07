@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import javafx.geometry.Point2D;
+import javafx.scene.image.ImageView;
 /**
  * By Miguel Anderson, Juan Philippe
  * Modified by Mina Mungekar
@@ -23,12 +24,14 @@ public class TurtleMaster {
 	private Animator myAnimator;
 	private Turtle currTurtle;
 	private Model myModel;
+	private List<ImageView> myStamps;
 
 	public TurtleMaster(Model model) {
 		this.myModel = model;
 		turtleContainer = new HashMap<Integer, Turtle>();
 		activeTurtleIDs = new ArrayList<Integer>();
 		tempActiveTurtleIDs = new ArrayList<Integer>();
+		myStamps = new ArrayList<ImageView>();
 		tempActiveTurtles = false;
 		activeTurtleID = 0;
 		myAnimator = new Animator(this);
@@ -109,7 +112,36 @@ public class TurtleMaster {
 		// pos[coordinate];
 		return (coordinate.equals(0) ? -1 : 1) * (homePos[coordinate] - pos[coordinate]);
 	}
-
+/**
+ * Adds a turtle image stamp at position of current turtle
+ * @return
+ */
+	public int addStamp(){
+	ImageView myStamp = new ImageView(currTurtle.getTurtleImage());	
+	myStamp.setX(currTurtle.getCenterPosition().getX());
+	myStamp.setY(currTurtle.getCenterPosition().getY());
+	myStamps.add(myStamp);
+	notifyModel();
+	return myStamps.indexOf(myStamp);
+	}
+/**
+ * Clears all stamps
+ * @return
+ */
+	public int clearStamps(){
+	int size = myStamps.size();
+	myStamps.clear();
+	notifyModel();
+	return (size>0? 1 : 0);
+	}
+/**
+ * Passes list of stamps to caller	
+ * @return
+ */
+	public List<ImageView> getStamps(){
+		return myStamps;
+	}
+	
 	public void breedTurtle(int newTurtleID) {
 		if (newTurtleID == -1) {
 			newTurtleID = findLowestIDnotTaken();

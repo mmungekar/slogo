@@ -209,6 +209,10 @@ public class Turtle extends Observable {
 		Image imageTurtle = new Image(getClass().getClassLoader().getResourceAsStream(imageLocation));
 		return imageTurtle;
 	}
+	
+	public Image getTurtleImage(){
+		return getTurtleImage(DEFAULT_TURTLE);
+	}
 
 	public void setPenSize(Double double1) {
 		this.penSize = double1;

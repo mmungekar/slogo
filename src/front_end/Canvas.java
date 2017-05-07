@@ -1,6 +1,8 @@
 package front_end;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -10,6 +12,7 @@ import back_end.model.scene.Turtle;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -25,6 +28,7 @@ public class Canvas implements Observer {
 	private Animator observedAnimator = null;
 	private Rectangle rectangle;
 	private Group myRoot;
+	private List<ImageView> myStamps;
 
 	public Canvas(Model model)
 	{
@@ -32,6 +36,7 @@ public class Canvas implements Observer {
 		this.observedModel = model;
 		addRectangle();
 		model.addObserver(this);
+		myStamps = new ArrayList<ImageView>();
 	}
 
 	private void addRectangle() {
@@ -49,6 +54,7 @@ public class Canvas implements Observer {
 		if (obs == observedModel || obs == observedAnimator) {
 			// update all parts of modelstate that canvas has
 			Iterator<Turtle> turtleIterator = observedModel.getTurtleMaster().getTurtleIterator();
+			List<ImageView> stampList = observedModel.getTurtleMaster().getStamps();
 			while(turtleIterator.hasNext()) {
 				Turtle turtle = turtleIterator.next();
 				if(turtle.hasMoved() && turtle.isPenDown()){
@@ -61,9 +67,28 @@ public class Canvas implements Observer {
 					observedModel.getTurtleMaster().getAnimator().addObserver(this);
 				}
 			}
+			
+			manageStamps(stampList);
 			updateBackground();
 		}
 
+	}
+
+	private void manageStamps(List<ImageView> stampList) {
+		if(stampList.size()!=0){
+		for(ImageView stamp:stampList){
+			if(!myRoot.getChildren().contains(stamp)){
+				myRoot.getChildren().add(stamp);
+				myStamps.add(stamp);
+			}
+			
+		}
+}
+		else{
+			for(ImageView stamp:myStamps){
+				myRoot.getChildren().remove(stamp);
+			}
+		}
 	}
 
 	private void updateBackground()
