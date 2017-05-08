@@ -195,6 +195,7 @@ public class TurtleMaster {
 	public double stamp()
 	{
 		stamps.add(currTurtle.getImageView());
+		notifyModel();
 		return activeTurtleID;
 	}
 
@@ -203,6 +204,7 @@ public class TurtleMaster {
 		if (stamps.size() == 0) return 0;
 		
 		stamps.clear();
+		notifyModel();
 		
 		return 1;
 	}
