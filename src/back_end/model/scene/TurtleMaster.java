@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import javafx.geometry.Point2D;
+import javafx.scene.image.ImageView;
 /**
  * By Miguel Anderson, Juan Philippe
  * Modified by Mina Mungekar
@@ -23,6 +24,7 @@ public class TurtleMaster {
 	private Animator myAnimator;
 	private Turtle currTurtle;
 	private Model myModel;
+	private List<ImageView> stamps;
 
 	public TurtleMaster(Model model) {
 		this.myModel = model;
@@ -32,6 +34,7 @@ public class TurtleMaster {
 		tempActiveTurtles = false;
 		activeTurtleID = 0;
 		myAnimator = new Animator(this);
+		stamps = new ArrayList<ImageView>();
 	}
 	
 	
@@ -186,6 +189,27 @@ public class TurtleMaster {
     		centerPositions.add(this.turtleContainer.get(id).getCenterPosition());
     	});
 		return centerPositions;
+	}
+
+
+	public double stamp()
+	{
+		stamps.add(currTurtle.getImageView());
+		return activeTurtleID;
+	}
+
+	public double clearStamps()
+	{
+		if (stamps.size() == 0) return 0;
+		
+		stamps.clear();
+		
+		return 1;
+	}
+
+	public List<ImageView> getStamps()
+	{
+		return stamps;
 	}
 
 }

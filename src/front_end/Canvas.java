@@ -1,6 +1,8 @@
 package front_end;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -10,6 +12,7 @@ import back_end.model.scene.Turtle;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -25,6 +28,7 @@ public class Canvas implements Observer {
 	private Animator observedAnimator = null;
 	private Rectangle rectangle;
 	private Group myRoot;
+	private List<ImageView> currentStamps;
 
 	public Canvas(Model model)
 	{
@@ -32,6 +36,7 @@ public class Canvas implements Observer {
 		this.observedModel = model;
 		addRectangle();
 		model.addObserver(this);
+		currentStamps = new ArrayList<ImageView>();
 	}
 
 	private void addRectangle() {
@@ -61,9 +66,32 @@ public class Canvas implements Observer {
 					observedModel.getTurtleMaster().getAnimator().addObserver(this);
 				}
 			}
+			updateStamps();
 			updateBackground();
 		}
 
+	}
+
+	private void updateStamps()
+	{
+		for (ImageView stamp : observedModel.getTurtleMaster().getStamps())
+		{
+			if (!myRoot.getChildren().contains(stamp))
+			{
+				myRoot.getChildren().add(stamp);
+				currentStamps.add(stamp);
+			}
+		}
+		List<ImageView> toRemove = new ArrayList<ImageView>();
+		for (ImageView stamp : currentStamps)
+		{
+			if (!observedModel.getTurtleMaster().getStamps().contains(stamp))
+			{
+				toRemove.add(stamp);
+				myRoot.getChildren().remove(stamp);
+			}
+		}
+		currentStamps.removeAll(toRemove);
 	}
 
 	private void updateBackground()
@@ -72,7 +100,6 @@ public class Canvas implements Observer {
 	}
 
 	private void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {
-		//System.out.println("Making Line");
 		Line line = new Line();
 		line.setStartX(startPos.getX());
 		line.setStartY(startPos.getY());

@@ -5,11 +5,12 @@ import back_end.exceptions.CommandException;
 import back_end.exceptions.VariableNotFoundException;
 import back_end.model.scene.Model;
 
-public class Stamp extends SimpleParameterCommand
-{
+public class ClearStamps extends SimpleParameterCommand {
+
 	@Override
 	public double Execute(Model model) throws CommandException, VariableNotFoundException, CommandException
 	{
-		return model.getTurtleMaster().stamp();
+		return model.getTurtleMaster().clearStamps();
 	}
+
 }
