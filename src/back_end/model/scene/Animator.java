@@ -17,7 +17,7 @@ import java.util.function.Function;
  */
 public class Animator extends Observable implements Observer {
 	private final String ANIMATOR_FILEPATH = "resources.parameters/Animator";
-   private ResourceBundle AnimatorProperties = ResourceBundle.getBundle(this.ANIMATOR_FILEPATH);
+    private ResourceBundle AnimatorProperties = ResourceBundle.getBundle(this.ANIMATOR_FILEPATH);
 	private int DEFAULT_SPEED = Integer.parseInt(AnimatorProperties.getString("DefaultSpeed"));
     private final int FRAMES_PER_SECOND = Integer.parseInt(AnimatorProperties.getString("FramesPerSecond"));
     private final int MILLISECOND_DELAY = Integer.parseInt(AnimatorProperties.getString("MilliDelayFactor")) / FRAMES_PER_SECOND;
