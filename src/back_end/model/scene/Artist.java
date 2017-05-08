@@ -1,11 +1,14 @@
 package back_end.model.scene;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 import back_end.exceptions.NotInMapException;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 /**
  * By Miguel Anderson
@@ -17,6 +20,8 @@ public class Artist {
 
 	private HashMap<Integer, Color> colorContainer;
 	private HashMap<Integer, Image> shapeContainer;
+	private ArrayList<ImageView> stampContainer;
+	private boolean clearStamps;
 
 	private Color backgroundColor;
 	
@@ -27,6 +32,7 @@ public class Artist {
 		setBackgroundColor(Color.WHITE);
 		createDefaultColors();
 		createDefaultShapes();
+		stampContainer = new ArrayList<>();
 	}
 	
 	private void notifyModel(){
@@ -39,6 +45,25 @@ public class Artist {
 			// shapeContainer.put(i,
 			// Color.web(DEFAULT_COLOR_HTML_NAMES.get(i)));
 		}
+	}
+	
+	public void placeStamp(ImageView image) {
+		clearStamps = false;
+		stampContainer.add(image);
+		notifyModel();
+	}
+	
+	public void clearStamp() {
+		clearStamps = true;
+		notifyModel();
+	}
+	
+	public boolean stampClear() {
+		return clearStamps;
+	}
+	
+	public Collection<ImageView> getStamps() {
+		return stampContainer;
 	}
 	
 	public void setBackgroundColor(int index) {

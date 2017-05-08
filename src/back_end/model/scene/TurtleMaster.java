@@ -160,7 +160,7 @@ public class TurtleMaster {
 		this.tempActiveTurtles = false;
 	}
 
-	public double getActiveTurtleID() {
+	public int getActiveTurtleID() {
 		return this.activeTurtleID;
 	}
 

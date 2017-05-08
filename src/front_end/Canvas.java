@@ -10,15 +10,18 @@ import back_end.model.scene.Turtle;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+
 /**
  * By Miguel Anderson, Juan Philippe
  *
  */
 
-//This entire file is in my masterpiece
+// This entire file is in my masterpiece
 public class Canvas implements Observer {
 	public static final int arc = 25;
 
@@ -27,8 +30,7 @@ public class Canvas implements Observer {
 	private Rectangle rectangle;
 	private Group myRoot;
 
-	public Canvas(Model model)
-	{
+	public Canvas(Model model) {
 		myRoot = new Group();
 		this.observedModel = model;
 		addRectangle();
@@ -50,9 +52,9 @@ public class Canvas implements Observer {
 		if (obs == observedModel || obs == observedAnimator) {
 			// update all parts of modelstate that canvas has
 			Iterator<Turtle> turtleIterator = observedModel.getTurtleMaster().getTurtleIterator();
-			while(turtleIterator.hasNext()) {
+			while (turtleIterator.hasNext()) {
 				Turtle turtle = turtleIterator.next();
-				if(turtle.hasMoved() && turtle.isPenDown()){
+				if (turtle.hasMoved() && turtle.isPenDown()) {
 					drawLine(turtle, turtle.getPrevCenterPosition(), turtle.getCenterPosition());
 					turtle.dontDrawLine();
 				}
@@ -63,17 +65,31 @@ public class Canvas implements Observer {
 				}
 			}
 			updateBackground();
+			updateStamp();
 		}
 
 	}
 
-	private void updateBackground()
-	{
+	private void updateBackground() {
 		rectangle.setFill(observedModel.getDrawer().getBackgroundColor());
+		
+	}
+	
+	private void updateStamp() {
+		if(observedModel.getDrawer().stampClear()) {
+			observedModel.getDrawer().getStamps().stream()
+			.filter(stamp -> myRoot.getChildren().contains(stamp))
+			.forEach(stamp -> myRoot.getChildren().remove(stamp));
+			observedModel.getDrawer().getStamps().clear();
+		} else {
+			observedModel.getDrawer().getStamps().stream()
+			.filter(stamp -> !myRoot.getChildren().contains(stamp))
+			.forEach(stamp -> myRoot.getChildren().add(stamp));
+		}
 	}
 
 	private void drawLine(Turtle turtle, Point2D startPos, Point2D endPos) {
-		//System.out.println("Making Line");
+		// System.out.println("Making Line");
 		Line line = new Line();
 		line.setStartX(startPos.getX());
 		line.setStartY(startPos.getY());
@@ -84,18 +100,15 @@ public class Canvas implements Observer {
 		myRoot.getChildren().add(line);
 	}
 
-	public void setWidth(int canvasWidth)
-	{
+	public void setWidth(int canvasWidth) {
 		rectangle.setWidth(canvasWidth);
 	}
 
-	public void setHeight(int canvasHeight)
-	{
+	public void setHeight(int canvasHeight) {
 		rectangle.setHeight(canvasHeight);
 	}
 
-	public Node getRoot()
-	{
+	public Node getRoot() {
 		return myRoot;
 	}
 
